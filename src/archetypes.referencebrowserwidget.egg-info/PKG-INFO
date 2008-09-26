@@ -1,0 +1,27 @@
+Metadata-Version: 1.0
+Name: archetypes.referencebrowserwidget
+Version: 1.0dev-r0
+Summary: An alternate atreferencebrowser implementation
+Home-page: http://pypi.python.org/archetypes.referencebrowserwidget
+Author: Tom Gross
+Author-email: itconsense@gmail.com
+License: ZPL 2.1
+Description: Introduction
+        ============
+        
+        
+        
+        Changelog
+        =========
+        
+        1.0 - Unreleased
+        ----------------
+        
+        * Initial release
+        
+        
+Keywords: Relation Widget
+Platform: UNKNOWN
+Classifier: Framework :: Plone
+Classifier: Programming Language :: Python
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
