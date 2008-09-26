@@ -5,4 +5,9 @@ Changelog
 ----------------
 
 * Initial release
+* Forked Products.ATReferenceBrowserWidget
+* moved popup and scripts to z3-style views
+* use catalog-only implementation for displaying items in popup
+* added some tests
+* use namedtemplate-adapter for popup-template
 
