@@ -149,7 +149,7 @@
                   <tal:block replace="python: show_path and '%s (%s)' % (title, obj_path.replace(portal_path, '')) or title" />
               </label>
 
-<!--              <img src="#" alt="up"
+              <img src="#" alt="up"
                   tal:condition="multipleitems"
                   tal:attributes="src string:${portal_url}/arrowUp.gif;
                   class string:moveUp kssattr-pos-${repeat/set/index} kssattr-length-${repeat/set/length} kssattr-field-${fieldName}"
@@ -158,7 +158,7 @@
                   tal:condition="multipleitems"
                   tal:attributes="src string:${portal_url}/arrowDown.gif;
                   class string:moveDown kssattr-pos-${repeat/set/index} kssattr-length-${repeat/set/length} kssattr-field-${fieldName}"
-                  /> -->
+                  />
 
             </li>
           </ul>

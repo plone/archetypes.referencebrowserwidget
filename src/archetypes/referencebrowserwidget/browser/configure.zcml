@@ -3,6 +3,13 @@
     xmlns:zope="http://namespaces.zope.org/zope"
     i18n_domain="atreferencebrowserwidget">
 
+  <!-- resources -->
+  <resourceDirectory
+      name="referencebrowser"
+      directory="referencebrowser"
+      />
+
+  <!-- pages and views -->
   <page
       name="refbrowserhelper"
       permission="zope2.Public"
@@ -30,6 +37,23 @@
       factory=".view.default_popup_template"
       name="popup"
       provides="zope.formlib.namedtemplate.INamedTemplate"
+      />
+
+  <!-- KSS views -->
+  <page
+      for="*"
+      class=".kssview.KSSMoveReferencesView"
+      attribute="moveUp"
+      name="moveUp"
+      permission="zope2.View"
+      />
+
+  <page
+      for="*"
+      class=".kssview.KSSMoveReferencesView"
+      attribute="moveDown"
+      name="moveDown"
+      permission="zope2.View"
       />
 
 </configure>

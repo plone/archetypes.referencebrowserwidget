@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<object name="portal_kss" meta_type="KSS Registry" autogroup="False">
+
+  <kineticstylesheet
+      cacheable="True"
+      compression="safe"
+      cookable="True"
+      enabled="on"
+      expression=""
+      id="++resource++referencebrowser/referencebrowser.kss"
+      />
+
+</object>
