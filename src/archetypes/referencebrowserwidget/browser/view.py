@@ -155,16 +155,15 @@ class ReferenceBrowserPopup(BrowserView):
             self.insertHistory(self.request, self.widget.history_length)
         self._updated = True
 
-    @view.memoize
     @property
     def search_catalog(self):
         if not self._updated:
             self.update()
         return utils.getSearchCatalog(aq_inner(self.context),
-                               self.widget.search_catalog)
+                                      self.widget.search_catalog)
 
     @property
-    def filered_indexes(self):
+    def filtered_indexes(self):
         if not self._updated:
             self.update()
         indexes = self.search_catalog.indexes()
@@ -209,6 +208,7 @@ class ReferenceBrowserPopup(BrowserView):
                                            history)
 
     def getResult(self):
+        result = []
         if self.widget.show_results_without_query or self.search_text:
 
             qc = getMultiAdapter((self.context, self.request),

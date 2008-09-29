@@ -3,6 +3,7 @@ import unittest
 from zope.component import getMultiAdapter
 
 from Products.Archetypes.tests.utils import makeContent
+from Products.CMFPlone import Batch
 
 from archetypes.referencebrowserwidget.tests.base import TestCase
 from archetypes.referencebrowserwidget.interfaces import IFieldRelation
@@ -30,18 +31,28 @@ class ProductsTestCase(TestCase):
 
 class PopupTestCase(TestCase):
 
-    def test_variables(self):
-        fieldname = 'multiRef2'
-        request = self.app.REQUEST
-        request.set('at_url', '/plone/Members/test_user_1_/')
-        request.set('fieldName', fieldname)
-        request.set('fieldRealName', fieldname)
+    def afterSetUp(self):
         makeContent(self.folder, portal_type='RefBrowserDemo', id='ref')
-        obj = self.folder.ref
-        obj.reindexObject()
+        self.obj = self.folder.ref
+        self.obj.reindexObject()
+        self.request = self.app.REQUEST
+
+    def _getPopup(self, obj=None, request=None):
+        if obj is None:
+            obj = self.obj
+        if request is None:
+            request = self.request
         popup = getMultiAdapter((obj, request), name='refbrowser_popup')
         popup.update()
-        relfield = obj.getField(fieldname)
+        return popup
+
+    def test_variables(self):
+        fieldname = 'multiRef2'
+        self.request.set('at_url', '/plone/Members/test_user_1_/')
+        self.request.set('fieldName', fieldname)
+        self.request.set('fieldRealName', fieldname)
+        popup = self._getPopup()
+        relfield = self.obj.getField(fieldname)
 
         assert popup.at_url == '/plone/Members/test_user_1_/'
         assert popup.fieldName == fieldname
@@ -51,8 +62,22 @@ class PopupTestCase(TestCase):
         assert popup.multiValued == 1
         assert popup.search_index == relfield.widget.default_search_index
         assert popup.allowed_types == ()
-        assert popup.at_obj == obj
+        assert popup.at_obj == self.obj
         assert popup.close_window == 1
+        assert popup.filtered_indexes == ['Description', 'SearchableText']
+
+    def test_query(self):
+        fieldname = 'multiRef3'
+        self.request.set('at_url', '/plone/Members/test_user_1_/')
+        self.request.set('fieldName', fieldname)
+        self.request.set('fieldRealName', fieldname)
+        self.request.set('search_index', 'getId')
+        self.request.set('searchValue', 'news')
+        popup = self._getPopup()
+        batch = popup.getResult()
+        assert isinstance(batch, Batch)
+        assert len(batch) == 1
+        assert batch[0].getObject() == self.portal.news
 
 
 def test_suite():

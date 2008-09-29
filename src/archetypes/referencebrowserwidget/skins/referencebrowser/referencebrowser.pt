@@ -13,11 +13,13 @@
           image_portal_types field/widget/image_portal_types|string:;
           image_method       field/widget/image_method|string:;
           show_path          field/widget/show_path|nothing;
-          hide_inaccessible  field/widget/hide_inaccessible | nothing;"
+          hide_inaccessible  field/widget/hide_inaccessible | nothing;
+          helper nocall:here/refbrowserhelper;
+          refs python:helper.getFieldRelations(field);"
           condition="refs">
 
         <tal:block 
-	       tal:condition="python: not field.multiValued and (can_view or not hide_inaccessible)"
+               tal:condition="python: not field.multiValued and (can_view or not hide_inaccessible)"
                tal:define="obj python:refs[0];
                            obj_path python: '/'.join(obj.getPhysicalPath());
                            can_view python: checkPermission('View', obj)">
@@ -30,26 +32,25 @@
               tal:attributes="href obj/absolute_url;
                               class python:obj.portal_type.replace(' ', '_')"
               tal:content="python:obj.Title() or obj.absolute_url(relative=1)"
-	      >Sole target object's title</a>
+              >Sole target object's title</a>
 
             <a href="#"
-               tal:condition="python:portal.portal_interface.objectImplements(ref,
-			'Products.Archetypes.interfaces.referenceengine.IContentReference')"
+               tal:condition="python:portal.portal_interface.objectImplements(obj,
+                        'Products.Archetypes.interfaces.referenceengine.IContentReference')"
                tal:attributes="href python:ref.getContentObject().absolute_url();
                                class python:obj.portal_type.replace(' ', '_')"
                tal:content="field/relationship"
-	       >reference object link</a>
+               >reference object link</a>
 
             <tal:if condition="show_path" i18n:translate="label_directory">
               ( Directory: <span i18n:name="directory"
-				 tal:replace="python: obj_path.replace(portal_path + '/', '')"
-				 >directory</span>)
+                                 tal:replace="python: obj_path.replace(portal_path + '/', '')"
+                                 >directory</span>)
             </tal:if>
 
         </tal:block>
 
         <ul tal:condition="field/multiValued">
-	abc
           <tal:block tal:repeat="obj refs">
             <tal:block tal:define="obj_path python: '/'.join(obj.getPhysicalPath());
                                    can_view python: checkPermission('View', obj)"
@@ -61,21 +62,21 @@
                     tal:attributes="href obj/absolute_url;
                                     class python:obj.portal_type.replace(' ', '_')"
                     tal:content="python:obj.Title() or obj.absolute_url(relative=1)"
-		    >Target Title</a>
+                    >Target Title</a>
 
                 <a href="#"
-                    tal:condition="python:portal.portal_interface.objectImplements(ref,
-			'Products.Archetypes.interfaces.referenceengine.IContentReference')"
+                    tal:condition="python:portal.portal_interface.objectImplements(obj,
+                        'Products.Archetypes.interfaces.referenceengine.IContentReference')"
                     tal:attributes="href python:ref.getContentObject().absolute_url();
                                     class python:obj.portal_type.replace(' ', '_')"
                     tal:content="field/relationship"
-		    >reference object link</a>
+                    >reference object link</a>
 
                 <tal:if condition="show_path"
                      i18n:translate="label_directory">
                      ( Directory: <span i18n:name="directory"
-					tal:replace="python: obj_path.replace(portal_path + '/', '') "
-					 >directory</span>)
+                                        tal:replace="python: obj_path.replace(portal_path + '/', '') "
+                                         >directory</span>)
                 </tal:if>
               </li>
             </tal:block>
@@ -90,8 +91,8 @@
         tal:define="show_path          field/widget/show_path|nothing;
                     image_portal_types widget/image_portal_types|string:;
                     image_method       widget/image_method|string:;
-		    helper nocall:here/refbrowserhelper;
-		    refs python:helper.getFieldRelations(field);">
+                    helper nocall:here/refbrowserhelper;
+                    refs python:helper.getFieldRelations(field);">
       <input type="hidden" value=""
           tal:condition="python:not field.required and field.multiValued"
           tal:attributes="name string:$fieldName:default:list"
@@ -121,22 +122,22 @@
         <input id="" size="50" type="text" readonly="readonly"
                value="No reference set. Click the add button to select."
                i18n:attributes="value label_no_reference_set;"
-	       tal:condition="not:  value"
-	       tal:attributes="id string:${fieldName}_label"
+               tal:condition="not:  value"
+               tal:attributes="id string:${fieldName}_label"
                />
         <input type="hidden" value="" name=""
                tal:attributes="name fieldName;
                                value value;
                                id string:${fieldName}"
-	      />
+              />
 
       </tal:single>
       <tal:multi tal:condition="field/multiValued">
         <div style="float: left"
              tal:define="multipleitems python:len(refs) > 1">
           <ul class="visualNoMarker" tal:attributes="id string:${fieldName};">
-  	    <li tal:repeat="set refs"
-   	   	tal:attributes="id string:ref-${fieldName}-${repeat/set/number}">
+            <li tal:repeat="set refs"
+                tal:attributes="id string:ref-${fieldName}-${repeat/set/index}">
               <label tal:define="
                    title set/title_or_id;
                    obj_path python: '/'.join(set.getPhysicalPath());">
@@ -149,13 +150,15 @@
               </label>
 
 <!--              <img src="#" alt="up"
-  	          tal:condition="multipleitems"
-                  tal:attributes="src string:${portal_url}/arrowUp.gif"
+                  tal:condition="multipleitems"
+                  tal:attributes="src string:${portal_url}/arrowUp.gif;
+                  class string:moveUp kssattr-pos-${repeat/set/index} kssattr-length-${repeat/set/length} kssattr-field-${fieldName}"
                   />
-	      <img src="#" alt="down"
-		  tal:condition="multipleitems"
-		  tal:attributes="src string:${portal_url}/arrowDown.gif"
-		  /> -->
+              <img src="#" alt="down"
+                  tal:condition="multipleitems"
+                  tal:attributes="src string:${portal_url}/arrowDown.gif;
+                  class string:moveDown kssattr-pos-${repeat/set/index} kssattr-length-${repeat/set/length} kssattr-field-${fieldName}"
+                  /> -->
 
             </li>
           </ul>
