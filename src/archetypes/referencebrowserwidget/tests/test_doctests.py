@@ -1,7 +1,6 @@
 import unittest, doctest
 
 from Testing import ZopeTestCase as ztc
-from Products.PloneTestCase import PloneTestCase as ptc
 from Products.PloneTestCase.setup import default_user
 from Products.PloneTestCase.setup import default_password
 

@@ -1,7 +1,11 @@
+from zope.component import getMultiAdapter
+
 from Products.Five import zcml
 from Products.Five import fiveconfigure
 from Testing import ZopeTestCase as ztc
 
+from Products.Archetypes.tests.utils import makeContent
+from Products.CMFPlone import Batch
 from Products.PloneTestCase import PloneTestCase as ptc
 from Products.PloneTestCase.layer import PloneSite
 
@@ -49,4 +53,22 @@ class TestCase(MixIn, ptc.PloneTestCase):
 
 class FunctionalTestCase(MixIn, ptc.FunctionalTestCase):
     """ Base FunctionalTestCase for archetypes.referencebrowserwidget """
+
+class PopupBaseTestCase(TestCase):
+
+    def afterSetUp(self):
+        makeContent(self.folder, portal_type='RefBrowserDemo', id='ref')
+        self.obj = self.folder.ref
+        self.obj.reindexObject()
+        self.request = self.app.REQUEST
+
+    def _getPopup(self, obj=None, request=None):
+        if obj is None:
+            obj = self.obj
+        if request is None:
+            request = self.request
+        popup = getMultiAdapter((obj, request), name='refbrowser_popup')
+        popup.update()
+        return popup
+
 

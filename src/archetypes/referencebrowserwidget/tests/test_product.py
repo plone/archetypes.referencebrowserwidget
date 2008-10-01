@@ -6,6 +6,7 @@ from Products.Archetypes.tests.utils import makeContent
 from Products.CMFPlone import Batch
 
 from archetypes.referencebrowserwidget.tests.base import TestCase
+from archetypes.referencebrowserwidget.tests.base import PopupBaseTestCase
 from archetypes.referencebrowserwidget.interfaces import IFieldRelation
 
 class ProductsTestCase(TestCase):
@@ -28,23 +29,7 @@ class ProductsTestCase(TestCase):
         pass
         # XXX test plone.relations implementation
 
-
-class PopupTestCase(TestCase):
-
-    def afterSetUp(self):
-        makeContent(self.folder, portal_type='RefBrowserDemo', id='ref')
-        self.obj = self.folder.ref
-        self.obj.reindexObject()
-        self.request = self.app.REQUEST
-
-    def _getPopup(self, obj=None, request=None):
-        if obj is None:
-            obj = self.obj
-        if request is None:
-            request = self.request
-        popup = getMultiAdapter((obj, request), name='refbrowser_popup')
-        popup.update()
-        return popup
+class PopupTestCase(PopupBaseTestCase):
 
     def test_variables(self):
         fieldname = 'multiRef2'
@@ -65,9 +50,8 @@ class PopupTestCase(TestCase):
         assert popup.at_obj == self.obj
         assert popup.filtered_indexes == ['Description', 'SearchableText']
 
-
     def test_close_window(self):
-        # close popup after inserting single reference
+        # close popup after inserting a single reference
         fieldname = 'singleRef'
         self.request.set('at_url', '/plone/Members/test_user_1_/')
         self.request.set('fieldName', fieldname)
@@ -75,7 +59,7 @@ class PopupTestCase(TestCase):
         popup = self._getPopup()
         assert popup.close_window == 1
 
-        # don't close popup after inserting multivalued reference
+        # don't close popup after inserting a multivalued reference
         fieldname = 'multiRef3'
         self.request.set('at_url', '/plone/Members/test_user_1_/')
         self.request.set('fieldName', fieldname)
@@ -83,14 +67,13 @@ class PopupTestCase(TestCase):
         popup = self._getPopup()
         assert popup.close_window == 0
 
-        # close popup after inserting multivalued reference, if forced
+        # close popup after inserting a  multivalued reference, if forced
         fieldname = 'multiRef2'
         self.request.set('at_url', '/plone/Members/test_user_1_/')
         self.request.set('fieldName', fieldname)
         self.request.set('fieldRealName', fieldname)
         popup = self._getPopup()
         assert popup.close_window == 1
-
 
     def test_query(self):
         # normal query
@@ -122,10 +105,67 @@ class PopupTestCase(TestCase):
         assert batch[0].getObject() == self.obj
         assert not popup.has_queryresults
 
+class PopupBreadcrumbTestCase(PopupBaseTestCase):
+
+    pat = ('http://nohost/plone%%srefbrowser_popup?fieldName=%s&'
+           'fieldRealName=%s&at_url=/plone/Members/test_user_1_/')
+
+    def test_breadcrumbs(self):
+        """ Standard breadcrumbs """
+        fieldname = 'multiRef3'
+        self.request.set('at_url', '/plone/Members/test_user_1_/')
+        self.request.set('fieldName', fieldname)
+        self.request.set('fieldRealName', fieldname)
+        popup = self._getPopup()
+        bc = popup.breadcrumbs('Members')
+
+        path = ''
+        pat = self.pat % (fieldname, fieldname)
+        for compare, bc in zip([('', 'Home'),
+                                ('Members', 'Users'),
+                                ('test_user_1_', 'test_user_1_'),
+                                ('ref', 'ref')], bc):
+            path += compare[0] + '/'
+            assert bc['absolute_url'] == pat % path
+            assert bc['Title'] == compare[1]
+
+    def test_startup(self):
+        """ The startup dir doesn't match the path we start with.
+
+            -> the crumbs are empty except the home entry
+        """
+        fieldname = 'multiRef3'
+        self.request.set('at_url', '/plone/Members/test_user_1_/')
+        self.request.set('fieldName', fieldname)
+        self.request.set('fieldRealName', fieldname)
+        popup = self._getPopup()
+        bc = popup.breadcrumbs('news')
+        assert len(bc) == 1
+        assert bc[0]['Title'] == 'Home'
+
+    def test_restrictedbrowsing(self):
+        """ Only browse startup-dir and below """
+        fieldname = 'multiRef3'
+        self.request.set('at_url', '/plone/Members/test_user_1_/')
+        self.request.set('fieldName', fieldname)
+        self.request.set('fieldRealName', fieldname)
+
+        field = self.obj.getField(fieldname)
+        field.widget.restrict_browsing_to_startup_directory = 1
+
+        popup = self._getPopup()
+        bc = popup.breadcrumbs('Members/test_user_1_')
+        assert len(bc) == 2
+        assert bc[0]['Title'] == 'test_user_1_'
+        assert bc[1]['Title'] == 'ref'
+
+        field.widget.restrict_browsing_to_startup_directory = 0
+
 def test_suite():
     return unittest.TestSuite([
         unittest.makeSuite(ProductsTestCase),
         unittest.makeSuite(PopupTestCase),
+        unittest.makeSuite(PopupBreadcrumbTestCase),
         ])
 
 if __name__ == '__main__':
