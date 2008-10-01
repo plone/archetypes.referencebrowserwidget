@@ -24,7 +24,7 @@
     </script>
   </head>
   <body class="popup atrefbrowser"
-        onload="focus();self.name='referencebrowser_popup'"
+        onload="focus();self.name='refbrowser_popup'"
           style="margin: 4px;padding:0.5em;"
           tal:define="
               border_color here/base_properties/globalBorderColor;
@@ -269,8 +269,9 @@
 		    style="text-align:right"
 		    tal:define="title python:title_or_id.replace('\'', '\\\'')">
 		  <tal:referenceable tal:condition="referenceable">
+                    <tal:test replace="view/close_window" />x
 		    <a href="#" onclick=""
-		       tal:attributes="onclick string:window.opener.referencebrowser_setReference('${fieldName}', '${uid}', '${title}', ${multiValued});; if (0==${view/close_window}) {window.close()} else {showMessage('${title}')};; ;">
+		       tal:attributes="onclick string:window.opener.refbrowser_setReference('${fieldName}', '${uid}', '${title}', ${multiValued});; if (1==${view/close_window}) {window.close()} else {showMessage('${title}')};; ;">
 		      <strong i18n:translate="referencebrowser_insert_reference">Insert</strong>
 		    </a>
 		    |

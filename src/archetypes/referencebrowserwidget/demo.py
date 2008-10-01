@@ -68,7 +68,9 @@ schema = BaseSchema.copy() +  Schema((
             description=('And here is another field with some dynamic '
                          'query restrictions (only objects with "start" '
                          'withing one week of the current date will appear).'),
-            base_query='dynamicBaseQuery')),
+            base_query='dynamicBaseQuery',
+            popup_width=173,
+            popup_height=209))
      ))
 
 class RefBrowserDemo(BaseContent):

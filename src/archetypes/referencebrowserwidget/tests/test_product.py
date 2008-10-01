@@ -63,8 +63,34 @@ class PopupTestCase(TestCase):
         assert popup.search_index == relfield.widget.default_search_index
         assert popup.allowed_types == ()
         assert popup.at_obj == self.obj
-        assert popup.close_window == 1
         assert popup.filtered_indexes == ['Description', 'SearchableText']
+
+
+    def test_close_window(self):
+        # close popup after inserting single reference
+        fieldname = 'singleRef'
+        self.request.set('at_url', '/plone/Members/test_user_1_/')
+        self.request.set('fieldName', fieldname)
+        self.request.set('fieldRealName', fieldname)
+        popup = self._getPopup()
+        assert popup.close_window == 1
+
+        # don't close popup after inserting multivalued reference
+        fieldname = 'multiRef3'
+        self.request.set('at_url', '/plone/Members/test_user_1_/')
+        self.request.set('fieldName', fieldname)
+        self.request.set('fieldRealName', fieldname)
+        popup = self._getPopup()
+        assert popup.close_window == 0
+
+        # close popup after inserting multivalued reference, if forced
+        fieldname = 'multiRef2'
+        self.request.set('at_url', '/plone/Members/test_user_1_/')
+        self.request.set('fieldName', fieldname)
+        self.request.set('fieldRealName', fieldname)
+        popup = self._getPopup()
+        assert popup.close_window == 1
+
 
     def test_query(self):
         fieldname = 'multiRef3'
@@ -78,6 +104,7 @@ class PopupTestCase(TestCase):
         assert isinstance(batch, Batch)
         assert len(batch) == 1
         assert batch[0].getObject() == self.portal.news
+        assert popup.has_queryresults
 
 
 def test_suite():

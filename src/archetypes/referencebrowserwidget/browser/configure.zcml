@@ -39,21 +39,4 @@
       provides="zope.formlib.namedtemplate.INamedTemplate"
       />
 
-  <!-- KSS views -->
-  <page
-      for="*"
-      class=".kssview.KSSMoveReferencesView"
-      attribute="moveUp"
-      name="moveUp"
-      permission="zope2.View"
-      />
-
-  <page
-      for="*"
-      class=".kssview.KSSMoveReferencesView"
-      attribute="moveDown"
-      name="moveDown"
-      permission="zope2.View"
-      />
-
 </configure>

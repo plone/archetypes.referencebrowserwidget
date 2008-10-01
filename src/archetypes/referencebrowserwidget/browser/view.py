@@ -219,9 +219,7 @@ class ReferenceBrowserPopup(BrowserView):
                       self.search_text) and \
                       qc(search_catalog=self.widget.search_catalog)
 
-        if self.search_text or not self.widget.allow_browse:
-            self.has_queryresults = (not self.search_text or not \
-                self.widget.allow_browse) and bool(len(result))
+            self.has_queryresults = bool(result)
 
         elif self.widget.allow_browse:
             ploneview = getMultiAdapter((self.context, self.request),

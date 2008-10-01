@@ -12,33 +12,26 @@ ATReferenceBrowserWidget
 Let's see if the Widget Base is here.
     
   >>> response = self.publish('%s/base_edit' % demo1_url, self.basic_auth)
-  >>> f = open('/tmp/result.html', 'w')
-  >>> f.write(response.getBody())
-  >>> f.close()
   >>> print response.getBody() #  doctest: +ELLIPSIS
   <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" ...
-
         <script type="text/javascript" charset="iso-8859-1"
                 src="http://nohost/plone/referencebrowser.js">
         </script>...
-
         <div class="field ArchetypesReferenceBrowserWidget  kssattr-atfieldname-singleRef"
              id="archetypes-fieldname-singleRef">
           <span></span>
-          <label for="singleRef">SingleRef</label>...
-                          
+            <label for="singleRef">SingleRef</label>...
 	  <input id="singleRef_label" size="50" type="text"
 		 readonly="readonly"
 		 value="No reference set. Click the add button to select." />
 	  <input type="hidden" name="singleRef" id="singleRef" />...
-
 	<div style="clear: both">
 	  <input type="button" class="searchButton"
 		 value="Add..."
-		 onclick="javascript:referencebrowser_openBrowser('http://nohost/plone/demo1','singleRef', '/plone/demo1', 'singleRef')" />
+		 onclick="javascript:refbrowser_openBrowser('http://nohost/plone/demo1','singleRef', '/plone/demo1', 'singleRef', 500, 550)" />
 	  <input type="button" class="destructive"
 		 value="Remove reference"
-		 onclick="javascript:referencebrowser_removeReference('singleRef', 0)" />
+		 onclick="javascript:refbrowser_removeReference('singleRef', 0)" />
 	</div>...
 
 Now check the popup.
@@ -71,7 +64,7 @@ Now check the popup.
            
   >>> import re
   >>> INSERTLINK = re.compile(
-  ...     r"onclick=\"window.opener.referencebrowser_setReference[(]'singleRef'")
+  ...     r"onclick=\"window.opener.refbrowser_setReference[(]'singleRef'")
   
   >>> ROWS = re.compile(r'<tr.*?>(.*?)</tr>', re.MULTILINE|re.DOTALL)
   >>> len(ROWS.findall(body))
@@ -96,5 +89,17 @@ Now check the popup.
   >>> len(INSERTLINK.findall(body))
   1
   
-  
-  XXX Test more 
+You can specify the size, of the popup-window with the properties 
+`popup_width` and `popup_height` on the widget. The default values are
+500 for `popup_width` and 550 for `popup_height`.
+
+  >>> response = self.publish('%s/base_edit' % demo1_url, self.basic_auth)
+  >>> f = open('/tmp/result.html', 'w')
+  >>> f.write(response.getBody())
+  >>> f.close()
+  >>> print response.getBody() #  doctest: +ELLIPSIS
+  <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" ...
+ 
+                 onclick="javascript:refbrowser_openBrowser('http://nohost/plone/demo1','singleRef', '/plone/demo1', 'singleRef', 500, 550)" />...
+
++                onclick="javascript:refbrowser_openBrowser('http://nohost/plone/demo1','multiRef5', '/plone/demo1', 'multiRef5', 173, 209)" />...
