@@ -93,6 +93,7 @@ class PopupTestCase(TestCase):
 
 
     def test_query(self):
+        # normal query
         fieldname = 'multiRef3'
         self.request.set('at_url', '/plone/Members/test_user_1_/')
         self.request.set('fieldName', fieldname)
@@ -106,6 +107,20 @@ class PopupTestCase(TestCase):
         assert batch[0].getObject() == self.portal.news
         assert popup.has_queryresults
 
+    def test_noquery(self):
+        # no query
+        fieldname = 'multiRef3'
+        self.request.set('at_url', '/plone/Members/test_user_1_/')
+        self.request.set('fieldName', fieldname)
+        self.request.set('fieldRealName', fieldname)
+        self.request.set('search_index', 'getId')
+        self.request.set('searchValue', '')
+        popup = self._getPopup()
+        batch = popup.getResult()
+        assert isinstance(batch, Batch)
+        assert len(batch) == 1
+        assert batch[0].getObject() == self.obj
+        assert not popup.has_queryresults
 
 def test_suite():
     return unittest.TestSuite([
