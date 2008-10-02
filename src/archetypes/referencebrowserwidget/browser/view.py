@@ -91,11 +91,11 @@ class QueryCatalogView(BrowserView):
         return results
 
 
+from zope.component import getAdapter
 
 class ReferenceBrowserPopup(BrowserView):
     """ View class of Popup window """
 
-    template = namedtemplate.NamedTemplate('popup')
     has_queryresults = False
     has_brain = False
     brainuid = None
@@ -154,19 +154,20 @@ class ReferenceBrowserPopup(BrowserView):
                                 self.widget.force_close_on_insert)
         if self.widget.history_length > 0:
             self.insertHistory(self.request, self.widget.history_length)
+        popup_name = getattr(self.widget, 'popup_name', 'popup')
+        self.template = getAdapter(self, namedtemplate.INamedTemplate,
+                                   name=popup_name or 'popup')
         self._updated = True
 
     @property
     def search_catalog(self):
-        if not self._updated:
-            self.update()
+        assert self._updated
         return utils.getSearchCatalog(aq_inner(self.context),
                                       self.widget.search_catalog)
 
     @property
     def filtered_indexes(self):
-        if not self._updated:
-            self.update()
+        assert self._updated
         indexes = self.search_catalog.indexes()
         avail = self.widget.available_indexes
         return [index for index in indexes if not avail or index in avail]
@@ -209,6 +210,7 @@ class ReferenceBrowserPopup(BrowserView):
                                            history)
 
     def getResult(self):
+        assert self._updated
         result = []
         if self.widget.show_results_without_query or self.search_text:
 
@@ -236,9 +238,9 @@ class ReferenceBrowserPopup(BrowserView):
         return Batch(result, b_size, b_start, orphan=1)
 
     def breadcrumbs(self, startup_directory):
+        assert self._updated
         context = aq_inner(self.context)
 
-# XXX get tool the right cached way
         putils = getToolByName(context, 'plone_utils')
         portal = context.portal_url.getPortalObject()
         crumbs = putils.createBreadCrumbs(context)
@@ -263,19 +265,23 @@ class ReferenceBrowserPopup(BrowserView):
         return newcrumbs
 
     def genRefBrowserUrl(self, urlbase):
+        assert self._updated
         return "%s/%s?fieldName=%s&fieldRealName=%s&at_url=%s" % (
        urlbase, self.__name__, self.fieldName, self.fieldRealName, self.at_url)
 
 
     def getUid(self, item):
+        assert self._updated
         return (self.has_brain and item.UID or item.aq_explicit.UID) or None
 
 
     def isNotSelf(self, item):
+        assert self._updated
         return self.has_brain and self.getUid(item) != self.brainuid or \
                item.getObject() != self.at_obj
 
     def isReferencable(self, item):
+        assert self._updated
         item_referenceable = not self.allowed_types or \
             item.portal_type in self.allowed_types
         filter_review_states = self.widget.only_for_review_states is not None

@@ -7,54 +7,35 @@ from Products.Archetypes.utils import shasattr
 class ReferenceBrowserWidget(ReferenceWidget):
     _properties = ReferenceWidget._properties.copy()
     _properties.update({
-        'macro' : "referencebrowser",
-        'size' : '',
+        'macro': "referencebrowser",
+        'size': '',
         'helper_js': ('referencebrowser.js',),
-        'default_search_index':'SearchableText',
-        'show_indexes':0,
-        'available_indexes':{},
-        'allow_search':1,
-        'allow_browse':1,
-        'startup_directory':'',
-        'startup_directory_method':'',
-        'base_query':'',
-        'force_close_on_insert':0,
-        'search_catalog':'portal_catalog',
-        'allow_sorting':0,
-        'show_review_state':0,
-        'show_path':0,
-        'only_for_review_states' : None,
-        'image_portal_types' : (),
-        'image_method' : None,
-        'history_length' : 0,
-        'restrict_browsing_to_startup_directory' : 0,
+        'default_search_index': 'SearchableText',
+        'show_indexes': 0,
+        'available_indexes': {},
+        'allow_search': 1,
+        'allow_browse': 1,
+        'startup_directory': '',
+        'startup_directory_method': '',
+        'base_query': '',
+        'force_close_on_insert': 0,
+        'search_catalog': 'portal_catalog',
+        'allow_sorting': 0,
+        'show_review_state': 0,
+        'show_path': 0,
+        'only_for_review_states': None,
+        'image_portal_types': (),
+        'image_method': None,
+        'history_length': 0,
+        'restrict_browsing_to_startup_directory': 0,
         'show_results_without_query': 0,
-        'hide_inaccessible' : 0,
-        'popup_width' : 500,
-        'popup_height' : 550,
+        'hide_inaccessible': 0,
+        'popup_width': 500,
+        'popup_height': 550,
+        'popup_name': 'popup',
         })
 
-    # default_search_index: when a user searches in the popup, this index is used by default
-    # show_indexes: in the popup, when set to True, a drop-down list is shown with the index to be
-    #     used for searching. If set to False, default_search_index will be used.
-    # size: in case of single-select widget, the default is set to 30. In case of multi-select, default is 8.
-    # available_indexes: optional dictionary that lists all the indexes that can be used
-    #  for searching. Format: {'<catalog index>':'<friendly name'>, ... } The friendly name
-    #  is what the end-users sees to make the indexes more sensible for him.
-    # allow_search: shows the search section in the popup
-    # allow_browse: shows the browse section in the popup
-    # allow_sorting: optional reordering of references (requires multiValued=1)
-    # startup_directory: directory where the popup opens. Optional. When omitted, the current folder
-    #  is used
-    # force_close_on_insert: closes the popup when the user choses insert. This overrides the behaviour
-    #   in multiselect.
-    # show_review_state: show the review state of objects
-    # search_catalog: the id of an alternate search catalog to use for the query
-    #   (i.e. member_catalog for CMFMember)
-    # hide_inaccessible: hides all the items from the list of references for
-    #   which users do not have the View permission (instead of showing them
-    #   the login screen)
-
+    # for documentation of properties see: README.txt
     security = ClassSecurityInfo()
 
     security.declarePublic('getBaseQuery')
@@ -86,10 +67,10 @@ class ReferenceBrowserWidget(ReferenceWidget):
 
         return results
 
-
 registerWidget(ReferenceBrowserWidget,
                title='Reference Browser',
-               description=('Reference widget that allows you to browse or search the portal for objects to refer to.'),
+               description=('Reference widget that allows you to browse or '
+                            'search the portal for objects to refer to.'),
                used_for=('Products.Archetypes.Field.ReferenceField',)
                )
 
@@ -99,8 +80,10 @@ registerPropertyType('available_indexes', 'dictionary', ReferenceBrowserWidget)
 registerPropertyType('allow_search', 'boolean', ReferenceBrowserWidget)
 registerPropertyType('allow_browse', 'boolean', ReferenceBrowserWidget)
 registerPropertyType('startup_directory', 'string', ReferenceBrowserWidget)
-registerPropertyType('restrict_browsing_to_startup_directory', 'boolean', ReferenceBrowserWidget)
+registerPropertyType('restrict_browsing_to_startup_directory',
+                     'boolean', ReferenceBrowserWidget)
 registerPropertyType('search_catalog', 'string', ReferenceBrowserWidget)
 registerPropertyType('image_portal_types', 'lines', ReferenceBrowserWidget)
 registerPropertyType('image_method', 'string', ReferenceBrowserWidget)
-registerPropertyType('force_close_on_insert', 'boolean', ReferenceBrowserWidget)
+registerPropertyType('force_close_on_insert',
+                     'boolean', ReferenceBrowserWidget)

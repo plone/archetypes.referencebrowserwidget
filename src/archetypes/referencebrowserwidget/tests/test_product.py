@@ -1,6 +1,13 @@
 import unittest
 
 from zope.component import getMultiAdapter
+from zope.component import provideAdapter
+from zope.formlib.namedtemplate import INamedTemplate
+
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from Products.Five import BrowserView
+
+from plone.app.form._named import named_template_adapter
 
 from Products.Archetypes.tests.utils import makeContent
 from Products.CMFPlone import Batch
@@ -29,6 +36,7 @@ class ProductsTestCase(TestCase):
         pass
         # XXX test plone.relations implementation
 
+
 class PopupTestCase(PopupBaseTestCase):
 
     def test_variables(self):
@@ -49,6 +57,25 @@ class PopupTestCase(PopupBaseTestCase):
         assert popup.allowed_types == ()
         assert popup.at_obj == self.obj
         assert popup.filtered_indexes == ['Description', 'SearchableText']
+
+        assert popup.template.default_template.__name__ == 'popup'
+
+    def test_alternatetemplate(self):
+        alternate_template = named_template_adapter(
+            ViewPageTemplateFile('sample.pt'))
+        provideAdapter(alternate_template, adapts=(BrowserView, ),
+                       provides=INamedTemplate, name='alternate')
+        fieldname = 'multiRef2'
+        self.request.set('at_url', '/plone/Members/test_user_1_/')
+        self.request.set('fieldName', fieldname)
+        self.request.set('fieldRealName', fieldname)
+
+        field = self.obj.getField(fieldname)
+        field.widget.popup_name = 'alternate'
+
+        popup = self._getPopup()
+        assert popup.template.default_template.__name__ == 'sample'
+        delattr(field.widget, 'popup_name')
 
     def test_close_window(self):
         # close popup after inserting a single reference

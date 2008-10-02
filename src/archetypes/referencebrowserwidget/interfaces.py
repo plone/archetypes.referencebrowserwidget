@@ -7,7 +7,7 @@ class IFieldRelation(Interface):
 
 
 class IATReferenceField(IObjectField):
-    """ Missing marker for Products.Archetypes.Fiele.ReferenceField """
+    """ Missing marker for Products.Archetypes.Field.ReferenceField """
 
 class IATBackRefereneceField(IObjectField):
     """ Missing marker for Products.ATBackRef.BackReferenceField """

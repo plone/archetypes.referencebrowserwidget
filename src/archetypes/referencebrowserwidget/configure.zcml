@@ -29,12 +29,12 @@
    </class>
 
    <class class="plonerelations.ATField.ploneRelationsATField.PloneRelationsATField"
-          zcml:condition="installed plonerelations.ATField.ploneRelationsATField.PloneRelationsATField">
+          zcml:condition="installed plonerelations.ATField">
      <implements interface=".interfaces.IPloneRelationsRefField" />
    </class>
 
    <class class="plonerelations.ATField.ploneRelationsATField.ReversePloneRelationsATField"
-          zcml:condition="installed plonerelations.ATField.ploneRelationsATField.PloneRelationsATField">
+          zcml:condition="installed plonerelations.ATField">
      <implements interface=".interfaces.IPloneRelationsRevRefField" />
    </class>
 
