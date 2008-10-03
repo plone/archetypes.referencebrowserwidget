@@ -96,7 +96,7 @@ from zope.component import getAdapter
 class ReferenceBrowserPopup(BrowserView):
     """ View class of Popup window """
 
-    has_queryresults = False
+    has_queryresults = True
     has_brain = False
     brainuid = None
     _updated = False

@@ -130,7 +130,7 @@ class PopupTestCase(PopupBaseTestCase):
         assert isinstance(batch, Batch)
         assert len(batch) == 1
         assert batch[0].getObject() == self.obj
-        assert not popup.has_queryresults
+        assert popup.has_queryresults
 
 class PopupBreadcrumbTestCase(PopupBaseTestCase):
 
