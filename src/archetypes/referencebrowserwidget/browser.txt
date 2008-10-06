@@ -1,6 +1,9 @@
-ATReferenceBrowserWidget
-========================
+archetypes.referencebrowserwidget
+=================================
 
+Some integration tests of the archetypes.referencebrowserwidget. Basically we
+create a demo-type which has some of our widgets and look, if they are
+available in the default views.
 
   >>> self.setRoles(['Manager'])
   >>> self.portal.portal_types.invokeFactory('RefBrowserDemo', 'demo1')
@@ -20,7 +23,7 @@ Let's see if the Widget Base is here.
         <div class="field ArchetypesReferenceBrowserWidget  kssattr-atfieldname-singleRef"
              id="archetypes-fieldname-singleRef">
           <span></span>
-            <label for="singleRef">SingleRef</label>...
+            <label ...for="singleRef">SingleRef</label>...
 	  <input id="singleRef_label" size="50" type="text"
 		 readonly="readonly"
 		 value="No reference set. Click the add button to select." />

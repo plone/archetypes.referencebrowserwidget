@@ -23,10 +23,7 @@ default_popup_template = named_template_adapter(
 class ReferenceBrowserHelperView(BrowserView):
 
     def getFieldRelations(self, field):
-        relations = getMultiAdapter((self.context, field),
-                                    interface=IFieldRelation)
-        # XXX sorting !?
-        return relations
+        return getMultiAdapter((self.context, field), interface=IFieldRelation)
 
     def getStartupDirectory(self, field):
         """ Return the path to the startup directory. """

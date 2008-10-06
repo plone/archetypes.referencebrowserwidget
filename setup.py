@@ -1,13 +1,37 @@
 from setuptools import setup, find_packages
 import os
 
-version = '1.0 (unreleased)'
+def read(*rnames):
+    return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
+
+version = '0.8 (unreleased)'
+
+long_description = (
+    read('README.txt')
+    + '\n' +
+    'Change history\n'
+    '**************\n'
+    + '\n' +
+    read('docs', 'HISTORY.txt')
+    + '\n' +
+    'Detailed Documentation\n'
+    '**********************\n'
+    + '\n' +
+    read('src', 'archetypes', 'referencebrowserwidget', 'README.txt')
+    + '\n' +
+    'Contributors\n'
+    '************\n'
+    + '\n' +
+    read('CONTRIBUTORS.txt')
+    + '\n' +
+    'Download\n'
+    '********\n'
+    )
 
 setup(name='archetypes.referencebrowserwidget',
       version=version,
       description="An alternate atreferencebrowser implementation",
-      long_description=open("README.txt").read() + "\n" +
-                       open(os.path.join("docs", "HISTORY.txt")).read(),
+      long_description=long_description,
       classifiers=[
         "Framework :: Plone",
         "Programming Language :: Python",

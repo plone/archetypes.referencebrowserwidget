@@ -3,12 +3,6 @@
     xmlns:zope="http://namespaces.zope.org/zope"
     i18n_domain="atreferencebrowserwidget">
 
-  <!-- resources -->
-  <resourceDirectory
-      name="referencebrowser"
-      directory="referencebrowser"
-      />
-
   <!-- pages and views -->
   <page
       name="refbrowserhelper"
