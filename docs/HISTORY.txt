@@ -4,6 +4,8 @@ Changelog
 0.9 - Unreleased
 ----------------
 
+* fixed popup for folderish objects
+* show order arrows now for one entry only too
 
 0.8 - 06.10.2008
 ----------------

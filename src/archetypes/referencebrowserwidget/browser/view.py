@@ -1,4 +1,5 @@
 from zope.component import getMultiAdapter
+from zope.component import queryMultiAdapter
 from zope.formlib import namedtemplate
 
 from Acquisition import aq_inner
@@ -23,7 +24,8 @@ default_popup_template = named_template_adapter(
 class ReferenceBrowserHelperView(BrowserView):
 
     def getFieldRelations(self, field):
-        return getMultiAdapter((self.context, field), interface=IFieldRelation)
+        return queryMultiAdapter((self.context, field),
+                                 interface=IFieldRelation, default=[])
 
     def getStartupDirectory(self, field):
         """ Return the path to the startup directory. """
@@ -108,10 +110,10 @@ class ReferenceBrowserPopup(BrowserView):
         if self.request.get('clearHistory', None):
             self.request.SESSION.set('atrefbrowserwidget_history', [])
 
-        self.at_url = request.get('at_url');
-        self.fieldName = request.get('fieldName');
-        self.fieldRealName = request.get('fieldRealName');
-        self.search_text = request.get('searchValue', '');
+        self.at_url = request.get('at_url')
+        self.fieldName = request.get('fieldName')
+        self.fieldRealName = request.get('fieldRealName')
+        self.search_text = request.get('searchValue', '')
 
     def __call__(self):
         self.update()
@@ -121,16 +123,16 @@ class ReferenceBrowserPopup(BrowserView):
         context = aq_inner(self.context)
 
         catalog = getToolByName(context, 'portal_catalog')
-
-        at_result = catalog.searchResults(dict(path=self.at_url));
-        at_brain = at_result and at_result[0] or None;
+        at_result = catalog.searchResults(dict(path={'query': self.at_url,
+                                                     'depth': 0}))
+        at_brain = len(at_result) == 1 and at_result[0] or None
         if at_brain:
             self.at_obj = at_brain.getObject()
             self.has_brain = True
             self.brainuid = at_brain.UID
         else:
-            self.at_obj = context.restrictedTraverse(self.at_url);
-        self.field = self.at_obj.Schema()[self.fieldRealName];
+            self.at_obj = context.restrictedTraverse(self.at_url)
+        self.field = self.at_obj.Schema()[self.fieldRealName]
         self.widget = self.field.widget
         self.multiValued = int(self.field.multiValued)
         self.search_index = self.request.get('search_index',

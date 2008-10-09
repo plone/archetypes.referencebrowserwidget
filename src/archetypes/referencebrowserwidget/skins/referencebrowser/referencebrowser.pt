@@ -141,8 +141,7 @@
 
       </tal:single>
       <tal:multi tal:condition="field/multiValued">
-        <div style="float: left"
-             tal:define="multipleitems python:len(refs) > 1">
+        <div style="float: left">
 
           <ul class="visualNoMarker"
               tal:attributes="id string:${fieldName};">
@@ -162,12 +161,10 @@
               <tal:sorting condition="widget/allow_sorting">
                 <img src="#" alt="up"
                     onclick="javascript:refbrowser_moveReferenceUp(this)"
-                    tal:condition="multipleitems"
                     tal:attributes="src string:${portal_url}/arrowUp.gif;"
                     />
                 <img src="#" alt="down"
                     onclick="javascript:refbrowser_moveReferenceDown(this)"
-                    tal:condition="multipleitems"
                     tal:attributes="src string:${portal_url}/arrowDown.gif;"
                     />
               </tal:sorting>

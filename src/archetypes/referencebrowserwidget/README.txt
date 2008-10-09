@@ -26,18 +26,18 @@ The search part has additional configuration in the widget
 
 The widget supports:
 
- * catalog-only query of popup-contents. This is massive! permformance
-   win compared with ATReferenceBrowserWidget. Try accessing a folder
-   with 10k+ objects with both widgets.
+* catalog-only query of popup-contents. This is massive! permformance
+  win compared with ATReferenceBrowserWidget. Try accessing a folder
+  with 10k+ objects with both widgets.
 
- * generic referencefield implementation via adapter. OOTB it supports
-   Archetypes.ReferenceField and plonerelations.ATField.
+* generic referencefield implementation via adapter. OOTB it supports
+  Archetypes.ReferenceField and plonerelations.ATField.
    
- * overwrite the popup-template via namedtemplate-implementation
+* overwrite the popup-template via namedtemplate-implementation
  
- * resizeable popup via simple properties
+* resizeable popup via simple properties
  
- * a good unittest and integrationtest coverage
+* a good unittest and integrationtest coverage
 
 Properties
 ==========
