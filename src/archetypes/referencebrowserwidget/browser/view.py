@@ -31,7 +31,7 @@ class ReferenceBrowserHelperView(BrowserView):
         """ Return the path to the startup directory. """
         widget = field.widget
         directory = widget.startup_directory
-        if widget.startup_directory_method:
+        if getattr(widget, 'startup_directory_method', None):
             if getattr(aq_base(self.context),
                        widget.startup_directory_method, False):
                 method = getattr(self.context, widget.startup_directory_method)
