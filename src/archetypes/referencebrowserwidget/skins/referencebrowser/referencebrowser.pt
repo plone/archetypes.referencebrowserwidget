@@ -185,8 +185,9 @@
                string:javascript:refbrowser_openBrowser('${startup_directory}','${fieldName}', '${at_url}', '${field/getName}', ${popup_width}, ${popup_height})" />
         <input type="button" class="destructive" value="Remove reference" onclick=""
                i18n:attributes="value label_remove_reference;"
+               tal:define="multiValued python:test(field.multiValued, 1, 0)"
                tal:condition="not:field/multiValued"
-               tal:attributes="onclick string:javascript:refbrowser_removeReference('${fieldName}', ${field/multiValued})" />
+               tal:attributes="onclick string:javascript:refbrowser_removeReference('${fieldName}', ${multiValued})" />
       </div>
       <!-- Todo? -->
       <metal:addable metal:use-macro="here/widgets/addable_support/macros/addable"/>

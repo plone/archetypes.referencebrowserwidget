@@ -4,6 +4,9 @@ Changelog
 0.9 - Unreleased
 ----------------
 
+* Fix 'Remove reference' when multiValued is a boolean instead of an int.
+  [fschulze]
+
 * fixed popup for folderish objects
 * show order arrows now for one entry only too
 
