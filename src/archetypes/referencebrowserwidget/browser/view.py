@@ -16,6 +16,8 @@ from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import Batch
 
 from archetypes.referencebrowserwidget import utils
+from archetypes.referencebrowserwidget.bridge import DummyField
+from archetypes.referencebrowserwidget.bridge import ReferenceBrowserWidgetEdit
 from archetypes.referencebrowserwidget.interfaces import IFieldRelation
 
 default_popup_template = named_template_adapter(
@@ -132,8 +134,20 @@ class ReferenceBrowserPopup(BrowserView):
             self.brainuid = at_brain.UID
         else:
             self.at_obj = context.restrictedTraverse(self.at_url)
-        self.field = self.at_obj.Schema()[self.fieldRealName]
-        self.widget = self.field.widget
+        
+        try:
+            # case used by an archetype
+            self.field = self.at_obj.Schema()[self.fieldRealName]
+            self.widget = self.field.widget
+        except AttributeError, e:
+            # case used via bridge currently only edit widget is supported
+            context = self.context.aq_inner
+            setattr(context, 'required', True)
+            self.widget = ReferenceBrowserWidgetEdit(self.context.aq_inner,
+                                                     self.request)
+            self.field = DummyField()
+            self.field.multiValued = self.widget.multiValued
+            
         self.multiValued = int(self.field.multiValued)
         self.search_index = self.request.get('search_index',
                                              self.widget.default_search_index)

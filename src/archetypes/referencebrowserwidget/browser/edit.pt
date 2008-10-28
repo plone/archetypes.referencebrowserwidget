@@ -1,0 +1,124 @@
+<tal:edit tal:define="show_path  view/show_path
+                      image_portal_types view/image_portal_types|string:;
+                      image_method view/image_method|string:;
+                      refs view/refs;
+                      fieldName view/fieldName;
+                      value view/value;">
+  
+  <script src="++resource++archetypes.referencebrowser.js" />
+  
+  <input type="hidden"
+         value=""
+         tal:condition="python:not view.required and view.multiValued"
+         tal:attributes="name string:${fieldName}:default:list"
+  />
+
+  <tal:single tal:condition="not:view/multiValued" >
+    <tal:value tal:condition="value">
+      <tal:block tal:define="obj python:refs[0];
+                             obj_path python: '/'.join(obj.getPhysicalPath())" >
+
+        <input size=""
+               type="text"
+               value=""
+               id=""
+               readonly="readonly"
+               tal:attributes="value obj/title_or_id;
+                               size python: view.size == '' and 30 or view.size;
+                               id string:${fieldName}_label"
+        />
+
+        <img tal:condition="python: obj.portal_type in image_portal_types"
+             tal:attributes="src string:${obj/absolute_url}/$image_method"
+        />
+
+        <tal:if condition="show_path" i18n:translate="label_directory">
+          (Directory:
+          <span i18n:name="directory"
+                tal:replace="python: obj_path.replace(portal_path + '/', '')">
+            directory
+          </span>
+          )
+        </tal:if>
+
+      </tal:block>
+    </tal:value>
+    
+    <input id=""
+           size="50"
+           type="text"
+           readonly="readonly"
+           value="No reference set. Click the add button to select."
+           i18n:attributes="value label_no_reference_set;"
+           tal:condition="not:value"
+           tal:attributes="id string:${fieldName}_label"
+    />
+    <input type="hidden"
+           value=""
+           name=""
+           tal:attributes="name fieldName;
+                           value value;
+                           id fieldName"
+    />
+
+  </tal:single>
+  <tal:multi tal:condition="view/multiValued">
+    <div style="float: left">
+      <ul class="visualNoMarker"
+          tal:attributes="id string:${fieldName};">
+        <li tal:repeat="set refs"
+            tal:attributes="id string:ref-${fieldName}-${repeat/set/index};">
+          <label tal:define="title set/title_or_id;
+                             obj_path python: '/'.join(set.getPhysicalPath());">
+            <input type="checkbox"
+                   tal:attributes="name string:${fieldName}:list;
+                                   value set/UID;"
+                   checked="checked"
+            />
+            
+            <tal:block replace="python: show_path and '%s (%s)' % (title, obj_path.replace(portal_path, '')) or title" />
+          </label>
+
+          <tal:sorting condition="view/allow_sorting">
+            <img src="#"
+                 alt="up"
+                 onclick="javascript:refbrowser_moveReferenceUp(this)"
+                 tal:attributes="src string:${portal_url}/arrowUp.gif;"
+            />
+            <img src="#"
+                 alt="down"
+                 onclick="javascript:refbrowser_moveReferenceDown(this)"
+                 tal:attributes="src string:${portal_url}/arrowDown.gif;"
+            />
+          </tal:sorting>
+        </li>
+      </ul>
+    </div>
+  </tal:multi>
+  <div style="clear: both"
+       tal:define="global at_url at_url|python:'/'.join(view.getPhysicalPath());
+                   startup_directory view/getStartupDirectory;">
+    <input type="button"
+           class="searchButton"
+           value="Add..."
+           onclick=""
+           i18n:attributes="value label_add;"
+           tal:define="popup_width view/popup_width|string:500;
+                       popup_height view/popup_height|string:550;"
+           tal:attributes="onclick string:javascript:refbrowser_openBrowser('${startup_directory}','${fieldName}', '${at_url}', '${view/getName}', ${popup_width}, ${popup_height})"
+    />
+    <input type="button"
+           class="destructive"
+           value="Remove reference"
+           onclick=""
+           i18n:attributes="value label_remove_reference;"
+           tal:define="multiValued python: view.multiValued and 1 or 0"
+           tal:condition="not:view/multiValued"
+           tal:attributes="onclick string:javascript:refbrowser_removeReference('${fieldName}', ${multiValued})"
+    />
+  </div>
+  <!-- Todo? -->
+  <tal:block condition="nothing">
+    <metal:addable metal:use-macro="here/widgets/addable_support/macros/addable"/>
+  </tal:block>
+</tal:edit>
