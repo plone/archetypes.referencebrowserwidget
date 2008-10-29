@@ -18,7 +18,6 @@
        />
 
     <include package=".browser" />
-    <include file="bridge.zcml" />
 
 <!--   <class class="Products.ATBackRef.BackReferenceField"
           zcml:condition="installed Products.ATBackRef.BackReferenceField">
