@@ -64,6 +64,8 @@
                  tal:attributes="value fieldName" />
           <input type="hidden" name="at_url"
                  tal:attributes="value view/at_url" />
+          <input type="hidden" name="bridge"
+                 tal:attributes="value context/REQUEST/bridge|string:" />
           <input type="hidden" name="clear:int" value="1" />
           <label for="path"
                  i18n:translate="referencebrowser_history">History</label>
@@ -149,6 +151,8 @@
              tal:attributes="value fieldRealName" />
       <input type="hidden" name="at_url" value=""
              tal:attributes="value view/at_url" />
+      <input type="hidden" name="bridge"
+             tal:attributes="value context/REQUEST/bridge|string:" />
     </form>
     <div id="message" class="portalMessage"
          style="display:none;margin-top:0px;">

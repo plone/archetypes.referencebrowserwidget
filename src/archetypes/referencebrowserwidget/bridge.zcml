@@ -7,5 +7,17 @@
     name="archetypes.referencebrowser.js"
     file="skins/referencebrowser/referencebrowser.js"
   />
+  
+  <adapter
+    for="*"
+    name="default"
+    factory=".bridge.DefaultReferenceBrowserWidgetProps"
+  />
+  
+  <adapter
+    for="*"
+    name="default"
+    factory=".bridge.FieldDummy"
+  />
 
 </configure>

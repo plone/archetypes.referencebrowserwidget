@@ -16,9 +16,12 @@ from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import Batch
 
 from archetypes.referencebrowserwidget import utils
-from archetypes.referencebrowserwidget.bridge import DummyField
-from archetypes.referencebrowserwidget.bridge import ReferenceBrowserWidgetEdit
 from archetypes.referencebrowserwidget.interfaces import IFieldRelation
+
+from zope.component import getAdapter
+from zope.component.interfaces import ComponentLookupError
+from archetypes.referencebrowserwidget.bridge import IFieldDummy
+from archetypes.referencebrowserwidget.bridge import ReferenceBrowserWidgetEdit
 
 default_popup_template = named_template_adapter(
     ViewPageTemplateFile('popup.pt'))
@@ -120,6 +123,18 @@ class ReferenceBrowserPopup(BrowserView):
     def __call__(self):
         self.update()
         return self.template()
+    
+    @property
+    def fielddummy(self):
+        if hasattr(self, '_fielddummy'):
+            return self._fielddummy
+        bridge = self.request.form.get('bridge', '')
+        try:
+            fielddummy = getAdapter(self.context, IFieldDummy, name=bridge)
+        except ComponentLookupError, e:
+            fielddummy = getAdapter(self.context, IFieldDummy, name=u'default')
+        setattr(self, '_fielddummy', fielddummy)
+        return self._fielddummy
 
     def update(self):
         context = aq_inner(self.context)
@@ -139,14 +154,14 @@ class ReferenceBrowserPopup(BrowserView):
             # case used by an archetype
             self.field = self.at_obj.Schema()[self.fieldRealName]
             self.widget = self.field.widget
-        except AttributeError, e:
+        except Exception, e:
             # case used via bridge currently only edit widget is supported
             context = self.context.aq_inner
             setattr(context, 'required', True)
             self.widget = ReferenceBrowserWidgetEdit(self.context.aq_inner,
                                                      self.request)
-            self.field = DummyField()
-            self.field.multiValued = self.widget.multiValued
+            # the other way around the widget holds a field dummy.
+            self.field = self.widget.field
             
         self.multiValued = int(self.field.multiValued)
         self.search_index = self.request.get('search_index',
@@ -279,14 +294,17 @@ class ReferenceBrowserPopup(BrowserView):
 
     def genRefBrowserUrl(self, urlbase):
         assert self._updated
-        return "%s/%s?fieldName=%s&fieldRealName=%s&at_url=%s" % (
-       urlbase, self.__name__, self.fieldName, self.fieldRealName, self.at_url)
-
+        url = "%s/%s?fieldName=%s&fieldRealName=%s&at_url=%s" % \
+                  (urlbase, self.__name__, self.fieldName,
+                   self.fieldRealName, self.at_url)
+        bridge = self.request.form.get('bridge')
+        if bridge:
+            url = '%s&bridge=%s' % (url, bridge)
+        return url
 
     def getUid(self, item):
         assert self._updated
         return (self.has_brain and item.UID or item.aq_explicit.UID) or None
-
 
     def isNotSelf(self, item):
         assert self._updated
@@ -303,5 +321,3 @@ class ReferenceBrowserPopup(BrowserView):
             True
         return self.getUid(item) and item_referenceable and \
                review_state_allows and self.isNotSelf(item)
-
-
