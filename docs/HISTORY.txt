@@ -1,14 +1,17 @@
 Changelog
 =========
 
-0.9 - Unreleased
-----------------
+0.8.1 - 06.11.2008
+------------------
 
 * Fix 'Remove reference' when multiValued is a boolean instead of an int.
   [fschulze]
 
-* fixed popup for folderish objects
-* show order arrows now for one entry only too
+* fixed popup for folderish objects [tom_gross]
+* show order arrows now for one entry only too [tom_gross]
+* popup now has a body-tag cssid: `atrefbrowserpopup`  (#8702) [tom_gross]
+* added tests for plone tickets #8347, #7608, #7965 [tom_gross]
+* fixed plone ticket #7557 [tom_gross]
 
 0.8 - 06.10.2008
 ----------------

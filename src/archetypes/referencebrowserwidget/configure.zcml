@@ -66,4 +66,6 @@
       provides=".interfaces.IFieldRelation"
       />
 
+  <five:deprecatedManageAddDelete class=".demo.RefBrowserDemo" />
+
 </configure>

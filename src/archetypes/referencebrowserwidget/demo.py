@@ -88,4 +88,9 @@ class RefBrowserDemo(BaseContent):
         current_week = [DateTime()-7,DateTime()+7]
         return {'start': {'query':current_week, 'range':'minmax'}}
 
+    def dynamicDirectory(self):
+        return '/bar/dynamic'
+
+    constantDirectory = '/foo/constant'
+
 registerType(RefBrowserDemo, PROJECTNAME)

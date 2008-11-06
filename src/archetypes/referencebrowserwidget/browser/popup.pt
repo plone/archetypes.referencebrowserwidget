@@ -24,6 +24,7 @@
     </script>
   </head>
   <body class="popup atrefbrowser"
+        id="atrefbrowserpopup"
         onload="focus();self.name='refbrowser_popup'"
           style="margin: 4px;padding:0.5em;"
           tal:define="

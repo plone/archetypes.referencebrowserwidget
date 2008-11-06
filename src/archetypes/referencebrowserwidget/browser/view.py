@@ -32,13 +32,12 @@ class ReferenceBrowserHelperView(BrowserView):
         widget = field.widget
         directory = widget.startup_directory
         if getattr(widget, 'startup_directory_method', None):
-            if getattr(aq_base(self.context),
-                       widget.startup_directory_method, False):
-                method = getattr(self.context, widget.startup_directory_method)
+            method = getattr(aq_base(self.context),
+                             widget.startup_directory_method,
+                             False)
+            if method:
                 if callable(method):
-                    directory = method()
-                else:
-                    directory = method
+                    method = method()
                 return method
         return utils.getStartupDirectory(self.context, directory)
 

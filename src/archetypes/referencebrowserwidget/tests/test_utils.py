@@ -45,6 +45,9 @@ class PloneUtilsTestCase(TestCase):
             utils.getStartupDirectory(self.doc2, '..'),
             'http://nohost/plone/Members/test_user_1_/folder1/subfolder1')
 
+        self.assertEqual(
+            utils.getStartupDirectory(self.doc2, '../..'),
+            'http://nohost/plone/Members/test_user_1_/folder1')
 
 def test_suite():
     return unittest.TestSuite([

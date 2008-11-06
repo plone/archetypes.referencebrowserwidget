@@ -79,6 +79,7 @@ registerPropertyType('show_index_selector', 'boolean', ReferenceBrowserWidget)
 registerPropertyType('available_indexes', 'dictionary', ReferenceBrowserWidget)
 registerPropertyType('allow_search', 'boolean', ReferenceBrowserWidget)
 registerPropertyType('allow_browse', 'boolean', ReferenceBrowserWidget)
+registerPropertyType('allow_sorting', 'boolean', ReferenceBrowserWidget)
 registerPropertyType('startup_directory', 'string', ReferenceBrowserWidget)
 registerPropertyType('restrict_browsing_to_startup_directory',
                      'boolean', ReferenceBrowserWidget)

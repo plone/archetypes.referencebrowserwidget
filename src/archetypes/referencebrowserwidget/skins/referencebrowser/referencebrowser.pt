@@ -96,13 +96,14 @@
                     image_portal_types widget/image_portal_types|string:;
                     image_method       widget/image_method|string:;
                     helper nocall:here/refbrowserhelper;
+                    multiValued python:test(field.multiValued, 1, 0);
                     refs python:helper.getFieldRelations(field);">
       <input type="hidden" value=""
-          tal:condition="python:not field.required and field.multiValued"
+          tal:condition="python:not field.required and multiValued"
           tal:attributes="name string:$fieldName:default:list"
           />
 
-      <tal:single tal:condition="not:field/multiValued" >
+      <tal:single tal:condition="not:multiValued" >
         <tal:value tal:condition="value">
           <tal:block tal:define="
               obj python:refs[0];
@@ -140,7 +141,7 @@
               />
 
       </tal:single>
-      <tal:multi tal:condition="field/multiValued">
+      <tal:multi tal:condition="multiValued">
         <div style="float: left">
 
           <ul class="visualNoMarker"
@@ -185,8 +186,7 @@
                string:javascript:refbrowser_openBrowser('${startup_directory}','${fieldName}', '${at_url}', '${field/getName}', ${popup_width}, ${popup_height})" />
         <input type="button" class="destructive" value="Remove reference" onclick=""
                i18n:attributes="value label_remove_reference;"
-               tal:define="multiValued python:test(field.multiValued, 1, 0)"
-               tal:condition="not:field/multiValued"
+               tal:condition="not:multiValued"
                tal:attributes="onclick string:javascript:refbrowser_removeReference('${fieldName}', ${multiValued})" />
       </div>
       <!-- Todo? -->
