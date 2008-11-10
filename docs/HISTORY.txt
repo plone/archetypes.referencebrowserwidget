@@ -4,7 +4,8 @@ Changelog
 0.9 - (unreleased)
 ----------------
 
-*
+* Fix popup template to not required sessions.
+  [witsch]
 
 
 0.8.1 - 06.11.2008

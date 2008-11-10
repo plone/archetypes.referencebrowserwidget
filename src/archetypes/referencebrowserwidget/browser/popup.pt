@@ -55,7 +55,7 @@
     </div>
     <div style="text-align:right;margin-bottom:1.5em; margin-top: 2.5em;">
       <div tal:condition="python:widget.history_length > 0 "
-           tal:define="history python:request.SESSION.get('atrefbrowserwidget_history', [])[:]">
+           tal:define="history view/history">
         <form tal:condition="history"
               action="referencebrowser_popup"
               method="GET" name="history" id="history">

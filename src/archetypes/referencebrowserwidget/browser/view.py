@@ -176,6 +176,15 @@ class ReferenceBrowserPopup(BrowserView):
             self.request.get('ACTUAL_URL', ''),
             self.request.get('QUERY_STRING', ''))
 
+    @property
+    def history(self):
+        sdm = getToolByName(aq_inner(self.context), 'session_data_manager', None)
+        if sdm is not None:
+            session = sdm.getSessionData(create=0)
+            if session is not None:
+                return list(session.get('atrefbrowserwidget_history', []))
+        return []
+
     def insertHistory(self, history_length=20):
         """ Keep url history in session
 
