@@ -10,7 +10,6 @@ from Products.Five import BrowserView
 from Products.ZCTextIndex.ParseTree import ParseError
 
 from plone.app.form._named import named_template_adapter
-from plone.memoize import view
 
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import Batch

@@ -2,7 +2,7 @@ Changelog
 =========
 
 0.9 - (unreleased)
-----------------
+------------------
 
 * Fix popup template to not required sessions.
   [witsch]

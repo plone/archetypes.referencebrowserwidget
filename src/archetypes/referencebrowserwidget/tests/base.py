@@ -5,7 +5,6 @@ from Products.Five import fiveconfigure
 from Testing import ZopeTestCase as ztc
 
 from Products.Archetypes.tests.utils import makeContent
-from Products.CMFPlone import Batch
 from Products.PloneTestCase import PloneTestCase as ptc
 from Products.PloneTestCase.layer import PloneSite
 
