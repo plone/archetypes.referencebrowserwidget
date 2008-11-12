@@ -31,10 +31,15 @@ class ReferenceBrowserHelperView(BrowserView):
         widget = field.widget
         directory = widget.startup_directory
         if getattr(widget, 'startup_directory_method', None):
+            # First check that the method exists and isn't inherited.
             method = getattr(aq_base(self.context),
                              widget.startup_directory_method,
                              False)
             if method:
+                # Then get the method again, but with acquisition context this time:
+                method = getattr(self.context,
+                                 widget.startup_directory_method,
+                                 False)
                 if callable(method):
                     method = method()
                 return method
