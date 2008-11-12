@@ -4,6 +4,9 @@ Changelog
 0.9 - (unreleased)
 ------------------
 
+* Fix usage of `aq_explicit` in favour of `aq_base`.
+  [witsch]
+
 * Fix popup template to not required sessions.
   [witsch]
 

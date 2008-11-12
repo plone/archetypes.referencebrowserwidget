@@ -283,7 +283,7 @@ class ReferenceBrowserPopup(BrowserView):
 
     def getUid(self, item):
         assert self._updated
-        return (self.has_brain and item.UID or item.aq_explicit.UID) or None
+        return getattr(aq_base(item), 'UID', None)
 
 
     def isNotSelf(self, item):
