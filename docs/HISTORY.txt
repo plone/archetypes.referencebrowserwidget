@@ -1,8 +1,12 @@
 Changelog
 =========
 
-0.9 - (unreleased)
-------------------
+0.10 - (unreleased)
+-------------------
+
+
+0.9 - 13.11.2008
+----------------
 
 * Fix usage of `aq_explicit` in favour of `aq_base`.
   [witsch]
