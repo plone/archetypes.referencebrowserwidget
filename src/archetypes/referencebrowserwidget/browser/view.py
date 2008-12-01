@@ -12,7 +12,7 @@ from Products.ZCTextIndex.ParseTree import ParseError
 from plone.app.form._named import named_template_adapter
 
 from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone import Batch
+from Products.CMFPlone.PloneBatch import Batch
 
 from archetypes.referencebrowserwidget import utils
 from archetypes.referencebrowserwidget.interfaces import IFieldRelation
