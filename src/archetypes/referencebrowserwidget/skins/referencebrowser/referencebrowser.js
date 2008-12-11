@@ -108,6 +108,9 @@ function refbrowser_moveReferenceUp(self)
   elem.parentNode.removeChild(elem);
   newelem.id = 'ref-' + widget_id + '-' + (pos-1);
   prevelem.id = 'ref-' + widget_id + '-' + pos;
+
+  // mark the checkbox, this is needed for IE
+  newelem.childNodes[0].childNodes[0].checked = true;
 }
 
 function refbrowser_moveReferenceDown(self)
@@ -137,5 +140,8 @@ function refbrowser_moveReferenceDown(self)
   elem.parentNode.removeChild(elem);
   newelem.id = 'ref-' + widget_id + '-' + (pos+1);
   nextelem.id = 'ref-' + widget_id + '-' + pos;
+
+  // mark the checkbox, this is needed for IE
+  newelem.childNodes[0].childNodes[0].checked = true;
 }
 

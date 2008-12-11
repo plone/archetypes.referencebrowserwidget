@@ -88,7 +88,7 @@ class QueryCatalogView(BrowserView):
             try:
                 results=catalog(**query)
             except ParseError:
-                 pass
+                pass
 
         return results
 
@@ -227,8 +227,6 @@ class ReferenceBrowserPopup(BrowserView):
 
             qc = getMultiAdapter((self.context, self.request),
                                  name='refbrowser_querycatalog')
-
-            # XXX do batching with query
             result = (self.widget.show_results_without_query or \
                       self.search_text) and \
                       qc(search_catalog=self.widget.search_catalog)
