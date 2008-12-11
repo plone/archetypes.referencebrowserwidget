@@ -4,6 +4,7 @@ Changelog
 0.10 - (unreleased)
 -------------------
 
+* Fixed unchecking of items when moving in IE [tom]
 
 0.9 - 13.11.2008
 ----------------
