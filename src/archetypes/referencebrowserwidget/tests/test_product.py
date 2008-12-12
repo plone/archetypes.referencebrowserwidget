@@ -22,6 +22,8 @@ from archetypes.referencebrowserwidget.interfaces import IFieldRelation
 
 from archetypes.referencebrowserwidget.browser import view
 
+_marker = []
+
 class ProductsTestCase(TestCase):
 
     def test_skininstall(self):
@@ -41,6 +43,105 @@ class ProductsTestCase(TestCase):
     def test_plonerelationsadapter(self):
         pass
         # XXX test plone.relations implementation
+
+    def test_requiredbehavior_multi(self):
+        """ A required field should throw an error, if no value is provided,
+            not silently ignore it.
+        """
+
+        basic_auth = '%s:%s' % (ztc.user_name, ztc.user_password)
+
+        makeContent(self.folder, portal_type='RefBrowserDemo', id='ref')
+        makeContent(self.folder, portal_type='Document', id='doc')
+
+        context = self.folder.ref
+
+        field = context.getField('multiRef')
+        field.required = True
+
+        self.folder.doc.reindexObject()
+        uid = self.folder.doc.UID()
+
+        # with value
+        form = {'singleRef': '',
+                'multiRef2': [''],
+                'multiRef': [uid]}
+        assert field.widget.process_form(context, field, form,
+                                         empty_marker=_marker)[0][0] == uid
+
+        # without key
+        form = {'singleRef': '',
+                'multiRef2': ['']}
+        value = field.widget.process_form(context, field, form,
+                                           empty_marker=_marker)
+        assert len(value) == 2
+        assert value[0] == []
+        assert value[0] is not _marker
+
+        # without value
+        form = {'singleRef': '',
+                'multiRef2': [''],
+                'multiRef': []}
+        value = field.widget.process_form(context, field, form,
+                                           empty_marker=_marker)
+        assert len(value) == 2
+        assert value[0] == []
+        assert value[0] is not _marker
+
+        # no value returns empty_marker
+        form = {'singleRef': '',
+                'multiRef2': ['']}
+        value = field.widget.process_form(context, field, form,
+                                          emptyReturnsMarker=True,
+                                          empty_marker=_marker)
+        assert value is _marker
+
+    def test_requiredbehavior_single(self):
+        """ A required field should throw an error, if no value is provided,
+            not silently ignore it.
+        """
+
+        basic_auth = '%s:%s' % (ztc.user_name, ztc.user_password)
+
+        makeContent(self.folder, portal_type='RefBrowserDemo', id='ref')
+        makeContent(self.folder, portal_type='Document', id='doc')
+
+        context = self.folder.ref
+
+        field = context.getField('singleRef')
+        field.required = True
+
+        self.folder.doc.reindexObject()
+        uid = self.folder.doc.UID()
+
+        # with value
+        form = {'singleRef': uid,
+                'multiRef2': [''],
+                'multiRef': []}
+        assert field.widget.process_form(context, field, form,
+                                         empty_marker=_marker)[0] == uid
+
+        # without key
+        form = {'multiRef2': ['']}
+        value = field.widget.process_form(context, field, form,
+                                           empty_marker=_marker)
+        assert value is _marker
+
+        # without value
+        form = {'singleRef': '',
+                'multiRef2': [''],
+                'multiRef': []}
+        value = field.widget.process_form(context, field, form,
+                                           empty_marker=_marker)
+        assert len(value) == 2
+        assert value[0] == ''
+
+        # no value returns empty_marker
+        form = {}
+        value = field.widget.process_form(context, field, form,
+                                          emptyReturnsMarker=True,
+                                          empty_marker=_marker)
+        assert value is _marker
 
 
 class PopupTestCase(PopupBaseTestCase):
@@ -138,6 +239,7 @@ class PopupTestCase(PopupBaseTestCase):
         assert batch[0].getObject() == self.obj
         assert popup.has_queryresults
 
+
 class PopupBreadcrumbTestCase(PopupBaseTestCase):
 
     pat = ('http://nohost/plone%%srefbrowser_popup?fieldName=%s&'
@@ -196,40 +298,41 @@ class PopupBreadcrumbTestCase(PopupBaseTestCase):
 
     def test_isNotSelf(self):
         catalog = getToolByName(self.portal, 'portal_catalog')
-        
+
         fieldname = 'multiRef3'
         self.request.set('at_url', '/plone/Members/test_user_1_/ref')
         self.request.set('fieldName', fieldname)
         self.request.set('fieldRealName', fieldname)
-        
+
         clip = self.folder.manage_copyObjects('ref')
         self.folder.manage_pasteObjects(clip)
-        
+
         copy = self.folder['copy_of_ref']
         copy.reindexObject()
-        
+
         refbrain = catalog(id='ref')[0]
         copybrain = catalog(id='copy_of_ref')[0]
-        
+
         popup = self._getPopup()
         assert popup.isNotSelf(copybrain) == True
         assert popup.isNotSelf(refbrain) == False
+
 
 class HelperViewTestCase(TestCase):
 
     def test_startupdirectory(self):
         makeContent(self.folder, portal_type='RefBrowserDemo', id='ref')
         context = self.folder.ref
-        
+
         request = self.app.REQUEST
-        
+
         field = context.getField('multiRef5')
         helper = view.ReferenceBrowserHelperView(context, request)
-        
+
         # no query
         self.assertEqual(helper.getStartupDirectory(field),
                          'http://nohost/plone/Members/test_user_1_/ref')
-        
+
         # dynamic query
         field.widget.startup_directory_method = 'dynamicDirectory'
         assert helper.getStartupDirectory(field) == '/bar/dynamic'
@@ -237,6 +340,7 @@ class HelperViewTestCase(TestCase):
         # constant query
         field.widget.startup_directory_method = 'constantDirectory'
         assert helper.getStartupDirectory(field) == '/foo/constant'
+
 
 class IntegrationTestCase(FunctionalTestCase):
 
@@ -246,31 +350,31 @@ class IntegrationTestCase(FunctionalTestCase):
             javascript there.
         """
         basic_auth = '%s:%s' % (ztc.user_name, ztc.user_password)
-        
+
         makeContent(self.folder, portal_type='RefBrowserDemo', id='ref')
         context = self.folder.ref
-        
+
         # this is the easy case
         field = context.getField('singleRef')
         field.multiValued = 0
-        
+
         response = self.publish(context.absolute_url(1) + '/base_edit',
                               basic_auth)
         self.assert_(
             'onclick="javascript:refbrowser_removeReference(\'singleRef\', 0)"'
             in response.getBody())
-                
+
         # we want to support this as well
         field = context.getField('singleRef')
         field.multiValued = False
-        
+
         response = self.publish(context.absolute_url(1) + '/base_edit',
                               basic_auth)
         # this should be the same
         self.assert_(
             'onclick="javascript:refbrowser_removeReference(\'singleRef\', 0)"'
             in response.getBody())
-        
+
 
 def test_suite():
     return unittest.TestSuite([

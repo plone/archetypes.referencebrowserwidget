@@ -15,9 +15,9 @@ ztc.close(app)
 
 # setup sample types
 from Products.GenericSetup import EXTENSION, profile_registry
-profile_registry.registerProfile('referncebrowserwidget_sampletypes',
-    'RefernceBrowserWidget Sample Content Types',
-    'Extension profile including referncebrowserwidget sample content types',
+profile_registry.registerProfile('referencebrowserwidget_sampletypes',
+    'ReferenceBrowserWidget Sample Content Types',
+    'Extension profile including referencebrowserwidget sample content types',
     'profiles/sample_types',
     'archetypes.referencebrowserwidget',
     EXTENSION)
@@ -25,7 +25,7 @@ profile_registry.registerProfile('referncebrowserwidget_sampletypes',
 # install site
 ptc.setupPloneSite(extension_profiles=[
     'archetypes.referencebrowserwidget:default',
-    'archetypes.referencebrowserwidget:referncebrowserwidget_sampletypes'
+    'archetypes.referencebrowserwidget:referencebrowserwidget_sampletypes'
     ])
 
 import archetypes.referencebrowserwidget
