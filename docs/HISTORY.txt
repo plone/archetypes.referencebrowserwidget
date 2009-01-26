@@ -4,6 +4,9 @@ Changelog
 0.9 - Unreleased
 ----------------
 
+* Avoid single element script tag.
+  [tesdal]
+
 * Fix 'Remove reference' when multiValued is a boolean instead of an int.
   [fschulze]
 
