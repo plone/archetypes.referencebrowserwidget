@@ -6,7 +6,7 @@
                       fieldRealName view/fieldRealName;
                       value view/value;">
   
-  <script src="++resource++archetypes.referencebrowser.js" />
+  <script src="++resource++archetypes.referencebrowser.js"></script>
   
   <input type="hidden"
          value=""
