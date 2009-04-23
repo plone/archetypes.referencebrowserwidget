@@ -270,8 +270,9 @@ class ReferenceBrowserPopup(BrowserView):
         assert self._updated
         context = aq_inner(self.context)
 
-        putils = getToolByName(context, 'plone_utils')
-        portal = context.portal_url.getPortalObject()
+        portal_state = getMultiAdapter((context, self.request),
+                                       name=u'plone_portal_state')
+        portal = portal_state.portal()
 
         crumbs = context.restrictedTraverse('@@breadcrumbs_view').breadcrumbs()
 
