@@ -18,7 +18,7 @@
           refs python:helper.getFieldRelations(field);"
           condition="refs">
 
-        <tal:block 
+        <tal:block
                tal:condition="python: not field.multiValued and (can_view or not hide_inaccessible)"
                tal:define="obj python:refs[0];
                            obj_path python: '/'.join(obj.getPhysicalPath());

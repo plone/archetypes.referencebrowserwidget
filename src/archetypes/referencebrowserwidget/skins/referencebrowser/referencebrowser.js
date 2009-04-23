@@ -16,13 +16,13 @@ function refbrowser_setReference(widget_id, uid, label, multi)
         label_element.value=label
      }  else {
          // check if the item isn't already in the list
-         var current_values = cssQuery('#' + widget_id + ' input');
+         var current_values = jq('#' + widget_id + ' input');
          for (var i=0; i < current_values.length; i++) {
             if (current_values[i].value == uid) {
               return false;
             }
-          }         
-          // now add the new item
+          }
+    	  // now add the new item
           var list = document.getElementById(widget_id);
           var li = document.createElement('li');
           var label_element = document.createElement('label');
@@ -39,7 +39,7 @@ function refbrowser_setReference(widget_id, uid, label, multi)
           var up_element = document.createElement('img');
           up_element.src = 'arrowUp.gif';
           up_element.alt = 'up';
-          up_element.onclick = function() { 
+          up_element.onclick = function() {
               refbrowser_moveReferenceUp(this);
               }
 
@@ -48,7 +48,7 @@ function refbrowser_setReference(widget_id, uid, label, multi)
           var down_element = document.createElement('img');
           down_element.src = 'arrowDown.gif';
           down_element.alt = 'down';
-          down_element.onclick = function() { 
+          down_element.onclick = function() {
               refbrowser_moveReferenceDown(this);
               }
 
@@ -58,7 +58,7 @@ function refbrowser_setReference(widget_id, uid, label, multi)
           // fix on IE7 - check *after* adding to DOM
           input.checked = true;
 
-     } 
+     }
 }
 
 // function to clear the reference field or remove items
@@ -74,7 +74,7 @@ function refbrowser_removeReference(widget_id, multi)
         }
         for (var x=0; x < list.length; x++) {
             list[x].selected='selected';
-          }        
+          }
     } else {
         element=document.getElementById(widget_id);
         label_element=document.getElementById(widget_id + '_label');
@@ -96,11 +96,11 @@ function refbrowser_moveReferenceUp(self)
   var prevelem = document.getElementById('ref-' + widget_id + '-' + (pos-1));
 
   // child node 1 is the up img-tag
-  newelem.childNodes[1].onclick = function() { 
+  newelem.childNodes[1].onclick = function() {
               refbrowser_moveReferenceUp(this);
               }
   // child node 2 is the down img-tag
-  newelem.childNodes[2].onclick = function() { 
+  newelem.childNodes[2].onclick = function() {
               refbrowser_moveReferenceDown(this);
               }
 
@@ -126,11 +126,11 @@ function refbrowser_moveReferenceDown(self)
   var newelem = elem.cloneNode(true);
 
   // child node 1 is the up img-tag
-  newelem.childNodes[1].onclick = function() { 
+  newelem.childNodes[1].onclick = function() {
               refbrowser_moveReferenceUp(this);
               }
   // child node 2 is the down img-tag
-  newelem.childNodes[2].onclick = function() { 
+  newelem.childNodes[2].onclick = function() {
               refbrowser_moveReferenceDown(this);
               }
 

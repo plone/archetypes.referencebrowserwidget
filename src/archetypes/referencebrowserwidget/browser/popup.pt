@@ -28,7 +28,7 @@
         onload="focus();self.name='refbrowser_popup'"
           style="margin: 4px;padding:0.5em;"
           tal:define="
-              border_color here/base_properties/globalBorderColor;
+              border_color view/border_color;
               fieldName view/fieldName;
               multiValued view/multiValued;
               fieldRealName view/fieldRealName;
@@ -102,7 +102,7 @@
         </label>
         <br/>
         <select name="search_index" style="" id="indexSelector"
-            tal:attributes="style string:font-family:${here/base_properties/fontFamily};;font-size:100%;">
+            tal:attributes="style string:font-family:${view/fontFamily};;font-size:100%;">
           <tal:indexes tal:repeat="index view/filtered_indexes">
             <option value="" selected=""
                 tal:attributes="
@@ -211,7 +211,7 @@
 		    isNotSelf python:view.isNotSelf(item);
 		    referenceable python:view.isReferencable(item);
 		    title_or_id item/sortable_title|item/Title|item/getId;
-		    color here/base_properties/discreetColor;">
+		    color view/discreetColor;">
 
 	      <tr tal:define="oddrow repeat/item/odd"
 		  tal:attributes="class python:oddrow and 'even' or 'odd'">

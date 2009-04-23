@@ -6,7 +6,10 @@ Changelog
 
 * Fixed unchecking of items when moving in IE [tom_gross]
 * Fixed handling of required multivalued fields to be standard. Throw a
-  validation error instead of silently return to the previous value. [tom_gross] 
+  validation error instead of silently return to the previous value. [tom_gross]
+* Changed cssQuery-call with jquery-call in referencebrowser.js [tom_gross]
+* made base_properties optional
+* added egg dependencies
 
 0.9 - 13.11.2008
 ----------------

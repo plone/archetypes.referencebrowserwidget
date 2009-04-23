@@ -64,8 +64,8 @@ def getStartupDirectory(context, directory=''):
         # Resolve the URL
         try:
             targetPath = basePath + url
-            object = context.restrictedTraverse (targetPath)
-            return object.absolute_url()
+            obj = context.restrictedTraverse (targetPath)
+            return obj.absolute_url()
         except ConflictError:
             raise
         except:

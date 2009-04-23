@@ -49,7 +49,16 @@ setup(name='archetypes.referencebrowserwidget',
       zip_safe=False,
       install_requires=[
           'setuptools',
-          # -*- Extra requirements: -*-
+          'DateTime',
+          'Products.Archetypes',
+          'zope.interface',
+          'zope.component',
+          'zope.formlib',
+          'Products.CMFCore',
+          'ZODB3',
+          'Zope2',
+          'Acquisition',
+          'plone.app.form',
       ],
       entry_points="""
       # -*- Entry points: -*-

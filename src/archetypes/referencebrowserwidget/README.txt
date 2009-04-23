@@ -10,12 +10,12 @@ To install it as a replacement just install the product via the quickinstaller.
 For using it as a standalone widget see the demotype in demo.py.
 The widget tries to be ui-compatible with its predecessor
 ATReferenceBrowserWidget. You can use the same properties as for the standard
-ReferenceField and for the ATReferenceBrowserWidget. 
+ReferenceField and for the ATReferenceBrowserWidget.
 
 When you use this widget, there are two buttons presented for each widget. One
 that opens a popup-window that let's you do the search/browsing and one that
 let's you clear the reference or selected references (will be in effect after
-the form's Save). 
+the form's Save).
 
 The popop window basically consists of two parts. The top half is a search form
 and the bottom half is the browser/search results part. Both parts can be
@@ -32,11 +32,11 @@ The widget supports:
 
 * generic referencefield implementation via adapter. OOTB it supports
   Archetypes.ReferenceField and plonerelations.ATField.
-   
+
 * overwrite the popup-template via namedtemplate-implementation
- 
+
 * resizeable popup via simple properties
- 
+
 * a good unittest and integrationtest coverage
 
 Properties
@@ -69,10 +69,10 @@ The popup window can be configured using the following widget properties:
 * allow_browse: shows the browse section in the popup
 
 * search_catalog: Catalog to use. Defaults to: portal_catalog
-  
+
 * startup_directory: directory where the popup opens. Optional. When
-  omitted, the current folder is used or in the case where a property 
-  refwidget_startupdirectories under site_properties is found it is 
+  omitted, the current folder is used or in the case where a property
+  refwidget_startupdirectories under site_properties is found it is
   searched for a startup_directory.
 
   Property is a lines field having the following
@@ -83,12 +83,12 @@ The popup window can be configured using the following widget properties:
   path1 is the path where all widgets being under it set startup_directory
   to path2 if no startup_directory is set.
 
-* startup_directory_method: the name of a method or variable that, if 
-  available at the instance, will be used to obtain the path of the 
+* startup_directory_method: the name of a method or variable that, if
+  available at the instance, will be used to obtain the path of the
   startup directory. If present, 'startup_directory' will be ignored.
 
 * restrict_browsing_to_startup_directory: allows you to restrict the
-  breadcrumbs ('allow_browse' property) to contents inside the 
+  breadcrumbs ('allow_browse' property) to contents inside the
   'startup_directory' only. So you are not able to walk up in the hierarchy.
   (default: 0 = disabled)
 
@@ -103,15 +103,15 @@ The popup window can be configured using the following widget properties:
   (off by default)
 
 * show_path: display the relative path (relative to the portal object) of
-  referenced objects 
+  referenced objects
 
 * only_for_review_states: items are only referencable if their workflow
   state matches the ones
-  a specified (default: None = no filtering by workflow state) 
+  a specified (default: None = no filtering by workflow state)
 
 * history_length: enable a history feature that show the paths of the last
   N visited folders (default : 0 = no history)
-  
+
 * force_close_on_insert: closes the popup when the user choses insert. This
   overrides the behavior in multiselect mode.
 
@@ -122,7 +122,7 @@ The popup window can be configured using the following widget properties:
 
 * hide_inaccessible: don't show inaccessible objects (no permission) in view
   mode.
-  
+
 * show_results_without_query: Don't ignore empty queries, but display results.
 
 * popup_width: Width of popup-window in pixel. Defaults to: 500
@@ -131,14 +131,14 @@ The popup window can be configured using the following widget properties:
 
 * popup_name: Name of template to be used for popup. To use another template
   you have to register a named adapter for this template. Like:
-  
+
     <zope:adapter
       for="Products.Five.BrowserView"
       factory=".view.default_popup_template"
       name="popup"
       provides="zope.formlib.namedtemplate.INamedTemplate"
       />
-  
+
   See default implementation and unittests for examples.
 
 Design notes

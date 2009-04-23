@@ -12,7 +12,12 @@ from Products.ZCTextIndex.ParseTree import ParseError
 from plone.app.form._named import named_template_adapter
 
 from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.PloneBatch import Batch
+try:
+    # Plone >= 4.0
+    from plone.sequencebatch import Batch
+except ImportError:
+    # Plone <= 3.x
+    from Products.CMFPlone.PloneBatch import Batch
 
 from archetypes.referencebrowserwidget import utils
 from archetypes.referencebrowserwidget.interfaces import IFieldRelation
@@ -106,7 +111,10 @@ class ReferenceBrowserPopup(BrowserView):
     def __init__(self, context, request):
         super(ReferenceBrowserPopup, self).__init__(context, request)
 
-        portal_props = getToolByName(aq_inner(context), 'portal_properties')
+        plone_tools = queryMultiAdapter((self.context, self.request),
+                                        name='plone_tools')
+        portal_props = plone_tools.properties()
+
         self.charset = portal_props.site_properties.default_charset
         self.request.response.setHeader('Content-Type',
                                         'text/html;;charset=%s' % self.charset)
@@ -117,6 +125,18 @@ class ReferenceBrowserPopup(BrowserView):
         self.fieldName = request.get('fieldName')
         self.fieldRealName = request.get('fieldRealName')
         self.search_text = request.get('searchValue', '')
+
+        base_props = getToolByName(aq_inner(context), 'base_properties', None)
+        if base_props is not None:
+            self.border_color = base_props.globalBorderColor
+            self.fontFamily = base_props.fontFamily
+            self.discreetColor = base_props.discreetColor
+        else:
+            # XXX This concept has changed in Plone 4.0
+            self.border_color = '#8cacbb'
+            self.fontFamily = '"Lucida Grande", Verdana, Lucida, Helvetica, Arial, sans-serif'
+            self.discreetColor = '#76797c'
+
 
     def __call__(self):
         self.update()
@@ -252,7 +272,8 @@ class ReferenceBrowserPopup(BrowserView):
 
         putils = getToolByName(context, 'plone_utils')
         portal = context.portal_url.getPortalObject()
-        crumbs = putils.createBreadCrumbs(context)
+
+        crumbs = context.restrictedTraverse('@@breadcrumbs_view').breadcrumbs()
 
         server_url = self.request.SERVER_URL
         if startup_directory.startswith('/'):
