@@ -1,8 +1,8 @@
 Changelog
 =========
 
-0.10 - (unreleased)
--------------------
+0.10 - 23.04.2008
+-----------------
 
 * Fixed unchecking of items when moving in IE [tom_gross]
 * Fixed handling of required multivalued fields to be standard. Throw a
