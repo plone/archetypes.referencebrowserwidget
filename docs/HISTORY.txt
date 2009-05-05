@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.10.1 - 05.05.2009
+-------------------
+
+* removed dependency for eggified zope
+* fixed tests for Plone 4 (tests pass on 3.2 and 4.0svn now)
+
 0.10 - 23.04.2009
 -----------------
 
