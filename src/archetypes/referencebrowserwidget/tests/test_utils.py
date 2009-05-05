@@ -17,6 +17,7 @@ class UtilsTestCase(unittest.TestCase):
 class PloneUtilsTestCase(TestCase):
 
     def afterSetUp(self):
+        self.folder = self.createDefaultStructure()
         makeContent(self.folder, portal_type='Document', id='doc1')
         makeContent(self.folder, portal_type='Folder', id='folder1')
         makeContent(self.folder, portal_type='Folder', id='folder2')
@@ -26,10 +27,13 @@ class PloneUtilsTestCase(TestCase):
         self.doc1 = self.folder.doc1
         self.doc2 = self.folder.folder1.subfolder1.doc2
 
+    def beforeTearDown(self):
+        self.removeDefaultStructure()
+
     def test_emptystartupdir(self):
         self.assertEqual(
             utils.getStartupDirectory(self.doc1, ''),
-            'http://nohost/plone/Members/test_user_1_/doc1')
+            'http://nohost/plone/layer1/layer2/doc1')
 
     def test_absstartupdir(self):
         self.assertEqual(
@@ -39,15 +43,15 @@ class PloneUtilsTestCase(TestCase):
     def test_relstartupdir(self):
         self.assertEqual(
             utils.getStartupDirectory(self.doc2, '../../folder2'),
-            'http://nohost/plone/Members/test_user_1_/folder2')
+            'http://nohost/plone/layer1/layer2/folder2')
 
         self.assertEqual(
             utils.getStartupDirectory(self.doc2, '..'),
-            'http://nohost/plone/Members/test_user_1_/folder1/subfolder1')
+            'http://nohost/plone/layer1/layer2/folder1/subfolder1')
 
         self.assertEqual(
             utils.getStartupDirectory(self.doc2, '../..'),
-            'http://nohost/plone/Members/test_user_1_/folder1')
+            'http://nohost/plone/layer1/layer2/folder1')
 
 def test_suite():
     return unittest.TestSuite([

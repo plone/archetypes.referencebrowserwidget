@@ -7,6 +7,8 @@ from Testing import ZopeTestCase as ztc
 from Products.Archetypes.tests.utils import makeContent
 from Products.PloneTestCase import PloneTestCase as ptc
 from Products.PloneTestCase.layer import PloneSite
+from Products.PloneTestCase.setup import default_user
+from Products.PloneTestCase.setup import default_password
 
 # setup session
 app = ztc.app()
@@ -47,16 +49,41 @@ class MixIn(object):
         def tearDown(cls):
             pass
 
+    def createDefaultStructure(self):
+        if 'layer1' not in self.portal.objectIds():
+            self.setRoles(['Manager'])
+            makeContent(self.portal, portal_type='Folder', id='layer1')
+            self.portal.layer1.setTitle('Layer1')
+            self.portal.layer1.reindexObject()
+            makeContent(self.portal.layer1, portal_type='Folder', id='layer2')
+            self.folder = self.portal.layer1.layer2
+            self.folder.setTitle('Layer2')
+            self.folder.reindexObject()
+            self.setRoles(['Member'])
+        return self.portal.layer1.layer2
+
+    def removeDefaultStructure(self):
+        if 'layer1' in self.portal.objectIds():
+            self.portal._delObject('layer1')
+
+
 class TestCase(MixIn, ptc.PloneTestCase):
     """ Base TestCase for archetypes.referencebrowserwidget """
 
 class FunctionalTestCase(MixIn, ptc.FunctionalTestCase):
     """ Base FunctionalTestCase for archetypes.referencebrowserwidget """
 
+    basic_auth = '%s:%s' % (default_user, default_password)
+
 class PopupBaseTestCase(TestCase):
 
     def afterSetUp(self):
+        self.folder = self.createDefaultStructure()
         makeContent(self.folder, portal_type='RefBrowserDemo', id='ref')
+        if 'news' not in self.portal.objectIds():
+            self.setRoles(['Manager'])
+            makeContent(self.portal, portal_type='Folder', id='news')
+            self.setRoles(['Member'])
         self.obj = self.folder.ref
         self.obj.reindexObject()
         self.request = self.app.REQUEST
@@ -70,4 +97,7 @@ class PopupBaseTestCase(TestCase):
         popup.update()
         return popup
 
+def normalize(s):
+    """ Helper method for integration tests """
+    return ' '.join(s.split())
 
