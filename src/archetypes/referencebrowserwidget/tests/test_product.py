@@ -258,6 +258,26 @@ class PopupTestCase(PopupBaseTestCase):
         assert batch[0].getObject() == self.obj
         assert popup.has_queryresults
 
+    def test_history(self):
+        fieldname = 'multiRef3'
+        self.request.set('at_url', '/plone/layer1/layer2/ref')
+        self.request.set('fieldName', fieldname)
+        self.request.set('fieldRealName', fieldname)
+        self.request.set('search_index', 'getId')
+        self.request.set('searchValue', '')
+        
+        field = self.folder.ref.getField('multiRef3')
+        field.widget.history_length = 5
+        
+        popup = self._getPopup()
+        
+        self.assertEqual(
+            self.request.SESSION.get('atrefbrowserwidget_history'),
+            [('', '/layer1/layer2/ref')])
+        
+        field.widget.history_length = 0
+        
+
 
 class PopupBreadcrumbTestCase(PopupBaseTestCase):
 

@@ -15,6 +15,7 @@
           show_path          field/widget/show_path|nothing;
           hide_inaccessible  field/widget/hide_inaccessible | nothing;
           helper nocall:here/refbrowserhelper;
+          portal_path        utool/getPortalPath;
           refs python:helper.getFieldRelations(field);"
           condition="refs">
 

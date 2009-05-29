@@ -75,6 +75,11 @@ class FunctionalTestCase(MixIn, ptc.FunctionalTestCase):
 
     basic_auth = '%s:%s' % (default_user, default_password)
 
+class DummySession(dict):
+    
+    def set(self, key, value):
+        self[key] = value
+
 class PopupBaseTestCase(TestCase):
 
     def afterSetUp(self):
@@ -87,7 +92,8 @@ class PopupBaseTestCase(TestCase):
         self.obj = self.folder.ref
         self.obj.reindexObject()
         self.request = self.app.REQUEST
-
+        setattr(self.request, 'SESSION', DummySession())
+        
     def _getPopup(self, obj=None, request=None):
         if obj is None:
             obj = self.obj

@@ -175,7 +175,7 @@ class ReferenceBrowserPopup(BrowserView):
         self.close_window = int(not self.field.multiValued or
                                 self.widget.force_close_on_insert)
         if self.widget.history_length > 0:
-            self.insertHistory(self.request, self.widget.history_length)
+            self.insertHistory(self.widget.history_length)
         popup_name = getattr(self.widget, 'popup_name', 'popup')
         self.template = getAdapter(self, namedtemplate.INamedTemplate,
                                    name=popup_name or 'popup')
