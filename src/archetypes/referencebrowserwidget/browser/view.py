@@ -25,6 +25,7 @@ from archetypes.referencebrowserwidget.interfaces import IFieldRelation
 default_popup_template = named_template_adapter(
     ViewPageTemplateFile('popup.pt'))
 
+
 class ReferenceBrowserHelperView(BrowserView):
 
     def getFieldRelations(self, field):
@@ -41,7 +42,8 @@ class ReferenceBrowserHelperView(BrowserView):
                              widget.startup_directory_method,
                              False)
             if method:
-                # Then get the method again, but with acquisition context this time:
+                # Then get the method again, but with acquisition context this
+                # time:
                 method = getattr(self.context,
                                  widget.startup_directory_method,
                                  False)
@@ -49,6 +51,7 @@ class ReferenceBrowserHelperView(BrowserView):
                     method = method()
                 return method
         return utils.getStartupDirectory(self.context, directory)
+
 
 class QueryCatalogView(BrowserView):
 
@@ -69,20 +72,20 @@ class QueryCatalogView(BrowserView):
             if v and k in indexes:
                 if quote_logic and k in quote_logic_indexes:
                     v = utils.quotequery(v)
-                query.update({k:v})
+                query.update({k: v})
                 show_query=1
             elif k.endswith('_usage'):
                 key = k[:-6]
                 param, value = v.split(':')
-                second_pass[key] = {param:value}
+                second_pass[key] = {param: value}
             elif k in ('sort_on', 'sort_order', 'sort_limit'):
-                query.update({k:v})
+                query.update({k: v})
 
         for k, v in second_pass.items():
             qs = query.get(k)
             if qs is None:
                 continue
-            query[k] = q = {'query':qs}
+            query[k] = q = {'query': qs}
             q.update(v)
 
 # doesn't normal call catalog unless some field has been queried
@@ -99,6 +102,7 @@ class QueryCatalogView(BrowserView):
 
 
 from zope.component import getAdapter
+
 
 class ReferenceBrowserPopup(BrowserView):
     """ View class of Popup window """
@@ -134,9 +138,9 @@ class ReferenceBrowserPopup(BrowserView):
         else:
             # XXX This concept has changed in Plone 4.0
             self.border_color = '#8cacbb'
-            self.fontFamily = '"Lucida Grande", Verdana, Lucida, Helvetica, Arial, sans-serif'
+            self.fontFamily = '"Lucida Grande", Verdana, Lucida, Helvetica, ' \
+                'Arial, sans-serif'
             self.discreetColor = '#76797c'
-
 
     def __call__(self):
         self.update()
@@ -202,7 +206,8 @@ class ReferenceBrowserPopup(BrowserView):
 
     @property
     def history(self):
-        sdm = getToolByName(aq_inner(self.context), 'session_data_manager', None)
+        sdm = getToolByName(aq_inner(self.context), 'session_data_manager',
+            None)
         if sdm is not None:
             session = sdm.getSessionData(create=0)
             if session is not None:
@@ -300,11 +305,9 @@ class ReferenceBrowserPopup(BrowserView):
         return "%s/%s?fieldName=%s&fieldRealName=%s&at_url=%s" % (
        urlbase, self.__name__, self.fieldName, self.fieldRealName, self.at_url)
 
-
     def getUid(self, item):
         assert self._updated
         return getattr(aq_base(item), 'UID', None)
-
 
     def isNotSelf(self, item):
         assert self._updated
@@ -317,9 +320,7 @@ class ReferenceBrowserPopup(BrowserView):
             item.portal_type in self.allowed_types
         filter_review_states = self.widget.only_for_review_states is not None
         review_state_allows = filter_review_states and \
-            item.review_state in (self.widget.only_for_review_states or ()) or \
-            True
+            item.review_state in (self.widget.only_for_review_states or ()) \
+            or True
         return self.getUid(item) and item_referenceable and \
                review_state_allows and self.isNotSelf(item)
-
-
