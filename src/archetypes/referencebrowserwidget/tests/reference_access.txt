@@ -1,0 +1,57 @@
+
+  >>> self.setRoles(['Manager'])
+  >>> from Products.Archetypes.tests.utils import makeContent
+
+  >>> context = makeContent(self.folder, portal_type='RefBrowserDemo', id='ref')
+  >>> doc1 = makeContent(self.folder, portal_type='Document', id='doc1')
+  >>> doc2 = makeContent(self.portal, portal_type='Document', id='doc2')
+
+  >>> context.setMultiRef(doc1.UID())
+  >>> context.reindexObject()
+  >>> request = self.app.REQUEST
+
+  >>> from archetypes.referencebrowserwidget.browser import view
+  >>> helper = view.ReferenceBrowserHelperView(context, request)
+
+  >>> from Products.PloneTestCase.setup import default_user
+  >>> from Products.PloneTestCase.setup import default_password
+  >>> membership = self.portal.portal_membership
+  >>> membership.addMember('fred', default_password, [], [])
+  >>> fred = membership.getMemberById('fred')
+
+  >>> from Products.Five.testbrowser import Browser
+  >>> owner_browser = Browser()
+  >>> owner_browser.addHeader('Authorization', 'Basic %s:%s' % (default_user, default_password))
+  >>> owner_browser.open(context.absolute_url())
+
+
+  >>> browser = Browser()
+  >>> browser.addHeader('Authorization', 'Basic %s:%s' % ('fred', default_password))
+  >>> browser.open(context.absolute_url())
+  >>> browser.url
+  'http://nohost/plone/acl_users/credentials_cookie_auth/require_login?...'
+
+
+  >>> self.folder.manage_setLocalRoles('fred', ('Authenticated', 'Reader', 'Member',))
+  >>> self.folder.reindexObjectSecurity()
+  >>> context.manage_setLocalRoles('fred', ('Authenticated', 'Reader',  'Member','Owner',))
+  >>> context.reindexObjectSecurity()
+
+  >>> browser.open(context.absolute_url() + "/edit")
+  >>> browser.url
+  'http://nohost/plone/Members/test_user_1_/ref/edit'
+
+  >>> browser.getControl(name="multiRef:list").value == [doc1.UID()]
+  True
+
+  >>> context.setMultiRef((doc1.UID(), doc2.UID()))
+  >>> context.reindexObject()
+
+  >>> browser.open(context.absolute_url() + "/edit")
+  >>> browser.getControl(name="multiRef:list").value == [doc1.UID(), doc2.UID()]
+  Traceback (most recent call last):
+  ...
+  LookupError: name 'multiRef:list'
+
+  >>> "Insufficient Privileges" in browser.contents
+  True
