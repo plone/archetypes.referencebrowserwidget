@@ -8,7 +8,7 @@
       name="refbrowserhelper"
       permission="zope2.Public"
       for="Products.Archetypes.interfaces.IReferenceable"
-      allowed_attributes="getFieldRelations getStartupDirectory"
+      allowed_attributes="getFieldRelations getStartupDirectory getUidFromReference"
       class=".view.ReferenceBrowserHelperView"
       />
 
