@@ -151,11 +151,11 @@
                 tal:attributes="
                   id string:ref-${fieldName}-${repeat/set/index};">
               <label tal:define="
-                   title set/title_or_id;
+                   title set/title_or_id | string:Undisclosed;
                    obj_path python: '/'.join(set.getPhysicalPath());">
                 <input type="checkbox"
                        tal:attributes="name string:${fieldName}:list;
-                                       value set/UID;"
+                                       value python:helper.getUidFromReference(set);"
                        checked="checked" />
                 <tal:block replace="python: show_path and '%s (%s)' % (title, obj_path.replace(portal_path, '')) or title" />
               </label>

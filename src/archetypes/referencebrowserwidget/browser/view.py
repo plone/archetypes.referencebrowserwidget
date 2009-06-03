@@ -32,6 +32,14 @@ class ReferenceBrowserHelperView(BrowserView):
         return queryMultiAdapter((self.context, field),
                                  interface=IFieldRelation, default=[])
 
+    def getUidFromReference(self, ref):
+        """ helper to get UID in restricted code without having rights to
+            access the object """
+        uid = ref.UID
+        if callable(uid):
+            uid = uid()
+        return uid
+
     def getStartupDirectory(self, field):
         """ Return the path to the startup directory. """
         widget = field.widget
