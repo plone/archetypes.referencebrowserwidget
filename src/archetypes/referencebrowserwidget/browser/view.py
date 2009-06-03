@@ -35,10 +35,7 @@ class ReferenceBrowserHelperView(BrowserView):
     def getUidFromReference(self, ref):
         """ helper to get UID in restricted code without having rights to
             access the object """
-        uid = ref.UID
-        if callable(uid):
-            uid = uid()
-        return uid
+        return ref.UID()
 
     def getStartupDirectory(self, field):
         """ Return the path to the startup directory. """
