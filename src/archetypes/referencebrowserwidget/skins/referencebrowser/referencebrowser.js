@@ -22,7 +22,7 @@ function refbrowser_setReference(widget_id, uid, label, multi)
               return false;
             }
           }
-    	  // now add the new item
+          // now add the new item
           var list = document.getElementById(widget_id);
           var li = document.createElement('li');
           var label_element = document.createElement('label');
@@ -93,14 +93,22 @@ function refbrowser_moveReferenceUp(self)
   var widget_id = eid.pop();
 
   var newelem = elem.cloneNode(true);
+
+  //Fix: (IE keep the standard value)
+  var cbs = newelem.getElementsByTagName("input")
+  if (cbs.length > 0) {
+    cbs[0].checked = elem.getElementsByTagName("input")[0].checked
+  }
+
   var prevelem = document.getElementById('ref-' + widget_id + '-' + (pos-1));
 
-  // child node 1 is the up img-tag
-  newelem.childNodes[1].onclick = function() {
+  // up img
+  var imgs = newelem.getElementsByTagName("img")
+  imgs[0].onclick = function() {
               refbrowser_moveReferenceUp(this);
               }
-  // child node 2 is the down img-tag
-  newelem.childNodes[2].onclick = function() {
+  // down img
+  imgs[1].onclick = function() {
               refbrowser_moveReferenceDown(this);
               }
 
@@ -108,9 +116,6 @@ function refbrowser_moveReferenceUp(self)
   elem.parentNode.removeChild(elem);
   newelem.id = 'ref-' + widget_id + '-' + (pos-1);
   prevelem.id = 'ref-' + widget_id + '-' + pos;
-
-  // mark the checkbox, this is needed for IE
-  newelem.childNodes[0].childNodes[0].checked = true;
 }
 
 function refbrowser_moveReferenceDown(self)
@@ -124,13 +129,19 @@ function refbrowser_moveReferenceDown(self)
   if ((pos+1) == current_values.length) { return false }
 
   var newelem = elem.cloneNode(true);
+  //Fix: (IE keep the standard value)
+  var cbs = newelem.getElementsByTagName("input")
+  if (cbs.length > 0) {
+    cbs[0].checked = elem.getElementsByTagName("input")[0].checked
+  }
 
-  // child node 1 is the up img-tag
-  newelem.childNodes[1].onclick = function() {
-              refbrowser_moveReferenceUp(this);
+  // up img
+  var imgs = newelem.getElementsByTagName("img")
+  imgs[0].onclick = function() {
+               refbrowser_moveReferenceUp(this);
               }
-  // child node 2 is the down img-tag
-  newelem.childNodes[2].onclick = function() {
+  // down img
+  imgs[1].onclick = function() {
               refbrowser_moveReferenceDown(this);
               }
 
@@ -140,8 +151,5 @@ function refbrowser_moveReferenceDown(self)
   elem.parentNode.removeChild(elem);
   newelem.id = 'ref-' + widget_id + '-' + (pos+1);
   nextelem.id = 'ref-' + widget_id + '-' + pos;
-
-  // mark the checkbox, this is needed for IE
-  newelem.childNodes[0].childNodes[0].checked = true;
 }
 

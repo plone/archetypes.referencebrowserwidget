@@ -6,6 +6,7 @@ Changelog
 
 * added missing portal_path in refererencebrowser.pt (Thanks, Bert Vanderbauwhede)
 * fixed ambiguous method call in popup-view (Thanks, Bert Vanderbauwhede)
+* fixed javascript for order support in IE (Thanks, Rodrigo Ristow)
 
 0.10.1 - 05.05.2009
 -------------------
