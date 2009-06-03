@@ -107,7 +107,10 @@ And re-edit:
 
 Both targets are referenced by the widget:
 
-  >>> browser.getControl(name="multiRef:list").value == [doc1.UID(), doc2.UID()]
+  >>> doc1.UID() in browser.getControl(name="multiRef:list").value
+  True
+
+  >>> doc2.UID() in browser.getControl(name="multiRef:list").value
   True
 
   >>> 'doc1' in browser.contents
