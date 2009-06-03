@@ -1,9 +1,10 @@
 Changelog
 =========
 
-0.11 - (svn/unreleased)
------------------------
+0.11 - 03.06.2009
+-----------------
 
+* fixed Unauthorized error when referencing inaccessible targets [tomster]
 * added missing portal_path in refererencebrowser.pt (Thanks, Bert Vanderbauwhede)
 * fixed ambiguous method call in popup-view (Thanks, Bert Vanderbauwhede)
 * fixed javascript for order support in IE (Thanks, Rodrigo Ristow)
