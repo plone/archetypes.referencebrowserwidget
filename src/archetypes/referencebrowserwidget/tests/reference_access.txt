@@ -14,6 +14,24 @@
   >>> membership.addMember('fred', default_password, [], [])
   >>> fred = membership.getMemberById('fred')
 
+We want to test for doc1 and doc2 in the browser output later, so we turn off
+both portlet columns, since they will contain references to both at all times
+(i.e. the navigation portlet, recent items etc.)
+
+  >>> from zope.component import getMultiAdapter, getUtility
+  >>> from plone.portlets.interfaces import IPortletManager
+  >>> from plone.portlets.interfaces import IPortletAssignmentMapping
+
+  >>> left_column = getUtility(IPortletManager, name=u"plone.leftcolumn")
+  >>> left_assignable = getMultiAdapter((self.portal, left_column), IPortletAssignmentMapping)
+  >>> for name in left_assignable.keys():
+  ...     del left_assignable[name]
+
+  >>> right_column = getUtility(IPortletManager, name=u"plone.rightcolumn")
+  >>> right_assignable = getMultiAdapter((self.portal, right_column), IPortletAssignmentMapping)
+  >>> for name in right_assignable.keys():
+  ...     del right_assignable[name]
+
   >>> from Products.Five.testbrowser import Browser
   >>> browser = Browser()
   >>> browser.addHeader('Authorization', 'Basic %s:%s' % ('fred', default_password))
@@ -33,14 +51,25 @@
   >>> browser.getControl(name="multiRef:list").value == [doc1.UID()]
   True
 
+  >>> 'doc1' in browser.contents
+  True
+
+  >>> 'doc2' in browser.contents
+  False
+
   >>> context.setMultiRef((doc1.UID(), doc2.UID()))
   >>> context.reindexObject()
 
   >>> browser.open(context.absolute_url() + "/edit")
   >>> browser.getControl(name="multiRef:list").value == [doc1.UID(), doc2.UID()]
-  Traceback (most recent call last):
-  ...
-  LookupError: name 'multiRef:list'
-
-  >>> "Insufficient Privileges" in browser.contents
   True
+
+  >>> 'doc1' in browser.contents
+  True
+
+  >>> 'doc2' in browser.contents
+  False
+
+  >>> 'Undisclosed' in browser.contents
+  True
+
