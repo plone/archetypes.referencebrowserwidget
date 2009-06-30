@@ -1,3 +1,5 @@
+from types import ListType, TupleType
+
 from zope.component import getMultiAdapter
 from zope.component import queryMultiAdapter
 from zope.formlib import namedtemplate
@@ -11,6 +13,7 @@ from Products.ZCTextIndex.ParseTree import ParseError
 
 from plone.app.form._named import named_template_adapter
 
+from Products.Archetypes.config import REFERENCE_CATALOG
 from Products.CMFCore.utils import getToolByName
 try:
     # Plone >= 4.0
@@ -27,14 +30,34 @@ default_popup_template = named_template_adapter(
 
 
 class ReferenceBrowserHelperView(BrowserView):
+    """ A helper view for the reference browser widget.
+    
+        The main purpose of this view is to move code out of the
+        referencebrowser.pt template. This template needs to be in skins
+        and can not be a view, since it is macro widget for Archetypes.
+    """
 
-    def getFieldRelations(self, field):
-        return queryMultiAdapter((self.context, field),
-                                 interface=IFieldRelation, default=[])
+    def getFieldRelations(self, field, value=None):
+        """ Query relations of a field and a context.
+        
+            Return a list of objects. If the value parameter
+            is supported it needs to be a list of UIDs.
+        """
+        if not value:
+            return queryMultiAdapter((self.context, field),
+                                     interface=IFieldRelation, default=[])
+        else:
+            if isinstance(value, basestring):
+                value = [value]
+            if type(value) != ListType and type(value) != TupleType:
+                return []
+            catalog = getToolByName(aq_inner(self.context), REFERENCE_CATALOG)
+            return [catalog.lookupObject(uid) for uid in value if uid]
 
     def getUidFromReference(self, ref):
-        """ helper to get UID in restricted code without having rights to
-            access the object """
+        """ Helper to get UID in restricted code without having rights to
+            access the object
+        """
         return ref.UID()
 
     def getStartupDirectory(self, field):

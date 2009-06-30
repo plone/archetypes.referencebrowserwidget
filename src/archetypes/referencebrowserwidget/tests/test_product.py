@@ -5,6 +5,7 @@ import re
 from zope.component import getMultiAdapter
 from zope.component import provideAdapter
 from zope.formlib.namedtemplate import INamedTemplate
+from zope.publisher.browser import TestRequest
 
 from Testing import ZopeTestCase as ztc
 
@@ -385,6 +386,59 @@ class HelperViewTestCase(TestCase):
 
         # clean up
         field.widget.startup_directory_method = ''
+
+    def test_valuefromrequest_multi(self):
+        """ If the request provides UIDs take these, not the references 
+            on the object for the edit-view of the widget.
+        """      
+        makeContent(self.folder, portal_type='Document', id='doc1')
+        makeContent(self.folder, portal_type='Document', id='doc2')
+        makeContent(self.folder, portal_type='Document', id='doc3')
+        
+        context = self.folder.doc1
+        request = TestRequest()
+        helper = view.ReferenceBrowserHelperView(context, request)
+        field = context.getField('relatedItems')
+        
+        # no relations
+        self.assertEqual(helper.getFieldRelations(field), [])
+        
+        # relations on the object
+        context.setRelatedItems(self.folder.doc3)        
+        self.assertEqual(helper.getFieldRelations(field),
+                         [self.folder.doc3])
+
+        # relations from the parameter (request, session, ...)
+        uid = self.folder.doc2.UID()
+        self.assertEqual(helper.getFieldRelations(field, [uid]),
+                         [self.folder.doc2])
+        
+        # invalid values
+        self.assertEqual(helper.getFieldRelations(field, 1), [])
+        
+    def test_valuefromrequest_single(self):
+        makeContent(self.folder, portal_type='RefBrowserDemo', id='ref')
+        makeContent(self.folder, portal_type='Document', id='doc2')
+        makeContent(self.folder, portal_type='Document', id='doc3')
+        
+        context = self.folder.ref
+        request = TestRequest()
+        field = context.getField('singleRef')
+        helper = view.ReferenceBrowserHelperView(context, request)
+        
+        # no relations
+        self.assertEqual(helper.getFieldRelations(field), [])
+        
+        # relations on the object
+        context.setSingleRef(self.folder.doc3)        
+        self.assertEqual(helper.getFieldRelations(field),
+                         [self.folder.doc3])
+
+        # relations from the parameter (request, session, ...)
+        uid = self.folder.doc2.UID()
+        self.assertEqual(helper.getFieldRelations(field, uid),
+                         [self.folder.doc2])
+  
 
 class IntegrationTestCase(FunctionalTestCase):
 
