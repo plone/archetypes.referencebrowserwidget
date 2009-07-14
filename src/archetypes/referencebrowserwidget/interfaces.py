@@ -20,3 +20,13 @@ class IPloneRelationsRevRefField(IObjectField):
     """ Missing marker for plone.relations.ReversePloneRelationsATField """
 
 
+class IReferenceBrowserHelperView(Interface):
+
+      def getFieldRelations():
+          """ """
+
+      def getStartupDirectory():
+          """ """
+
+      def getUidFromReference():
+          """ """

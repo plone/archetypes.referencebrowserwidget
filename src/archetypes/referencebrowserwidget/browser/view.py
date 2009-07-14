@@ -1,7 +1,9 @@
 from types import ListType, TupleType
 
-from zope.component import getMultiAdapter
-from zope.component import queryMultiAdapter
+import zope.interface
+
+from zope.component import getAdapter
+from zope.component import getMultiAdapter, queryMultiAdapter
 from zope.formlib import namedtemplate
 
 from Acquisition import aq_inner
@@ -24,6 +26,8 @@ except ImportError:
 
 from archetypes.referencebrowserwidget import utils
 from archetypes.referencebrowserwidget.interfaces import IFieldRelation
+from archetypes.referencebrowserwidget.interfaces import \
+        IReferenceBrowserHelperView
 
 default_popup_template = named_template_adapter(
     ViewPageTemplateFile('popup.pt'))
@@ -31,15 +35,17 @@ default_popup_template = named_template_adapter(
 
 class ReferenceBrowserHelperView(BrowserView):
     """ A helper view for the reference browser widget.
-    
+
         The main purpose of this view is to move code out of the
         referencebrowser.pt template. This template needs to be in skins
         and can not be a view, since it is macro widget for Archetypes.
     """
 
+    zope.interface.implements(IReferenceBrowserHelperView)
+
     def getFieldRelations(self, field, value=None):
         """ Query relations of a field and a context.
-        
+
             Return a list of objects. If the value parameter
             is supported it needs to be a list of UIDs.
         """
@@ -127,10 +133,6 @@ class QueryCatalogView(BrowserView):
                 pass
 
         return results
-
-
-from zope.component import getAdapter
-
 
 class ReferenceBrowserPopup(BrowserView):
     """ View class of Popup window """

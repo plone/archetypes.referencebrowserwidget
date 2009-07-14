@@ -5,7 +5,7 @@ Changelog
 -----------------------
 
 * keep values in edit-mode, when edit form validates to false [tom_gross]
-*
+* define an interface `IReferenceBrowserHelperView` for the helper view [tom_gross] 
 
 
 0.11 - 03.06.2009

@@ -8,7 +8,15 @@
       name="refbrowserhelper"
       permission="zope2.Public"
       for="Products.Archetypes.interfaces.IReferenceable"
-      allowed_attributes="getFieldRelations getStartupDirectory getUidFromReference"
+      allowed_interface="..interfaces.IReferenceBrowserHelperView"
+      class=".view.ReferenceBrowserHelperView"
+      />
+
+  <page
+      name="refbrowserhelper"
+      permission="zope2.Public"
+      for="Products.ATContentTypes.interface.topic.IATTopicCriterion"
+      allowed_interface="..interfaces.IReferenceBrowserHelperView"
       class=".view.ReferenceBrowserHelperView"
       />
 
