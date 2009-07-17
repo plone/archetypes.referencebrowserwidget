@@ -1,9 +1,10 @@
 import unittest
 import os.path
 import re
+from urllib import urlencode
 
-from zope.component import getMultiAdapter
-from zope.component import provideAdapter
+import zope.component
+import zope.interface
 from zope.formlib.namedtemplate import INamedTemplate
 from zope.publisher.browser import TestRequest
 
@@ -11,11 +12,16 @@ from Testing import ZopeTestCase as ztc
 
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.Five import BrowserView
+from Products.Five.testbrowser import Browser
 
 from plone.app.form._named import named_template_adapter
+from plone.app.layout.navigation.interfaces import INavigationRoot
 
 from Products.Archetypes.tests.utils import makeContent
 from Products.CMFCore.utils import getToolByName
+from Products.PloneTestCase.PloneTestCase import default_password
+from Products.PloneTestCase.PloneTestCase import portal_owner
+
 try:
     # Plone 4
     from plone.sequencebatch import Batch
@@ -39,6 +45,7 @@ from archetypes.referencebrowserwidget.browser import view
 _marker = []
 
 class ProductsTestCase(TestCase):
+    """ Basic product unit tests """
 
     def afterSetUp(self):
         self.createDefaultStructure()
@@ -52,8 +59,8 @@ class ProductsTestCase(TestCase):
         self.folder.doc1.setRelatedItems(self.folder.doc2)
 
         field = self.folder.doc1.getField('relatedItems')
-        relation = getMultiAdapter((self.folder.doc1, field),
-                                   interface=IFieldRelation)
+        relation = zope.component.getMultiAdapter((self.folder.doc1, field),
+                                                  interface=IFieldRelation)
         assert len(relation) == 1
         assert relation[0] == self.folder.doc2
 
@@ -165,6 +172,7 @@ def getPTName(filename):
     return os.path.basename(basepath)
 
 class PopupTestCase(PopupBaseTestCase):
+    """ Test the popup view """
 
     def test_variables(self):
         fieldname = 'multiRef2'
@@ -190,8 +198,10 @@ class PopupTestCase(PopupBaseTestCase):
     def test_alternatetemplate(self):
         alternate_template = named_template_adapter(
             ViewPageTemplateFile('sample.pt'))
-        provideAdapter(alternate_template, adapts=(BrowserView, ),
-                       provides=INamedTemplate, name='alternate')
+        zope.component.provideAdapter(alternate_template,
+                                      adapts=(BrowserView, ),
+                                      provides=INamedTemplate,
+                                      name='alternate')
         fieldname = 'multiRef2'
         self.request.set('at_url', '/plone/layer1/layer2/ref')
         self.request.set('fieldName', fieldname)
@@ -279,8 +289,8 @@ class PopupTestCase(PopupBaseTestCase):
         field.widget.history_length = 0
         
 
-
 class PopupBreadcrumbTestCase(PopupBaseTestCase):
+    """ Test the popup breadcrumbs """
 
     pat = ('http://nohost/plone%%srefbrowser_popup?fieldName=%s&'
            'fieldRealName=%s&at_url=/plone/layer1/layer2/ref')
@@ -359,6 +369,7 @@ class PopupBreadcrumbTestCase(PopupBaseTestCase):
 
 
 class HelperViewTestCase(TestCase):
+    """ Test the helper view """
 
     def afterSetUp(self):
         self.createDefaultStructure()
@@ -441,9 +452,8 @@ class HelperViewTestCase(TestCase):
   
 
 class IntegrationTestCase(FunctionalTestCase):
-
-    def afterSetUp(self):
-        self.createDefaultStructure()
+    """ Browser/publish tests of referencebrowser widget 
+    """
 
     def afterSetUp(self):
         self.setRoles(['Manager'])
@@ -521,7 +531,6 @@ class IntegrationTestCase(FunctionalTestCase):
         assert '<input type="hidden" name="fieldRealName" value="singleRef" />' in body
         assert '<input type="hidden" name="at_url" value="plone/demo1" />' in body
 
-
     def test_popup_items(self):
         wanted_rows = 3
         wanted_insertlinks = 1
@@ -550,6 +559,39 @@ class IntegrationTestCase(FunctionalTestCase):
         assert '''onclick="javascript:refbrowser_openBrowser('http://nohost/plone/demo1','singleRef', '/plone/demo1', 'singleRef', 500, 550)" />''' in body
 
         assert '''onclick="javascript:refbrowser_openBrowser('http://nohost/plone/demo1','multiRef5', '/plone/demo1', 'multiRef5', 173, 209)" />''' in body
+
+    def test_bc_navigationroot(self):
+        makeContent(self.portal, portal_type='Folder', id='folder1')
+        makeContent(self.portal.folder1, portal_type='Document', id='page1')
+        
+        page = self.portal.folder1.page1
+        
+        browser = Browser()
+        data = {
+          'fieldName': 'relatedItems',
+          'fieldRealName': 'relatedItems',
+          'at_url': page.absolute_url(1)}
+        
+        basic = '%s:%s' % (portal_owner, default_password)
+
+        browser.addHeader('Authorization', 'Basic %s' % basic)
+        browser.open('%s/refbrowser_popup?%s' % (page.absolute_url(),
+                                                 urlencode(data)))        
+        self.failUnless(('<a href="http://nohost/plone/refbrowser_popup?'
+                         'fieldName=relatedItems&amp;fieldRealName=relatedItems'
+                         '&amp;at_url=plone/folder1/page1"> '
+                         '<span>Home</span> </a>')
+                         in normalize(browser.contents))
+
+        # now let's change the navigation root
+        zope.interface.alsoProvides(self.portal.folder1, INavigationRoot)
+        browser.open('%s/refbrowser_popup?%s' % (page.absolute_url(),
+                                                 urlencode(data)))     
+        self.failUnless(('<a href="http://nohost/plone/folder1/refbrowser_popup?'
+                         'fieldName=relatedItems&amp;fieldRealName=relatedItems'
+                         '&amp;at_url=plone/folder1/page1"> '                                                           
+                         '<span>Home</span> </a>')
+                         in normalize(browser.contents))
 
 def test_suite():
     return unittest.TestSuite([

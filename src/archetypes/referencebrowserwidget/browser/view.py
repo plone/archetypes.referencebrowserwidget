@@ -327,7 +327,8 @@ class ReferenceBrowserPopup(BrowserView):
         if not self.widget.restrict_browsing_to_startup_directory:
             newcrumbs.insert(0,
                 {'Title': 'Home',
-                 'absolute_url': self.genRefBrowserUrl(portal.absolute_url())})
+                 'absolute_url': self.genRefBrowserUrl(
+                                    portal_state.navigation_root_url())})
         return newcrumbs
 
     def genRefBrowserUrl(self, urlbase):
