@@ -532,11 +532,8 @@ class IntegrationTestCase(FunctionalTestCase):
         assert '<input type="hidden" name="at_url" value="plone/demo1" />' in body
 
     def test_popup_items(self):
-        wanted_rows = 3
-        wanted_insertlinks = 1
-        if not PLONE40:
-            wanted_rows += 3 # news, events, members
-            wanted_insertlinks += 1 # front-page
+        wanted_rows = 6
+        wanted_insertlinks = 2
 
         body = self.getNormalizedPopup()
         INSERTLINK = re.compile(
