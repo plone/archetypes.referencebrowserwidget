@@ -7,6 +7,7 @@ Changelog
 * keep values in edit-mode, when edit form validates to false [tom_gross]
 * define an interface `IReferenceBrowserHelperView` for the helper view [tom_gross]
 * respect navigation root in breadcrumbs (Plone ticket #9379) [tom_gross]
+* added `getPortalPath`-method to helper-view, since global utool is no longer available in Plone 4 [tom_gross]
 
 0.11 - 03.06.2009
 -----------------

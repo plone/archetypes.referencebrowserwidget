@@ -29,18 +29,14 @@ except ImportError:
     # Plone <4
     from Products.CMFPlone import Batch
 
-try:
-    from Products.PloneTestCase.setup import PLONE40
-except ImportError:
-    PLONE40 = 0
-
 from archetypes.referencebrowserwidget.tests.base import TestCase
 from archetypes.referencebrowserwidget.tests.base import FunctionalTestCase
 from archetypes.referencebrowserwidget.tests.base import PopupBaseTestCase
 from archetypes.referencebrowserwidget.tests.base import normalize
-from archetypes.referencebrowserwidget.interfaces import IFieldRelation
-
-from archetypes.referencebrowserwidget.browser import view
+from archetypes.referencebrowserwidget.interfaces import (
+    IFieldRelation, IReferenceBrowserHelperView)
+from archetypes.referencebrowserwidget.browser.view import \
+    ReferenceBrowserHelperView
 
 _marker = []
 
@@ -374,6 +370,14 @@ class HelperViewTestCase(TestCase):
     def afterSetUp(self):
         self.createDefaultStructure()
 
+    def test_interface(self):
+        zope.interface.verify.verifyClass(IReferenceBrowserHelperView,
+                                          ReferenceBrowserHelperView)
+
+    def test_portalpath(self):
+        helper = ReferenceBrowserHelperView(self.folder, self.app.REQUEST)
+        self.assertEqual(helper.getPortalPath(), '/plone')
+
     def test_startupdirectory(self):
         makeContent(self.folder, portal_type='RefBrowserDemo', id='ref')
         context = self.folder.ref
@@ -381,7 +385,7 @@ class HelperViewTestCase(TestCase):
         request = self.app.REQUEST
 
         field = context.getField('multiRef5')
-        helper = view.ReferenceBrowserHelperView(context, request)
+        helper = ReferenceBrowserHelperView(context, request)
 
         # no query
         self.assertEqual(helper.getStartupDirectory(field),
@@ -408,7 +412,7 @@ class HelperViewTestCase(TestCase):
         
         context = self.folder.doc1
         request = TestRequest()
-        helper = view.ReferenceBrowserHelperView(context, request)
+        helper = ReferenceBrowserHelperView(context, request)
         field = context.getField('relatedItems')
         
         # no relations
@@ -435,7 +439,7 @@ class HelperViewTestCase(TestCase):
         context = self.folder.ref
         request = TestRequest()
         field = context.getField('singleRef')
-        helper = view.ReferenceBrowserHelperView(context, request)
+        helper = ReferenceBrowserHelperView(context, request)
         
         # no relations
         self.assertEqual(helper.getFieldRelations(field), [])

@@ -86,6 +86,10 @@ class ReferenceBrowserHelperView(BrowserView):
                 return method
         return utils.getStartupDirectory(self.context, directory)
 
+    def getPortalPath(self):
+        tools = getMultiAdapter((self.context, self.request),
+                                name='plone_tools')
+        return tools.url().getPortalPath()
 
 class QueryCatalogView(BrowserView):
 

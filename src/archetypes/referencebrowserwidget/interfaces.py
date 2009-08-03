@@ -22,11 +22,18 @@ class IPloneRelationsRevRefField(IObjectField):
 
 class IReferenceBrowserHelperView(Interface):
 
-      def getFieldRelations():
+      def getFieldRelations(field, value):
           """ """
 
-      def getStartupDirectory():
+      def getStartupDirectory(field):
           """ """
 
-      def getUidFromReference():
-          """ """
+      def getUidFromReference(ref):
+          """ Get UID in restricted code 
+          
+              Can be used in restricted code without having rights to
+              access the object.
+          """
+
+      def getPortalPath():
+          """ Return the path to the portal """

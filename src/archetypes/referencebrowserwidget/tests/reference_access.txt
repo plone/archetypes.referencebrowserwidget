@@ -62,7 +62,7 @@ We give him access to the source and doc1 but *not* doc2:
 
   >>> self.folder.manage_setLocalRoles('fred', ('Authenticated', 'Reader', 'Member',))
   >>> self.folder.reindexObjectSecurity()
-  >>> context.manage_setLocalRoles('fred', ('Authenticated', 'Reader',  'Member','Owner',))
+  >>> context.manage_setLocalRoles('fred', ('Authenticated', 'Reader', 'Member', 'Owner',))
   >>> context.reindexObjectSecurity()
 
 We verify by revisiting:
