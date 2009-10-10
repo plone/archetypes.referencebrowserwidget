@@ -138,6 +138,10 @@ class QueryCatalogView(BrowserView):
 
         return results
 
+BORDERCOLOR = '#8cacbb'
+FONTFAMILY = '"Lucida Grande", Verdana, Lucida, Helvetica, Arial, sans-serif'
+DISCREETCOLOR = '#76797c'
+
 class ReferenceBrowserPopup(BrowserView):
     """ View class of Popup window """
 
@@ -166,15 +170,14 @@ class ReferenceBrowserPopup(BrowserView):
 
         base_props = getToolByName(aq_inner(context), 'base_properties', None)
         if base_props is not None:
-            self.border_color = base_props.globalBorderColor
-            self.fontFamily = base_props.fontFamily
-            self.discreetColor = base_props.discreetColor
+            self.border_color = getattr(base_props, 'globalBorderColor', BORDERCOLOR)
+            self.fontFamily = getattr(base_props, 'fontFamily',  FONTFAMILY)
+            self.discreetColor = getattr(base_props, 'discreetColor', DISCREETCOLOR)
         else:
             # XXX This concept has changed in Plone 4.0
-            self.border_color = '#8cacbb'
-            self.fontFamily = '"Lucida Grande", Verdana, Lucida, Helvetica, ' \
-                'Arial, sans-serif'
-            self.discreetColor = '#76797c'
+            self.border_color = BORDERCOLOR
+            self.fontFamily = FONTFAMILY
+            self.discreetColor = DISCREETCOLOR
 
     def __call__(self):
         self.update()
