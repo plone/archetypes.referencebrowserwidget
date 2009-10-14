@@ -1,8 +1,8 @@
 Changelog
 =========
 
-1.0a2 - (unreleased)
---------------------
+1.0a2 - 14.10.2009
+------------------
 
  * simplified compatibility changes for ATCT 1.3 and 2.0 [hannosch]
  * provide fallbacks, if base_properties are not available [tom_gross]
