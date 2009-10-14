@@ -1,6 +1,0 @@
-<?xml version="1.0"?>
-<object name="portal_javascripts">
- <javascript cacheable="True" compression="safe"
-    conditionalcomment="" cookable="True" enabled="on" expression=""
-    id="referencebrowser.js" inline="False"/>
-</object>
