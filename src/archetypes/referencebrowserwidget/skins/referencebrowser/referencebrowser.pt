@@ -79,7 +79,7 @@
 
                 <tal:if condition="show_path"
                      i18n:translate="label_directory">
-                     ( Directory: <span i18n:name="directory"
+                     (Directory: <span i18n:name="directory"
                                         tal:replace="python: obj_path.replace(portal_path + '/', '') "
                                          >directory</span>)
                 </tal:if>
