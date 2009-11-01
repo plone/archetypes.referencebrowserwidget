@@ -125,7 +125,7 @@ function refbrowser_moveReferenceDown(self)
   var eid = elem.id.split('-')
   var pos = parseInt(eid.pop());
   var widget_id = eid.pop();
-  var current_values = cssQuery('#' + widget_id + ' input');
+  var current_values = jQuery('#' + widget_id + ' input');
   if ((pos+1) == current_values.length) { return false }
 
   var newelem = elem.cloneNode(true);
