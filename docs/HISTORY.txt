@@ -1,10 +1,16 @@
 Changelog
 =========
 
+1.0a4 - 14.11.2009
+------------------
+
+* replaced cssQuery-call with jQuery one [esteele]
+* define portal which is used in the widget-template [santonelli]
+
 1.0a3 - 16.10.2009
 ------------------
 
-* egg 1.0a2 on pyi was broken [tom_gross]
+* egg 1.0a2 on pypi was broken [tom_gross]
 
 1.0a2 - 14.10.2009
 ------------------
