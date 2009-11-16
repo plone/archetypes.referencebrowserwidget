@@ -102,7 +102,7 @@
                     refs python:helper.getFieldRelations(field, value);">
 
       <input type="hidden" value=""
-          tal:condition="python:not field.required and multiValued"
+          tal:condition="python:multiValued"
           tal:attributes="name string:$fieldName:default:list"
           />
 

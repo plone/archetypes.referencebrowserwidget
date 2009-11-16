@@ -74,12 +74,12 @@ class ReferenceBrowserWidget(ReferenceWidget):
         result = super(ReferenceBrowserWidget,
                        self).process_form(instance, field, form, empty_marker,
                                           emptyReturnsMarker, validating)
-        # when removing all items from a required reference-field the
-        # entry is omitted in the form dictionary. here we inject a 'custom'
-        # empty-value to trigger the isempty-validator and not use the previous
-        # content of the field.
-        if field.multiValued and \
-           not emptyReturnsMarker and result is empty_marker:
+        # when removing all items from a required reference-field we get a
+        # default form value of [''].  here we inject a 'custom' empty-value
+        # to trigger the isempty-validator and not use the previous content of
+        # the field.
+        if field.required and field.multiValued and \
+           not emptyReturnsMarker and result == ([''], {}):
             return [], {}
         return result
 

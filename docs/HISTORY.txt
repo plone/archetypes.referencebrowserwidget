@@ -4,7 +4,10 @@ Changelog
 1.0b1 - (unreleased)
 --------------------
 
- *
+* Make sure that a default value is passed in the request even for required
+  multi-valued fields, so that the list of references only gets cleared if
+  a value was actually passed for this field in the request form.
+  [davisagli]
 
 1.0a4 - 14.11.2009
 ------------------
