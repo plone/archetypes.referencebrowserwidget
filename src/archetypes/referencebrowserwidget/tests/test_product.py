@@ -68,7 +68,7 @@ class ProductsTestCase(TestCase):
         """ A required field should throw an error, if no value is provided,
             not silently ignore it.
         """
-
+        
         basic_auth = '%s:%s' % (ztc.user_name, ztc.user_password)
 
         makeContent(self.folder, portal_type='RefBrowserDemo', id='ref')
@@ -89,14 +89,12 @@ class ProductsTestCase(TestCase):
         assert field.widget.process_form(context, field, form,
                                          empty_marker=_marker)[0][0] == uid
 
-        # without key
+        # without the key, we have to return the empty marker and do nothing
         form = {'singleRef': '',
                 'multiRef2': ['']}
         value = field.widget.process_form(context, field, form,
                                            empty_marker=_marker)
-        assert len(value) == 2
-        assert value[0] == []
-        assert value[0] is not _marker
+        assert value is _marker
 
         # without value
         form = {'singleRef': '',
