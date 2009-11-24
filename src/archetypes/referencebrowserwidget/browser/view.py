@@ -357,8 +357,9 @@ class ReferenceBrowserPopup(BrowserView):
         item_referenceable = not self.allowed_types or \
             item.portal_type in self.allowed_types
         filter_review_states = self.widget.only_for_review_states is not None
-        review_state_allows = filter_review_states and \
-            item.review_state in (self.widget.only_for_review_states or ()) \
-            or True
+        review_state_allows = True
+        if filter_review_states:
+            review_state_allows = item.review_state in \
+                (self.widget.only_for_review_states or ())
         return self.getUid(item) and item_referenceable and \
                review_state_allows and self.isNotSelf(item)
