@@ -1,8 +1,8 @@
 Changelog
 =========
 
-1.0b1 - (unreleased)
---------------------
+1.0a6 - 01.12.2009
+------------------
 
 * Fixed ``only_for_review_states`` of the widget to actually restrict.
   [hannosch]
