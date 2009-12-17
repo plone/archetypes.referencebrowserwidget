@@ -1,6 +1,13 @@
 Changelog
 =========
 
+1.0b1 - Unreleased
+------------------
+
+* Add missing portal_path that prevented editing of content that contains if a
+  multivalued reference has items set.
+  [MatthewWilkes]
+
 1.0a6 - 01.12.2009
 ------------------
 

@@ -98,6 +98,7 @@
                     image_portal_types widget/image_portal_types|string:;
                     image_method       widget/image_method|string:;
                     helper nocall:here/refbrowserhelper;
+                    portal_path        helper/getPortalPath;
                     multiValued python:test(field.multiValued, 1, 0);
                     refs python:helper.getFieldRelations(field, value);">
 
