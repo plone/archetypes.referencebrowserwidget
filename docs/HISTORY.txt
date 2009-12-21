@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.0b1 - Unreleased
+1.0b1 - 21.12.2009
 ------------------
 
 * Add missing portal_path that prevented editing of content that contains if a
