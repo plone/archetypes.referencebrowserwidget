@@ -4,6 +4,12 @@ Changelog
 1.0b2 - Unreleased
 ------------------
 
+* Inserted conditional check in the widget, so it doesn't render an empty ul
+  when there are no results. This is a backport of
+  http://dev.plone.org/archetypes/changeset/12072 and refs
+  http://dev.plone.org/plone/ticket/10083 and
+  http://dev.plone.org/plone/ticket/9222
+
 
 1.0b1 - 21.12.2009
 ------------------
