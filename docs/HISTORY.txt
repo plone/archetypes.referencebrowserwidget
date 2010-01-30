@@ -9,6 +9,7 @@ Changelog
   http://dev.plone.org/archetypes/changeset/12072 and refs
   http://dev.plone.org/plone/ticket/10083 and
   http://dev.plone.org/plone/ticket/9222
+  [limi]
 
 
 1.0b1 - 21.12.2009
