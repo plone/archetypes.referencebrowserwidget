@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.0b2 - Unreleased
+1.0b2 - 01.02.2010
 ------------------
 
 * Inserted conditional check in the widget, so it doesn't render an empty ul
