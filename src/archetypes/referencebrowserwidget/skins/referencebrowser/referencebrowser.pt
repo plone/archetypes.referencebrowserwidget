@@ -183,12 +183,11 @@
           tal:define="
               global at_url at_url|python:'/'.join(here.getPhysicalPath());
               startup_directory python:helper.getStartupDirectory(field);">
-        <input type="button" class="searchButton" value="Add..." onclick=""
+        <input type="button" class="searchButton addreference" value="Add..." onclick=""
                i18n:attributes="value label_add;"
                tal:define="popup_width widget/popup_width|string:500;
                            popup_height widget/popup_height|string:550;"
-               tal:attributes="onclick
-               string:javascript:refbrowser_openBrowser('${startup_directory}','${fieldName}', '${at_url}', '${field/getName}', ${popup_width}, ${popup_height})" />
+               tal:attributes="src string:${startup_directory}/refbrowser_popup?fieldName=${fieldName}&fieldRealName=${field/getName}&at_url=${at_url}" />            
         <input type="button" class="destructive" value="Remove reference" onclick=""
                i18n:attributes="value label_remove_reference;"
                tal:condition="not:multiValued"

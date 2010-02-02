@@ -48,10 +48,10 @@
                 top: 1.4em;
                 right: 1.0em;">
       <a href="javascript:history.back()"
-         i18n:translate="referencebrowser_back">Back</a>
+         i18n:translate="referencebrowser_back" class="refbrowser_back">Back</a>
       |
       <a href="javascript:window.close()"
-         i18n:translate="referencebrowser_close">Close window</a>
+         i18n:translate="referencebrowser_close" class="refbrowser_closewindow">Close window</a>
     </div>
     <div style="text-align:right;margin-bottom:1.5em; margin-top: 2.5em;">
       <div tal:condition="python:widget.history_length > 0 "
@@ -294,10 +294,10 @@
     </tal:block>
     <div style="text-align:right;margin-top:1em;margin-bottom:2em;">
       <a href="javascript:history.back()"
-         i18n:translate="referencebrowser_back">Back</a>
+         i18n:translate="referencebrowser_back" class="refbrowser_back">Back</a>
       |
       <a href="javascript:window.close()"
-         i18n:translate="referencebrowser_close">Close window</a>
+         i18n:translate="referencebrowser_close" class="refbrowser_closewindow">Close window</a>
     </div>
   </body>
 </html>
