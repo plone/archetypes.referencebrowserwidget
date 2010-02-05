@@ -270,12 +270,12 @@
 		    style="text-align:right"
 		    tal:define="title python:title_or_id.replace('\'', '\\\'')">
 		  <tal:referenceable tal:condition="referenceable">
-		    <a href="#" onclick=""
-		       tal:attributes="onclick string:window.opener.refbrowser_setReference('${fieldName}', '${uid}', '${title}', ${multiValued});; if (1==${view/close_window}) {window.close()} else {showMessage('${title}')};; ;">
+                  <a href="" onclick=""
+                     tal:attributes="onclick string:refbrowser_setReference('${fieldName}', '${uid}', '${title}', ${multiValued});; if (1==${view/close_window}) {window.close()} else {showMessage('${title}')};; ;">
 		      <strong i18n:translate="referencebrowser_insert_reference">Insert</strong>
 		    </a>
 		    |
-		    <a href="" target="_blank"
+		    <a href="" target="_blank" class="refbrowser_browse"
 		       tal:attributes="href item/getURL">
 		      <strong i18n:translate="referencebrowser_browse">Browse</strong>
 		    </a>

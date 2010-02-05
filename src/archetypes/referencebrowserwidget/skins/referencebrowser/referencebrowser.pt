@@ -149,8 +149,7 @@
         <div style="float: left">
 
           <ul class="visualNoMarker"
-              tal:attributes="id string:${fieldName};"
-              tal:condition="python: field.multiValued and refs">
+              tal:attributes="id string:${fieldName};">
             <li tal:repeat="set refs"
                 tal:attributes="
                   id string:ref-${fieldName}-${repeat/set/index};">
