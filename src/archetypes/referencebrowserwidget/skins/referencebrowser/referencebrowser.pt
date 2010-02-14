@@ -188,7 +188,7 @@
                tal:define="popup_width widget/popup_width|string:500;
                            popup_height widget/popup_height|string:550;"
                tal:attributes="onclick
-               string:javascript:refbrowser_openBrowser('${startup_directory}','${fieldName}', '${at_url}', '${field/getName}', ${popup_width}, ${popup_height})" />
+               string:javascript:refbrowser_openBrowser('${startup_directory}','archetypes-fieldname-${fieldName}', '${at_url}', '${field/getName}', ${popup_width}, ${popup_height})" />
         <input type="button" class="destructive" value="Remove reference" onclick=""
                i18n:attributes="value label_remove_reference;"
                tal:condition="not:multiValued"
