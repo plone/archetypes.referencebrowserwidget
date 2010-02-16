@@ -146,11 +146,11 @@
 
       </tal:single>
       <tal:multi tal:condition="multiValued">
-        <div style="float: left">
+        <div style="float: left"> <!-- don't remove this. it is needed for DOM traversal -->
 
           <ul class="visualNoMarker"
               tal:attributes="id string:${fieldName};"
-              tal:condition="python: field.multiValued and refs">
+              tal:condition="refs">
             <li tal:repeat="set refs"
                 tal:attributes="
                   id string:ref-${fieldName}-${repeat/set/index};">

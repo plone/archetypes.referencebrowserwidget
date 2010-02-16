@@ -33,6 +33,12 @@ function refbrowser_setReference(widget_id, uid, label, multi)
         }
         // now add the new item
         list = document.getElementById(widget_id);
+        // add ul-element to DOM, if it is not there
+        if (list === null) {
+            jq('#archetypes-fieldname-' + widget_id + ' input + div').after(
+               '<ul class="visualNoMarker" id="' + widget_id + '"></ul>');
+            list = document.getElementById(widget_id);
+        }
         li = document.createElement('li');
         label_element = document.createElement('label');
         input = document.createElement('input');
