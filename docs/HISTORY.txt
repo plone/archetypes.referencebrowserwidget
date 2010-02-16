@@ -1,6 +1,17 @@
 Changelog
 =========
 
+1.0b3 - (unreleased)
+--------------------
+
+* Fixed case where parent ul-element was missing for adding relations. This
+  fixes
+  http://dev.plone.org/plone/ticket/10172
+  and hopefully
+  http://dev.plone.org/plone/ticket/10215 and
+  http://dev.plone.org/plone/ticket/10083
+  [tom_gross]
+
 1.0b2 - 01.02.2010
 ------------------
 
