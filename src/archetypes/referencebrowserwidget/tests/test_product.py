@@ -513,7 +513,7 @@ class IntegrationTestCase(FunctionalTestCase):
         assert ('<input type="button" class="searchButton" value="Add..." '
                 'onclick="javascript:refbrowser_openBrowser'
                 "('http://nohost/plone/demo1','singleRef', '/plone/demo1', "
-                '\'singleRef\', 500, 550)" />') in body
+                '\'singleRef\', 500, 550)"') in body
         assert '''<input type="button" class="destructive" value="Remove reference" onclick="javascript:refbrowser_removeReference('singleRef', 0)" />''' in body
 
     def getNormalizedPopup(self):
@@ -555,9 +555,9 @@ class IntegrationTestCase(FunctionalTestCase):
         response = self.publish(self.portal.demo1.absolute_url(1) + '/base_edit',
                                 self.basic_auth)
         body = response.getBody()
-        assert '''onclick="javascript:refbrowser_openBrowser('http://nohost/plone/demo1','singleRef', '/plone/demo1', 'singleRef', 500, 550)" />''' in body
+        assert '''onclick="javascript:refbrowser_openBrowser('http://nohost/plone/demo1','singleRef', '/plone/demo1', 'singleRef', 500, 550)"''' in body
 
-        assert '''onclick="javascript:refbrowser_openBrowser('http://nohost/plone/demo1','multiRef5', '/plone/demo1', 'multiRef5', 173, 209)" />''' in body
+        assert '''onclick="javascript:refbrowser_openBrowser('http://nohost/plone/demo1','multiRef5', '/plone/demo1', 'multiRef5', 173, 209)"''' in body
 
     def test_bc_navigationroot(self):
         makeContent(self.portal, portal_type='Folder', id='folder1')
