@@ -15,7 +15,8 @@ function refbrowser_setReference(widget_id, uid, label, multi)
         li = null,
         input = null,
         up_element = null,
-        down_element = null;
+        down_element = null,
+        container = null;
     // differentiate between the single and mulitselect widget
     // since the single widget has an extra label field.
     if (multi === 0) {
@@ -35,7 +36,12 @@ function refbrowser_setReference(widget_id, uid, label, multi)
         list = document.getElementById(widget_id);
         // add ul-element to DOM, if it is not there
         if (list === null) {
-            jq('#archetypes-fieldname-' + widget_id + ' input + div').after(
+            container = jq('#archetypes-fieldname-' + widget_id + ' input + div');
+            if (!container.length) {
+                // fix for Plone 3.3 collections, with a weird widget-id
+                container = jq('#archetypes-fieldname-value input + div');
+            }
+            container.after(
                '<ul class="visualNoMarker" id="' + widget_id + '"></ul>');
             list = document.getElementById(widget_id);
         }
@@ -194,4 +200,5 @@ function refbrowser_moveReferenceDown(self)
     newelem.id = 'ref-' + widget_id + '-' + (pos + 1);
     nextelem.id = 'ref-' + widget_id + '-' + pos;
 }
+
 
