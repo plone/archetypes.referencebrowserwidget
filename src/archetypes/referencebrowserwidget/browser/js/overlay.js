@@ -1,32 +1,36 @@
-
 jq(function() {
-        /*
-   jq('input.addreference').prepOverlay({
-        subtype: 'ajax',
-        filter: '>*',
-        closeselector: 'a.refbrowser_closewindow',
-   });
-   
-   jQuery('.link').bind('click', function() {
-        :
-   });
-  */ 
 
   jq('.addreference').overlay({
        closeOnClick: false,
-       // TODO: enable close button
        onBeforeLoad: function() {
            var wrap = this.getContent().find('.overlaycontent');
            var src = this.getTrigger().attr('src');
+           var srcfilter = src + ' >*';
+           wrap.data('srcfilter', srcfilter);
            wrap.data('overlay', this);
-           wrap.load(src + ' >*');
+           resetHistory();
+           wrap.load(srcfilter);
            }});
 
   jq('[id^=atrb_] a.browse').live('click', function(event) {
       var target = jq(this);
       var src = target.attr('href');
       var wrap = target.parents('.overlaycontent');
-      wrap.load(src + ' #content');
+      var srcfilter = src + ' #content';
+      pushToHistory(wrap.data('srcfilter'));
+      wrap.data('srcfilter', srcfilter);
+      wrap.load(srcfilter);
+      return false;
+      });
+
+  jq('[id^=atrb_] a.browsesite').live('click', function(event) {
+      var target = jq(this);
+      var src = target.attr('href');
+      var wrap = target.parents('.overlaycontent');
+      var srcfilter = src + ' >*';
+      pushToHistory(wrap.data('srcfilter'));
+      wrap.data('srcfilter', srcfilter);
+      wrap.load(srcfilter);
       return false;
       });
 
@@ -49,7 +53,12 @@ jq(function() {
 
           });
 
+  jq('[id^=atrb_] a.refbrowser_back').live('click', function(event) {
+      var target = jq(this);
+      var wrap = target.siblings('.overlaycontent');
+      srcfilter = popFromHistory();
+      wrap.load(srcfilter);
+      return false;
+      });
+
 });
-
-
-

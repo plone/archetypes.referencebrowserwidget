@@ -207,3 +207,19 @@ function submitHistoryForm() {
      form.submit();
 }
 
+function pushToHistory(url) {
+  var history = jq(document).data('atrb_history');
+  history.push(url);
+  jq(document).data('atrb_history', history);
+}
+
+function resetHistory() {
+  jq(document).data('atrb_history', []);
+}
+
+function popFromHistory() {
+  var history = jq(document).data('atrb_history');
+  value = history.pop();
+  jq(document).data('atrb_history', history);
+  return value;
+}

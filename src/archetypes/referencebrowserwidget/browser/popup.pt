@@ -29,16 +29,6 @@
               image_method widget/image_method|string:;
               ">
 
-    <div style="text-align:right;
-                position: absolute;
-                top: 1.4em;
-                right: 1.0em;">
-      <a href="javascript:history.back()"
-         i18n:translate="referencebrowser_back" class="refbrowser_back">Back</a>
-      |
-      <a href="javascript:window.close()"
-         i18n:translate="referencebrowser_close" class="refbrowser_closewindow">Close window</a>
-    </div>
     <div style="text-align:right;margin-bottom:1.5em; margin-top: 2.5em;">
       <div tal:condition="python:widget.history_length > 0 "
            tal:define="history view/history">
@@ -213,7 +203,7 @@
 		<td width="50%">
 		  <img src="#"
 		       tal:attributes="src string:${here/portal_url}/${item/getIcon};alt title_or_id" />
-		  <a tal:condition="python: item.is_folderish and allow_browse"
+		  <a class="browsesite" tal:condition="python: item.is_folderish and allow_browse"
 		     tal:attributes="
 			 href python:view.genRefBrowserUrl(item.getURL())">
 		    <strong tal:condition="referenceable"
@@ -281,12 +271,5 @@
       </tal:var>
 
     </tal:block>
-    <div style="text-align:right;margin-top:1em;margin-bottom:2em;">
-      <a href="javascript:history.back()"
-         i18n:translate="referencebrowser_back" class="refbrowser_back">Back</a>
-      |
-      <a href="javascript:window.close()"
-         i18n:translate="referencebrowser_close" class="refbrowser_closewindow">Close window</a>
-    </div>
   </body>
 </html>

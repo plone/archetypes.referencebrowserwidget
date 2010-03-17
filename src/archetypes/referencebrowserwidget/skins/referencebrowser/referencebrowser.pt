@@ -195,7 +195,12 @@
                tal:condition="not:multiValued"
                tal:attributes="onclick string:javascript:refbrowser_removeReference('${fieldName}', ${multiValued})" />
            </div><div id="atrb" tal:attributes="id overlay_id" class="overlay overlay-ajax">
-               <div class="pb-ajax"><div class="overlaycontent"></div></div></div>
+           <div class="pb-ajax">
+             <a href="" i18n:translate="referencebrowser_back" class="refbrowser_back">Back</a>
+             <div class="overlaycontent"></div>
+             <a href="" i18n:translate="referencebrowser_back" class="refbrowser_back">Back</a>
+           </div>
+           </div>
       <!-- Todo? -->
       <metal:addable metal:use-macro="here/widgets/addable_support/macros/addable"/>
     </metal:reference_edit>
