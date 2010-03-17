@@ -2,32 +2,25 @@
       xmlns:tal="http://xml.zope.org/namespaces/tal"
       xmlns:metal="http://xml.zope.org/namespaces/metal"
       i18n:domain="atreferencebrowserwidget">
-  <head>
-    <title tal:content="here/title_or_id">Title or Id</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"
-          tal:attributes="content string:text/html;;charset=${view/charset}" />
-    <tal:styles define="view context/@@plone|nothing"
-                replace="structure provider:plone.resourceregistries.styles" />
-  </head>
-  <body class="popup atrefbrowser"
-        id="atrefbrowserpopup"
-        onload="focus();self.name='refbrowser_popup'"
-          style="margin: 4px;padding:0.5em;"
-          tal:define="
-              border_color view/border_color;
-              fieldName view/fieldName;
-              multiValued view/multiValued;
-              fieldRealName view/fieldRealName;
-		      at_obj nocall:view/at_obj;
-              widget nocall:view/widget;
-              title python:widget.Label(at_obj);
-              search_index view/search_index;
-              search_text view/search_text;
-              available_indexes widget/available_indexes;
-              allow_browse widget/allow_browse;
-              image_portal_types widget/image_portal_types;
-              image_method widget/image_method|string:;
-              ">
+  <head></head>
+  <body
+      class="popup atrefbrowser"
+      id="atrefbrowserpopup"
+      style="margin: 4px;padding:0.5em;"
+      tal:define="border_color view/border_color;
+                  fieldName view/fieldName;
+                  multiValued view/multiValued;
+                  fieldRealName view/fieldRealName;
+                  at_obj nocall:view/at_obj;
+                  widget nocall:view/widget;
+                  title python:widget.Label(at_obj);
+                  search_index view/search_index;
+                  search_text view/search_text;
+                  available_indexes widget/available_indexes;
+                  allow_browse widget/allow_browse;
+                  image_portal_types widget/image_portal_types;
+                  image_method widget/image_method|string:;
+                  ">
 
     <div style="text-align:right;margin-bottom:1.5em; margin-top: 2.5em;">
       <div tal:condition="python:widget.history_length > 0 "
@@ -148,7 +141,7 @@
         <span i18n:translate="referencebrowser_heading_search_results"
             >Search results</span>
       </div>
-      <!-- breadcrums -->
+      <!-- breadcrumbs -->
       <div style="border-top:1px solid black;border-bottom:1px solid black;"
            tal:attributes="
                style string:border-top:1px solid ${border_color};;
@@ -161,7 +154,7 @@
         <tal:crums tal:repeat="
             crumb python:view.breadcrumbs(widget.startup_directory)">
 
-          <a tal:attributes="href crumb/absolute_url">
+          <a tal:attributes="href crumb/absolute_url" class="browsesite">
             <span tal:content="string:${crumb/Title}">
               Breadcrumb Title
             </span>
@@ -182,92 +175,91 @@
          i18n:translate="referencebrowser_no_items_found">No items found.</p>
 
       <table class="group" width="100%" cellspacing="0" cellpadding="2"
-	     tal:condition="batch">
-	<tbody>
-	  <tal:results tal:repeat="item batch">
-	    <tal:row
-		tal:define="
-		    uid python:view.getUid(item);
-		    isNotSelf python:view.isNotSelf(item);
-		    referenceable python:view.isReferencable(item);
-		    title_or_id item/sortable_title|item/Title|item/getId;
-		    color view/discreetColor;">
+         tal:condition="batch">
+    <tbody>
+      <tal:results tal:repeat="item batch">
+        <tal:row
+        tal:define="
+            uid python:view.getUid(item);
+            isNotSelf python:view.isNotSelf(item);
+            referenceable python:view.isReferencable(item);
+            title_or_id item/sortable_title|item/Title|item/getId;
+            color view/discreetColor;">
 
-	      <tr tal:define="oddrow repeat/item/odd"
-		  tal:attributes="class python:oddrow and 'even' or 'odd'">
-		<td tal:condition="image_portal_types">
-		  <img tal:condition="python: item.Type in image_portal_types"
-		       tal:attributes="src string:${item/getURL}/$image_method"
-		       />
-		</td>
-		<td width="50%">
-		  <img src="#"
-		       tal:attributes="src string:${here/portal_url}/${item/getIcon};alt title_or_id" />
-		  <a class="browsesite" tal:condition="python: item.is_folderish and allow_browse"
-		     tal:attributes="
-			 href python:view.genRefBrowserUrl(item.getURL())">
-		    <strong tal:condition="referenceable"
-			    tal:content="title_or_id">Title</strong>
-		    <span style=""
-			  tal:condition="not: referenceable"
-			  tal:content="title_or_id"/>
-		  </a>
-		  <tal:foldercheck tal:condition="
-			  python:not((item.is_folderish and allow_browse) and isNotSelf)" >
-		    <strong tal:condition="referenceable"
-			    tal:content="title_or_id">Title
-		    </strong>
-		    <span style=""
-			  tal:condition="python:not referenceable"
-			  tal:content="title_or_id"
-			  tal:attributes="style string:color:${color}" />
-		  </tal:foldercheck>
+          <tr tal:define="oddrow repeat/item/odd"
+          tal:attributes="class python:oddrow and 'even' or 'odd'">
+        <td tal:condition="image_portal_types">
+          <img tal:condition="python: item.Type in image_portal_types"
+               tal:attributes="src string:${item/getURL}/$image_method"
+               />
+        </td>
+        <td width="50%">
+          <img src="#"
+               tal:attributes="src string:${here/portal_url}/${item/getIcon};alt title_or_id" />
+          <a class="browsesite" tal:condition="python: item.is_folderish and allow_browse"
+             tal:attributes="
+             href python:view.genRefBrowserUrl(item.getURL())">
+            <strong tal:condition="referenceable"
+                tal:content="title_or_id">Title</strong>
+            <span style=""
+              tal:condition="not: referenceable"
+              tal:content="title_or_id"/>
+          </a>
+          <tal:foldercheck tal:condition="
+              python:not((item.is_folderish and allow_browse) and isNotSelf)" >
+            <strong tal:condition="referenceable"
+                tal:content="title_or_id">Title
+            </strong>
+            <span style=""
+              tal:condition="python:not referenceable"
+              tal:content="title_or_id"
+              tal:attributes="style string:color:${color}" />
+          </tal:foldercheck>
 
-		  <div tal:condition="widget/show_review_state">
-		    <span tal:define="state item/review_state"
-			  tal:attributes="class string:state-$state"
-			  i18n:translate="" i18n:domain="plone"
-			  tal:content="state"
-			  />
-		  </div>
+          <div tal:condition="widget/show_review_state">
+            <span tal:define="state item/review_state"
+              tal:attributes="class string:state-$state"
+              i18n:translate="" i18n:domain="plone"
+              tal:content="state"
+              />
+          </div>
 
-		  <div class="additionalInfo"
-		       tal:content="
-			  structure item/additionalReferenceInfo | nothing"
-			  />
-		</td>
+          <div class="additionalInfo"
+               tal:content="
+              structure item/additionalReferenceInfo | nothing"
+              />
+        </td>
 
-		<td width="25%" style=""
-		    i18n:domain="plone"
-		    i18n:translate=""
-		    tal:attributes="
-			style python:referenceable and '' or 'color:' + color"
-		    tal:content="item/Type">
-		  Title
-		</td>
+        <td width="25%" style=""
+            i18n:domain="plone"
+            i18n:translate=""
+            tal:attributes="
+            style python:referenceable and '' or 'color:' + color"
+            tal:content="item/Type">
+          Title
+        </td>
 
-		<td width="25%" nowrap="nowrap"
-		    style="text-align:right"
-		    tal:define="title python:title_or_id.replace('\'', '\\\'')">
-		  <tal:referenceable tal:condition="referenceable">
+        <td width="25%" nowrap="nowrap"
+            style="text-align:right">
+          <tal:referenceable tal:condition="referenceable">
           <a href="" class="insertreference" tal:attributes="rel uid">
-		      <strong i18n:translate="referencebrowser_insert_reference">Insert</strong>
-		    </a>
-		    |
-		    <a href="" target="_blank" class="browse"
-		       tal:attributes="href item/getURL">
-		      <strong i18n:translate="referencebrowser_browse">Browse</strong>
-		    </a>
-		  </tal:referenceable>
-		</td>
-	      </tr>
-	    </tal:row>
-	  </tal:results>
-	</tbody>
+            <strong i18n:translate="referencebrowser_insert_reference">Insert</strong>
+          </a>
+          |
+          <a href="" target="_blank" class="browse"
+              tal:attributes="href item/getURL">
+            <strong i18n:translate="referencebrowser_browse">Browse</strong>
+          </a>
+          </tal:referenceable>
+        </td>
+          </tr>
+        </tal:row>
+      </tal:results>
+    </tbody>
       </table>
 
       <tal:var tal:define="template_id view/__name__">
-	<div metal:use-macro="here/batch_macros/macros/navigation" />
+    <div metal:use-macro="here/batch_macros/macros/navigation" />
       </tal:var>
 
     </tal:block>
