@@ -8,20 +8,6 @@
           tal:attributes="content string:text/html;;charset=${view/charset}" />
     <tal:styles define="view context/@@plone|nothing"
                 replace="structure provider:plone.resourceregistries.styles" />
-    <script language="javascript" type="text/javascript">
-         function showMessage(message) {
-            element = document.getElementById('message');
-            element.style.display='block';
-            inner = document.getElementById('messageTitle');
-            inner.innerHTML = message;
-         }
-         function submitHistoryForm() {
-             var form = document.history;
-             var path = form.path.options[form.path.selectedIndex].value;
-             form.action = path;
-             form.submit();
-         }
-    </script>
   </head>
   <body class="popup atrefbrowser"
         id="atrefbrowserpopup"

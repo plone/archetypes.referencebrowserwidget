@@ -195,3 +195,15 @@ function refbrowser_moveReferenceDown(self)
     nextelem.id = 'ref-' + widget_id + '-' + pos;
 }
 
+function showMessage(message) {
+    jq('#messageTitle').text(message);
+    jq('#message').show();
+}
+
+function submitHistoryForm() {
+     var form = document.history;
+     var path = form.path.options[form.path.selectedIndex].value;
+     form.action = path;
+     form.submit();
+}
+
