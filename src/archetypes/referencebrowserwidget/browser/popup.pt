@@ -23,7 +23,7 @@
                   ">
 
     <div style="text-align:right;margin-bottom:1.5em; margin-top: 2.5em;">
-      <div tal:condition="python:True or widget.history_length > 0">
+      <div tal:condition="python:widget.history_length > 0">
         <form action="referencebrowser_popup" name="history" id="history">
           <label for="path"
                  i18n:translate="referencebrowser_history">History</label>
