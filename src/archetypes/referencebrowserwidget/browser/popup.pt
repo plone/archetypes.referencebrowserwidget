@@ -23,35 +23,18 @@
                   ">
 
     <div style="text-align:right;margin-bottom:1.5em; margin-top: 2.5em;">
-      <div tal:condition="python:widget.history_length > 0 "
-           tal:define="history view/history">
-        <form tal:condition="history"
-              action="referencebrowser_popup"
-              method="GET" name="history" id="history">
-          <input type="hidden" name="fieldRealName"
-                 tal:attributes="value fieldRealName" />
-          <input type="hidden" name="fieldName"
-                 tal:attributes="value fieldName" />
-          <input type="hidden" name="at_url"
-                 tal:attributes="value view/at_url" />
-          <input type="hidden" name="clear:int" value="1" />
+      <div tal:condition="python:True or widget.history_length > 0">
+        <form action="referencebrowser_popup" name="history" id="history">
           <label for="path"
                  i18n:translate="referencebrowser_history">History</label>
           <select name="path" size="1">
-             <option value="" i18n:translate="" />
-             <option tal:repeat="tp history"
-                     tal:content="python: tp[1]"
-                     tal:attributes="value python: tp[0]"
-                     />
           </select>
           <input class="context" type="button" value="Go"
-                 onclick="submitHistoryForm()"
-                 i18n:attributes="value label_go;" />
+                 i18n:attributes="value label_go" />
         </form>
-        <div tal:condition="history">
-          <a tal:attributes="href view/history_url"
-             i18n:translate="referencebrowser_clearhistory">Clear history</a>
-        </div>
+        <a tal:attributes="href view/history_url"
+           i18n:translate="referencebrowser_clearhistory"
+           id="clearhistory">Clear history</a>
       </div>
     </div>
 
@@ -60,7 +43,7 @@
        tal:content="structure python:widget.Description(at_obj)" />
 
     <!-- Search form -->
-    <form action="search" method="post" name="search"
+    <form action="search" method="post" name="search" id="search"
           style="padding-bottom:0em;"
           tal:condition="widget/allow_search"
           tal:attributes="action request/getURL">
@@ -154,7 +137,9 @@
         <tal:crums tal:repeat="
             crumb python:view.breadcrumbs(widget.startup_directory)">
 
-          <a tal:attributes="href crumb/absolute_url" class="browsesite">
+        <a class="browsesite"
+            tal:attributes="href crumb/absolute_url;
+                            rel crumb/Title">
             <span tal:content="string:${crumb/Title}">
               Breadcrumb Title
             </span>
@@ -198,7 +183,8 @@
                tal:attributes="src string:${here/portal_url}/${item/getIcon};alt title_or_id" />
           <a class="browsesite" tal:condition="python: item.is_folderish and allow_browse"
              tal:attributes="
-             href python:view.genRefBrowserUrl(item.getURL())">
+             href python:view.genRefBrowserUrl(item.getURL());
+             rel item/Title">
             <strong tal:condition="referenceable"
                 tal:content="title_or_id">Title</strong>
             <span style=""

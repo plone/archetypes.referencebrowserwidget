@@ -30,7 +30,11 @@ jq(function() {
       var srcfilter = src + ' >*';
       pushToHistory(wrap.data('srcfilter'));
       wrap.data('srcfilter', srcfilter);
-      wrap.load(srcfilter);
+      var newoption = '<option value="' + src + '">' + target.attr('rel') + '</option>';
+      var oldhistory = jq('[id^=atrb_] form#history select');
+      wrap.load(srcfilter, function() { 
+          jq('[id^=atrb_] form#history select').append(newoption + oldhistory.html());
+          });
       return false;
       });
 
@@ -50,8 +54,7 @@ jq(function() {
           showMessage(title);
       };
       return false;
-
-          });
+      });
 
   jq('[id^=atrb_] a.refbrowser_back').live('click', function(event) {
       var target = jq(this);
@@ -61,7 +64,7 @@ jq(function() {
       return false;
       });
 
-  jq('[id^=atrb_] form input[name=submit]').live('click', function(event) {
+  jq('[id^=atrb_] form#search input[name=submit]').live('click', function(event) {
       var target = jq(this);
       var src = target.parents('form').attr('action');
       var wrap = target.parents('.overlaycontent');
@@ -77,6 +80,6 @@ jq(function() {
       wrap.data('srcfilter', srcfilter);
       wrap.load(srcfilter);
       return false;
-  });
+      });
 
 });
