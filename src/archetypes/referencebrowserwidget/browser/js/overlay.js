@@ -1,5 +1,6 @@
 jq(function() {
 
+  // the overlay itself
   jq('.addreference').overlay({
        closeOnClick: false,
        onBeforeLoad: function() {
@@ -12,6 +13,7 @@ jq(function() {
            wrap.load(srcfilter);
            }});
 
+  // the browse links on the right side of the widget
   jq('[id^=atrb_] a.browse').live('click', function(event) {
       var target = jq(this);
       var src = target.attr('href');
@@ -23,6 +25,7 @@ jq(function() {
       return false;
       });
 
+  // the breadcrumb-links and the links of the 'tree'-navigation
   jq('[id^=atrb_] a.browsesite').live('click', function(event) {
       var target = jq(this);
       var src = target.attr('href');
@@ -30,6 +33,11 @@ jq(function() {
       var srcfilter = src + ' >*';
       pushToHistory(wrap.data('srcfilter'));
       wrap.data('srcfilter', srcfilter);
+      // the history we are constructing here is destinct from the
+      // srcfilter-history. here we construct a selection-widget, which
+      // is available, if the history_length-parameter is set on the widget
+      // the srcfilter-history is used for storing the URLs to make the
+      // 'Back'-link work.
       var newoption = '<option value="' + src + '">' + target.attr('rel') + '</option>';
       var oldhistory = jq('[id^=atrb_] form#history select');
       wrap.load(srcfilter, function() { 
@@ -38,6 +46,7 @@ jq(function() {
       return false;
       });
 
+  // the links for inserting referencens
   jq('[id^=atrb_] a.insertreference').live('click', function(event) {
       var target = jq(this);
       var wrap = target.parents('.overlaycontent');
@@ -56,6 +65,7 @@ jq(function() {
       return false;
       });
 
+  // the back link
   jq('[id^=atrb_] a.refbrowser_back').live('click', function(event) {
       var target = jq(this);
       var wrap = target.siblings('.overlaycontent');
@@ -64,6 +74,13 @@ jq(function() {
       return false;
       });
 
+  // the clearhistory link
+  jq('[id^=atrb_] a#clearhistory').live('click', function(event) {
+      jq('[id^=atrb_] form#history select').empty();
+      return false;
+      });
+
+  // the search form
   jq('[id^=atrb_] form#search input[name=submit]').live('click', function(event) {
       var target = jq(this);
       var src = target.parents('form').attr('action');
@@ -74,7 +91,9 @@ jq(function() {
       var searchvalue = wrap.find('input[name=searchValue]').attr('value');
       var multi = wrap.find('input[name=multiValued]').attr('value');
       var close_window = wrap.find('input[name=close_window]').attr('value');
-      qs = 'searchValue=' + searchvalue + '&fieldRealName' + fieldrealname + '&fieldName=' + fieldname + '&multiValued=' + multi + '&close_window' + close_window + '&at_url=' + at_url;
+      qs = 'searchValue=' + searchvalue + '&fieldRealName' + fieldrealname +
+        '&fieldName=' + fieldname + '&multiValued=' + multi +
+        '&close_window' + close_window + '&at_url=' + at_url;
       var srcfilter = src + '?' + qs + ' >*';
       pushToHistory(wrap.data('srcfilter'));
       wrap.data('srcfilter', srcfilter);
