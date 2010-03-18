@@ -29,7 +29,7 @@
                  i18n:translate="referencebrowser_history">History</label>
           <select name="path" size="1">
           </select>
-          <input class="context" type="button" value="Go"
+          <input class="context" type="button" value="Go" name="go"
                  i18n:attributes="value label_go" />
         </form>
         <a tal:attributes="href view/history_url"

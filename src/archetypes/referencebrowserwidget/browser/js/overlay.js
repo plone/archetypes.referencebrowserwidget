@@ -80,6 +80,16 @@ jq(function() {
       return false;
       });
 
+  // the history-go button
+  jq('[id^=atrb_] form#history input[name=go]').live('click', function(event) {
+      var target = jq(this);
+      var wrap = target.parents('.overlaycontent');
+      src = jq('[id^=atrb_] form#history select[name=path] :selected').attr('value');
+      var srcfilter = src + ' >*';
+      wrap.load(srcfilter);
+      return false;
+      });
+
   // the search form
   jq('[id^=atrb_] form#search input[name=submit]').live('click', function(event) {
       var target = jq(this);
