@@ -155,14 +155,6 @@ class ReferenceBrowserPopup(BrowserView):
 
         plone_tools = queryMultiAdapter((self.context, self.request),
                                         name='plone_tools')
-        portal_props = plone_tools.properties()
-
-        self.charset = portal_props.site_properties.default_charset
-        self.request.response.setHeader('Content-Type',
-                                        'text/html;;charset=%s' % self.charset)
-        if self.request.get('clearHistory', None):
-            self.request.SESSION.set('atrefbrowserwidget_history', [])
-
         self.at_url = request.get('at_url')
         self.fieldName = request.get('fieldName')
         self.fieldRealName = request.get('fieldRealName')

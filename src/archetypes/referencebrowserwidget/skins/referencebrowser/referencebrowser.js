@@ -1,9 +1,3 @@
-// function to open the popup window
-function refbrowser_openBrowser(path, fieldName, at_url, fieldRealName, width, height)
-{
-    window.open(path + '/refbrowser_popup?fieldName=' + fieldName + '&fieldRealName=' + fieldRealName + '&at_url=' + at_url, 'refbrowser_popup', 'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=' + width + ',height=' + height);
-}
-
 // function to return a reference from the popup window back into the widget
 function refbrowser_setReference(widget_id, uid, label, multi)
 {
@@ -72,7 +66,6 @@ function refbrowser_setReference(widget_id, uid, label, multi)
 
         // fix on IE7 - check *after* adding to DOM
         input.checked = true;
-
     }
 }
 

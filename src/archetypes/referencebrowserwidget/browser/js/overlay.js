@@ -61,4 +61,22 @@ jq(function() {
       return false;
       });
 
+  jq('[id^=atrb_] form input[name=submit]').live('click', function(event) {
+      var target = jq(this);
+      var src = target.parents('form').attr('action');
+      var wrap = target.parents('.overlaycontent');
+      var fieldname = wrap.find('input[name=fieldName]').attr('value');
+      var fieldrealname = wrap.find('input[name=fieldRealName]').attr('value');
+      var at_url = wrap.find('input[name=at_url]').attr('value');
+      var searchvalue = wrap.find('input[name=searchValue]').attr('value');
+      var multi = wrap.find('input[name=multiValued]').attr('value');
+      var close_window = wrap.find('input[name=close_window]').attr('value');
+      qs = 'searchValue=' + searchvalue + '&fieldRealName' + fieldrealname + '&fieldName=' + fieldname + '&multiValued=' + multi + '&close_window' + close_window + '&at_url=' + at_url;
+      var srcfilter = src + '?' + qs + ' >*';
+      pushToHistory(wrap.data('srcfilter'));
+      wrap.data('srcfilter', srcfilter);
+      wrap.load(srcfilter);
+      return false;
+  });
+
 });

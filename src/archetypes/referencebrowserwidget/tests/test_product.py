@@ -510,10 +510,8 @@ class IntegrationTestCase(FunctionalTestCase):
             ) in body
         assert ('<input type="hidden" name="singleRef" id="singleRef" /> ') \
                 in body
-        assert ('<input type="button" class="searchButton" value="Add..." '
-                'onclick="javascript:refbrowser_openBrowser'
-                "('http://nohost/plone/demo1','singleRef', '/plone/demo1', "
-                '\'singleRef\', 500, 550)" />') in body
+        assert ('<input type="button" class="searchButton addreference" '
+                'value="Add..." src="') in body
         assert '''<input type="button" class="destructive" value="Remove reference" onclick="javascript:refbrowser_removeReference('singleRef', 0)" />''' in body
 
     def getNormalizedPopup(self):
@@ -525,8 +523,7 @@ class IntegrationTestCase(FunctionalTestCase):
 
     def test_popup_html(self):
         body = self.getNormalizedPopup()
-        assert '<title>demo1</title>' in body
-        assert '''<body class="popup atrefbrowser" id="atrefbrowserpopup" onload="focus();self.name='refbrowser_popup'"''' in body
+        assert '''<body class="popup atrefbrowser" id="atrefbrowserpopup" ''' in body
         assert '<h2 class="documentFirstHeading">SingleRef</h2>''' in body
 
         assert '<input type="hidden" name="fieldName" value="singleRef" />' in body
@@ -538,9 +535,7 @@ class IntegrationTestCase(FunctionalTestCase):
         wanted_insertlinks = 2
 
         body = self.getNormalizedPopup()
-        INSERTLINK = re.compile(
-            r"onclick=\"window.opener.refbrowser_setReference[(]'singleRef'")
-
+        INSERTLINK = re.compile(r' <a href="" class="insertreference" rel="')
         ROWS = re.compile(r'<tr.*?>(.*?)</tr>', re.MULTILINE|re.DOTALL)
         assert len(ROWS.findall(body)) == wanted_rows
         assert len(INSERTLINK.findall(body)) == wanted_insertlinks
@@ -550,14 +545,6 @@ class IntegrationTestCase(FunctionalTestCase):
 
         assert len(ROWS.findall(body)) == wanted_rows + 1
         assert len(INSERTLINK.findall(body)) == wanted_insertlinks
-
-    def test_popup_customsize(self):
-        response = self.publish(self.portal.demo1.absolute_url(1) + '/base_edit',
-                                self.basic_auth)
-        body = response.getBody()
-        assert '''onclick="javascript:refbrowser_openBrowser('http://nohost/plone/demo1','singleRef', '/plone/demo1', 'singleRef', 500, 550)" />''' in body
-
-        assert '''onclick="javascript:refbrowser_openBrowser('http://nohost/plone/demo1','multiRef5', '/plone/demo1', 'multiRef5', 173, 209)" />''' in body
 
     def test_bc_navigationroot(self):
         makeContent(self.portal, portal_type='Folder', id='folder1')
@@ -576,7 +563,7 @@ class IntegrationTestCase(FunctionalTestCase):
         browser.addHeader('Authorization', 'Basic %s' % basic)
         browser.open('%s/refbrowser_popup?%s' % (page.absolute_url(),
                                                  urlencode(data)))        
-        self.failUnless(('<a href="http://nohost/plone/refbrowser_popup?'
+        self.failUnless(('<a class="browsesite" href="http://nohost/plone/refbrowser_popup?'
                          'fieldName=relatedItems&amp;fieldRealName=relatedItems'
                          '&amp;at_url=plone/folder1/page1"> '
                          '<span>Home</span> </a>')
@@ -586,7 +573,7 @@ class IntegrationTestCase(FunctionalTestCase):
         zope.interface.alsoProvides(self.portal.folder1, INavigationRoot)
         browser.open('%s/refbrowser_popup?%s' % (page.absolute_url(),
                                                  urlencode(data)))     
-        self.failUnless(('<a href="http://nohost/plone/folder1/refbrowser_popup?'
+        self.failUnless(('<a class="browsesite" href="http://nohost/plone/folder1/refbrowser_popup?'
                          'fieldName=relatedItems&amp;fieldRealName=relatedItems'
                          '&amp;at_url=plone/folder1/page1"> '                                                           
                          '<span>Home</span> </a>')
