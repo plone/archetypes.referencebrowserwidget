@@ -102,7 +102,6 @@ jq(function() {
         '&fieldName=' + fieldname + '&multiValued=' + multi +
         '&close_window' + close_window + '&at_url=' + at_url;
       var srcfilter = src + '?' + qs + ' >*';
-      alert(srcfilter);
       pushToHistory(wrap.data('srcfilter'));
       wrap.data('srcfilter', srcfilter);
       refreshOverlay(wrap, srcfilter, '');
