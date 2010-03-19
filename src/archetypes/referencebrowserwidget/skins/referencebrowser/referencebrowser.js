@@ -45,18 +45,18 @@ function refbrowser_setReference(widget_id, uid, label, multi)
         li.appendChild(label_element);
         li.id = 'ref-' + widget_id + '-' + current_values.length;
 
-        up_element = document.createElement('img');
-        up_element.src = 'arrowUp.gif';
-        up_element.alt = 'up';
+        up_element = document.createElement('a');
+        up_element.title = 'Move Up';
+        up_element.innerHTML = '&#x25b2;';
         up_element.onclick = function () {
             refbrowser_moveReferenceUp(this);
         };
 
         li.appendChild(up_element);
 
-        down_element = document.createElement('img');
-        down_element.src = 'arrowDown.gif';
-        down_element.alt = 'down';
+        down_element = document.createElement('a');
+        down_element.title = 'Move Down';
+        down_element.innerHTML = '&#x25bc;';
         down_element.onclick = function () {
             refbrowser_moveReferenceDown(this);
         };
@@ -104,7 +104,7 @@ function refbrowser_moveReferenceUp(self)
         widget_id = null,
         newelem = null,
         prevelem = null,
-        imgs = null,
+        arrows = null,
         cbs = null;
     if (elem === null) {
         return false;
@@ -125,13 +125,13 @@ function refbrowser_moveReferenceUp(self)
 
     prevelem = document.getElementById('ref-' + widget_id + '-' + (pos - 1));
 
-    // up img
-    imgs = newelem.getElementsByTagName("img");
-    imgs[0].onclick = function () {
+    // up arrow
+    arrows = newelem.getElementsByTagName("a");
+    arrows[0].onclick = function () {
         refbrowser_moveReferenceUp(this);
     };
-    // down img
-    imgs[1].onclick = function () {
+    // down arrow
+    arrows[1].onclick = function () {
         refbrowser_moveReferenceDown(this);
     };
 
@@ -151,7 +151,7 @@ function refbrowser_moveReferenceDown(self)
         newelem = null,
         nextelem = null,
         cbs = null,
-        imgs = null;
+        arrows = null;
     if (elem === null) {
         return false;
     }
@@ -171,12 +171,12 @@ function refbrowser_moveReferenceDown(self)
     }
 
     // up img
-    imgs = newelem.getElementsByTagName("img");
-    imgs[0].onclick = function () {
+    arrows = newelem.getElementsByTagName("a");
+    arrows[0].onclick = function () {
         refbrowser_moveReferenceUp(this);
     };
     // down img
-    imgs[1].onclick = function () {
+    arrows[1].onclick = function () {
         refbrowser_moveReferenceDown(this);
     };
 

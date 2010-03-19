@@ -2,11 +2,12 @@
       xmlns:tal="http://xml.zope.org/namespaces/tal"
       xmlns:metal="http://xml.zope.org/namespaces/metal"
       i18n:domain="atreferencebrowserwidget">
-  <head></head>
+  <head>
+  </head>
   <body
       class="popup atrefbrowser"
       id="atrefbrowserpopup"
-      style="margin: 4px;padding:0.5em;"
+      style="font-size: 150% !important"
       tal:define="border_color view/border_color;
                   fieldName view/fieldName;
                   multiValued view/multiValued;
@@ -22,7 +23,6 @@
                   image_method widget/image_method|string:;
                   ">
 
-    <div style="text-align:right;margin-bottom:1.5em; margin-top: 2.5em;">
       <div tal:condition="python:widget.history_length > 0">
         <form action="referencebrowser_popup" name="history" id="history">
           <label for="path"
@@ -36,11 +36,13 @@
            i18n:translate="referencebrowser_clearhistory"
            id="clearhistory">Clear history</a>
       </div>
-    </div>
 
-    <h2 class="documentFirstHeading" tal:content="title" />
-    <p class="formHelp"
-       tal:content="structure python:widget.Description(at_obj)" />
+    <dl id="message" class="portalMessage info"
+         style="display:hidden;margin-top:0;">
+      <dt i18n:translate="referencebrowser_text_added_reference"
+        >Added</dt>
+      <dd id="messageTitle"></dd>
+    </dl>
 
     <!-- Search form -->
     <form action="search" method="post" name="search" id="search"
@@ -48,13 +50,12 @@
           tal:condition="widget/allow_search"
           tal:attributes="action request/getURL">
 
-      <div class="field" tal:condition="widget/show_indexes">
+      <div class="field" style="float: right">
+        <tal:indexes condition="widget/show_indexes">
         <label i18n:translate="referencebrowser_search_index_label">
              Search index
         </label>
-        <br/>
-        <select name="search_index" style="" id="indexSelector"
-            tal:attributes="style string:font-family:${view/fontFamily};;font-size:100%;">
+        <select name="search_index" style="" id="indexSelector">
           <tal:indexes tal:repeat="index view/filtered_indexes">
             <option value="" selected=""
                 tal:attributes="
@@ -73,16 +74,14 @@
                 />
           </tal:indexes>
         </select>
-      </div>
-      <div class="field">
-        <label i18n:translate="referencebrowser_search_term">
-            Search terms
-        </label>
-        <br/>
+        </tal:indexes>
+        
         <input type="text"
                id="searchGadget"
                name="searchValue"
                size="25"
+               title="Search Site"
+               class="inputLabel"
                value=""
                tal:attributes="value search_text;"
                />
@@ -107,34 +106,19 @@
       <input type="hidden" name="close_window" value=""
              tal:attributes="value view/close_window" />
     </form>
-    <div id="message" class="portalMessage"
-         style="display:none;margin-top:0px;">
-      <span i18n:translate="referencebrowser_text_added_reference"
-        >Added reference to:</span>&nbsp;
-      <span id="messageTitle"></span>
-    </div>
     <!-- actual list of objects, either searchresults or folder contents -->
     <tal:block tal:define="batch view/getResult;">
-      <div style="border-top:1px solid black;border-bottom:1px solid black;"
-           tal:attributes="style string:border-top:1px solid ${border_color};;
-                           border-bottom:1px solid ${border_color};;
-                           margin-bottom:1em;;padding:0.2em 0 0.1em 0;;
-                           margin-top:1.5em;;"
-           tal:condition="view/has_queryresults">
-        <span i18n:translate="referencebrowser_heading_search_results"
-            >Search results</span>
+      <div tal:condition="view/has_queryresults">
+        <!-- <span i18n:translate="referencebrowser_heading_search_results"
+            >Search results</span> -->
       </div>
       <!-- breadcrumbs -->
-      <div style="border-top:1px solid black;border-bottom:1px solid black;"
-           tal:attributes="
-               style string:border-top:1px solid ${border_color};;
-               border-bottom:1px solid ${border_color};;
-               margin-bottom:1em;;padding:0.2em 0 0.1em 0;;margin-top:1.5em;"
-           tal:condition= "python:search_text=='' and allow_browse"
-           tal:define="isRTL here/@@plone_portal_state/is_rtl;">
+      <div tal:condition= "python:search_text=='' and allow_browse"
+           tal:define="isRTL here/@@plone_portal_state/is_rtl;"
+           style="clear:both; margin-bottom: 1em">
 
-        <img tal:attributes="src string:${here/portal_url}/logoIcon.gif" />
-        <tal:crums tal:repeat="
+        You are here:
+        <tal:crumbs tal:repeat="
             crumb python:view.breadcrumbs(widget.startup_directory)">
 
         <a class="browsesite"
@@ -151,7 +135,7 @@
             <tal:rtl condition="isRTL">&larr;</tal:rtl>
           </span>
 
-        </tal:crums>
+        </tal:crumbs>
 
       </div>
 
@@ -173,12 +157,19 @@
 
           <tr tal:define="oddrow repeat/item/odd"
           tal:attributes="class python:oddrow and 'even' or 'odd'">
+
+        <td>
+          <tal:referenceable tal:condition="referenceable">
+            <input type="checkbox" class="insertreference" tal:attributes="rel uid" />
+          </tal:referenceable>
+        </td>
+
         <td tal:condition="image_portal_types">
           <img tal:condition="python: item.Type in image_portal_types"
                tal:attributes="src string:${item/getURL}/$image_method"
                />
         </td>
-        <td width="50%">
+        <td>
           <img src="#"
                tal:attributes="src string:${here/portal_url}/${item/getIcon};alt title_or_id" />
           <a class="browsesite" tal:condition="python: item.is_folderish and allow_browse"
@@ -216,28 +207,14 @@
               />
         </td>
 
-        <td width="25%" style=""
-            i18n:domain="plone"
+        <!-- <td i18n:domain="plone"
             i18n:translate=""
             tal:attributes="
             style python:referenceable and '' or 'color:' + color"
             tal:content="item/Type">
           Title
-        </td>
+        </td> -->
 
-        <td width="25%" nowrap="nowrap"
-            style="text-align:right">
-          <tal:referenceable tal:condition="referenceable">
-          <a href="" class="insertreference" tal:attributes="rel uid">
-            <strong i18n:translate="referencebrowser_insert_reference">Insert</strong>
-          </a>
-          |
-          <a href="" target="_blank" class="browse"
-              tal:attributes="href item/getURL">
-            <strong i18n:translate="referencebrowser_browse">Browse</strong>
-          </a>
-          </tal:referenceable>
-        </td>
           </tr>
         </tal:row>
       </tal:results>

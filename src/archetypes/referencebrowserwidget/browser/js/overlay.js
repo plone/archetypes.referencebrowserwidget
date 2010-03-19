@@ -47,7 +47,7 @@ jq(function() {
       });
 
   // the links for inserting referencens
-  jq('[id^=atrb_] a.insertreference').live('click', function(event) {
+  jq('[id^=atrb_] input.insertreference').live('click', function(event) {
       var target = jq(this);
       var wrap = target.parents('.overlaycontent');
       var fieldname = wrap.find('input[name=fieldName]').attr('value');
