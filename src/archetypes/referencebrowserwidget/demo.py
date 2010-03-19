@@ -44,9 +44,9 @@ schema = BaseSchema.copy() +  Schema((
     ReferenceField('multiRef3',
         multiValued=1,
         relationship='Rel3',
-        history_length=5,
         widget=ReferenceBrowserWidget(
             show_indexes=1,
+            history_length=5,
             description='And here is another field.',
             startup_directory='/Members')),
 

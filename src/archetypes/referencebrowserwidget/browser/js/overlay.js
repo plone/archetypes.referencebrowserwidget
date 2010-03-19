@@ -39,10 +39,7 @@ jq(function() {
       // the srcfilter-history is used for storing the URLs to make the
       // 'Back'-link work.
       var newoption = '<option value="' + src + '">' + target.attr('rel') + '</option>';
-      var oldhistory = jq('[id^=atrb_] form#history select');
-      wrap.load(srcfilter, function() { 
-          jq('[id^=atrb_] form#history select').append(newoption + oldhistory.html());
-          });
+      refreshOverlay(wrap, srcfilter, newoption);
       return false;
       });
 
@@ -70,7 +67,7 @@ jq(function() {
       var target = jq(this);
       var wrap = target.siblings('.overlaycontent');
       srcfilter = popFromHistory();
-      wrap.load(srcfilter);
+      refreshOverlay(wrap, srcfilter, '');
       return false;
       });
 
@@ -86,7 +83,7 @@ jq(function() {
       var wrap = target.parents('.overlaycontent');
       src = jq('[id^=atrb_] form#history select[name=path] :selected').attr('value');
       var srcfilter = src + ' >*';
-      wrap.load(srcfilter);
+      refreshOverlay(wrap, srcfilter, '');
       return false;
       });
 
@@ -101,13 +98,14 @@ jq(function() {
       var searchvalue = wrap.find('input[name=searchValue]').attr('value');
       var multi = wrap.find('input[name=multiValued]').attr('value');
       var close_window = wrap.find('input[name=close_window]').attr('value');
-      qs = 'searchValue=' + searchvalue + '&fieldRealName' + fieldrealname +
+      qs = 'searchValue=' + searchvalue + '&fieldRealName=' + fieldrealname +
         '&fieldName=' + fieldname + '&multiValued=' + multi +
         '&close_window' + close_window + '&at_url=' + at_url;
       var srcfilter = src + '?' + qs + ' >*';
+      alert(srcfilter);
       pushToHistory(wrap.data('srcfilter'));
       wrap.data('srcfilter', srcfilter);
-      wrap.load(srcfilter);
+      refreshOverlay(wrap, srcfilter, '');
       return false;
       });
 

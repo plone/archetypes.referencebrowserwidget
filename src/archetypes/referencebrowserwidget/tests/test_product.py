@@ -8,8 +8,6 @@ import zope.interface
 from zope.formlib.namedtemplate import INamedTemplate
 from zope.publisher.browser import TestRequest
 
-from Testing import ZopeTestCase as ztc
-
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.Five import BrowserView
 from Products.Five.testbrowser import Browser
@@ -68,9 +66,6 @@ class ProductsTestCase(TestCase):
         """ A required field should throw an error, if no value is provided,
             not silently ignore it.
         """
-        
-        basic_auth = '%s:%s' % (ztc.user_name, ztc.user_password)
-
         makeContent(self.folder, portal_type='RefBrowserDemo', id='ref')
         makeContent(self.folder, portal_type='Document', id='doc')
 
@@ -118,9 +113,6 @@ class ProductsTestCase(TestCase):
         """ A required field should throw an error, if no value is provided,
             not silently ignore it.
         """
-
-        basic_auth = '%s:%s' % (ztc.user_name, ztc.user_password)
-
         makeContent(self.folder, portal_type='RefBrowserDemo', id='ref')
         makeContent(self.folder, portal_type='Document', id='doc')
 
@@ -262,26 +254,6 @@ class PopupTestCase(PopupBaseTestCase):
         assert len(batch) == 1
         assert batch[0].getObject() == self.obj
         assert popup.has_queryresults
-
-    def test_history(self):
-        fieldname = 'multiRef3'
-        self.request.set('at_url', '/plone/layer1/layer2/ref')
-        self.request.set('fieldName', fieldname)
-        self.request.set('fieldRealName', fieldname)
-        self.request.set('search_index', 'getId')
-        self.request.set('searchValue', '')
-        
-        field = self.folder.ref.getField('multiRef3')
-        field.widget.history_length = 5
-        
-        popup = self._getPopup()
-        
-        self.assertEqual(
-            self.request.SESSION.get('atrefbrowserwidget_history'),
-            [('', '/layer1/layer2/ref')])
-        
-        field.widget.history_length = 0
-        
 
 class PopupBreadcrumbTestCase(PopupBaseTestCase):
     """ Test the popup breadcrumbs """
@@ -512,7 +484,7 @@ class IntegrationTestCase(FunctionalTestCase):
                 in body
         assert ('<input type="button" class="searchButton addreference" '
                 'value="Add..." src="') in body
-        assert '''<input type="button" class="destructive" value="Remove reference" onclick="javascript:refbrowser_removeReference('singleRef', 0)" />''' in body
+        assert '''<input type="button" class="destructive" value="Clear reference" onclick="javascript:refbrowser_removeReference('singleRef', 0)" />''' in body
 
     def getNormalizedPopup(self):
         response = self.publish(
@@ -523,8 +495,7 @@ class IntegrationTestCase(FunctionalTestCase):
 
     def test_popup_html(self):
         body = self.getNormalizedPopup()
-        assert '''<body class="popup atrefbrowser" id="atrefbrowserpopup" ''' in body
-        assert '<h2 class="documentFirstHeading">SingleRef</h2>''' in body
+        assert '''<body class="popup atrefbrowser" id="atrefbrowserpopup"''' in body
 
         assert '<input type="hidden" name="fieldName" value="singleRef" />' in body
         assert '<input type="hidden" name="fieldRealName" value="singleRef" />' in body
@@ -535,7 +506,8 @@ class IntegrationTestCase(FunctionalTestCase):
         wanted_insertlinks = 2
 
         body = self.getNormalizedPopup()
-        INSERTLINK = re.compile(r' <a href="" class="insertreference" rel="')
+        INSERTLINK = re.compile(r'<input type="checkbox" class="insertreference" rel="[0-9a-f]*?" />')
+
         ROWS = re.compile(r'<tr.*?>(.*?)</tr>', re.MULTILINE|re.DOTALL)
         assert len(ROWS.findall(body)) == wanted_rows
         assert len(INSERTLINK.findall(body)) == wanted_insertlinks
@@ -565,7 +537,7 @@ class IntegrationTestCase(FunctionalTestCase):
                                                  urlencode(data)))        
         self.failUnless(('<a class="browsesite" href="http://nohost/plone/refbrowser_popup?'
                          'fieldName=relatedItems&amp;fieldRealName=relatedItems'
-                         '&amp;at_url=plone/folder1/page1"> '
+                         '&amp;at_url=plone/folder1/page1" rel="Home"> '
                          '<span>Home</span> </a>')
                          in normalize(browser.contents))
 
@@ -575,7 +547,7 @@ class IntegrationTestCase(FunctionalTestCase):
                                                  urlencode(data)))     
         self.failUnless(('<a class="browsesite" href="http://nohost/plone/folder1/refbrowser_popup?'
                          'fieldName=relatedItems&amp;fieldRealName=relatedItems'
-                         '&amp;at_url=plone/folder1/page1"> '                                                           
+                         '&amp;at_url=plone/folder1/page1" rel="Home"> '                                                           
                          '<span>Home</span> </a>')
                          in normalize(browser.contents))
 
@@ -587,6 +559,3 @@ def test_suite():
         unittest.makeSuite(HelperViewTestCase),
         unittest.makeSuite(IntegrationTestCase),
         ])
-
-if __name__ == '__main__':
-    unittest.main(defaultTest='test_suite')

@@ -216,3 +216,10 @@ function popFromHistory() {
   jq(document).data('atrb_history', history);
   return value;
 }
+
+function refreshOverlay(wrap, srcfilter, newoption) {
+    var oldhistory = jq('[id^=atrb_] form#history select');
+    wrap.load(srcfilter, function() { 
+        jq('[id^=atrb_] form#history select').append(newoption + oldhistory.html());
+        });
+}

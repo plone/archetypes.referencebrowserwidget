@@ -153,8 +153,6 @@ class ReferenceBrowserPopup(BrowserView):
     def __init__(self, context, request):
         super(ReferenceBrowserPopup, self).__init__(context, request)
 
-        plone_tools = queryMultiAdapter((self.context, self.request),
-                                        name='plone_tools')
         self.at_url = request.get('at_url')
         self.fieldName = request.get('fieldName')
         self.fieldRealName = request.get('fieldRealName')
@@ -162,14 +160,13 @@ class ReferenceBrowserPopup(BrowserView):
 
         base_props = getToolByName(aq_inner(context), 'base_properties', None)
         if base_props is not None:
-            self.border_color = getattr(base_props, 'globalBorderColor', BORDERCOLOR)
-            self.fontFamily = getattr(base_props, 'fontFamily',  FONTFAMILY)
+
             self.discreetColor = getattr(base_props, 'discreetColor', DISCREETCOLOR)
         else:
             # XXX This concept has changed in Plone 4.0
-            self.border_color = BORDERCOLOR
-            self.fontFamily = FONTFAMILY
             self.discreetColor = DISCREETCOLOR
+
+
 
     def __call__(self):
         self.update()
@@ -207,8 +204,6 @@ class ReferenceBrowserPopup(BrowserView):
         # with javascript
         self.close_window = int(not self.field.multiValued or
                                 self.widget.force_close_on_insert)
-        if self.widget.history_length > 0:
-            self.insertHistory(self.widget.history_length)
         popup_name = getattr(self.widget, 'popup_name', 'popup')
         self.template = getAdapter(self, namedtemplate.INamedTemplate,
                                    name=popup_name or 'popup')
@@ -226,53 +221,6 @@ class ReferenceBrowserPopup(BrowserView):
         indexes = self.search_catalog.indexes()
         avail = self.widget.available_indexes
         return [index for index in indexes if not avail or index in avail]
-
-    @property
-    def history_url(self):
-        return "%s?%s&clearHistory=1" % (
-            self.request.get('ACTUAL_URL', ''),
-            self.request.get('QUERY_STRING', ''))
-
-    @property
-    def history(self):
-        sdm = getToolByName(aq_inner(self.context), 'session_data_manager',
-            None)
-        if sdm is not None:
-            session = sdm.getSessionData(create=0)
-            if session is not None:
-                return list(session.get('atrefbrowserwidget_history', []))
-        return []
-
-    def insertHistory(self, history_length=20):
-        """ Keep url history in session
-
-            Insert 'at_url' into the list of visited path in front.
-            The history is stored as list of tuples
-            (relative path to Zope root, relative_path to Plone portal root)
-        """
-        path = self.request.get('PATH_TRANSLATED')
-        history = self.request.SESSION.get('atrefbrowserwidget_history', [])
-        portal_path = self.context.portal_url.getPortalObject().absolute_url(1)
-
-        # remove existing entries
-        for i, tp in enumerate(history):
-            if path == tp[0]:
-                del history[i]
-                break
-
-        # generate a friendly path for UI representation
-        visible_path = self.context.absolute_url(1)
-        visible_path = visible_path.replace(portal_path, '')
-
-        # insert at the head of the history list
-        history.insert(0, (path, visible_path))
-
-        # cut off oversized history
-        history = history[:history_length]
-
-        # put it back into the session
-        history = self.request.SESSION.set('atrefbrowserwidget_history',
-                                           history)
 
     def getResult(self):
         assert self._updated
@@ -310,7 +258,6 @@ class ReferenceBrowserPopup(BrowserView):
 
         crumbs = context.restrictedTraverse('@@breadcrumbs_view').breadcrumbs()
 
-        server_url = self.request.SERVER_URL
         if startup_directory.startswith('/'):
             startup_directory = startup_directory[1:]
 

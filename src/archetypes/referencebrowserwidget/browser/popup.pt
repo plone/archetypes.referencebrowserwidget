@@ -8,8 +8,7 @@
       class="popup atrefbrowser"
       id="atrefbrowserpopup"
       style="font-size: 150% !important"
-      tal:define="border_color view/border_color;
-                  fieldName view/fieldName;
+      tal:define="fieldName view/fieldName;
                   multiValued view/multiValued;
                   fieldRealName view/fieldRealName;
                   at_obj nocall:view/at_obj;
@@ -46,7 +45,6 @@
 
     <!-- Search form -->
     <form action="search" method="post" name="search" id="search"
-          style="padding-bottom:0em;"
           tal:condition="widget/allow_search"
           tal:attributes="action request/getURL">
 
@@ -55,7 +53,7 @@
         <label i18n:translate="referencebrowser_search_index_label">
              Search index
         </label>
-        <select name="search_index" style="" id="indexSelector">
+        <select name="search_index" id="indexSelector">
           <tal:indexes tal:repeat="index view/filtered_indexes">
             <option value="" selected=""
                 tal:attributes="
@@ -178,19 +176,14 @@
              rel item/Title">
             <strong tal:condition="referenceable"
                 tal:content="title_or_id">Title</strong>
-            <span style=""
-              tal:condition="not: referenceable"
-              tal:content="title_or_id"/>
+            <span tal:condition="not:referenceable" tal:content="title_or_id" />
           </a>
           <tal:foldercheck tal:condition="
               python:not((item.is_folderish and allow_browse) and isNotSelf)" >
             <strong tal:condition="referenceable"
                 tal:content="title_or_id">Title
             </strong>
-            <span style=""
-              tal:condition="python:not referenceable"
-              tal:content="title_or_id"
-              tal:attributes="style string:color:${color}" />
+            <span tal:condition="not:referenceable" tal:content="title_or_id" />
           </tal:foldercheck>
 
           <div tal:condition="widget/show_review_state">

@@ -4,6 +4,7 @@ from Products.CMFCore.permissions import AddPortalContent
 from archetypes.referencebrowserwidget.config import PROJECTNAME
 from archetypes.referencebrowserwidget.config import WITH_SAMPLE_TYPES
 from archetypes.referencebrowserwidget.widget import ReferenceBrowserWidget
+ReferenceBrowserWidget # pyflakes
 
 def initialize(context):
     import demo
