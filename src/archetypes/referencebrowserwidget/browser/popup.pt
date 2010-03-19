@@ -37,7 +37,7 @@
       </div>
 
     <dl id="message" class="portalMessage info"
-         style="display:hidden;margin-top:0;">
+         style="display:none; margin-top:0;">
       <dt i18n:translate="referencebrowser_text_added_reference"
         >Added</dt>
       <dd id="messageTitle"></dd>
