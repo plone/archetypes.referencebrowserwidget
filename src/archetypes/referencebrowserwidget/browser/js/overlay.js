@@ -77,8 +77,8 @@ jq(function() {
       return false;
       });
 
-  // the history-go button
-  jq('[id^=atrb_] form#history input[name=go]').live('click', function(event) {
+  // the history menu
+  jq('[id^=atrb_] form#history select[name=path]').live('change', function(event) {
       var target = jq(this);
       var wrap = target.parents('.overlaycontent');
       src = jq('[id^=atrb_] form#history select[name=path] :selected').attr('value');

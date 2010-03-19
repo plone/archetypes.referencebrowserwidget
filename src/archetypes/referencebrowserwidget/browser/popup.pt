@@ -22,20 +22,6 @@
                   image_method widget/image_method|string:;
                   ">
 
-      <div tal:condition="python:widget.history_length > 0">
-        <form action="referencebrowser_popup" name="history" id="history">
-          <label for="path"
-                 i18n:translate="referencebrowser_history">History</label>
-          <select name="path" size="1">
-          </select>
-          <input class="context" type="button" value="Go" name="go"
-                 i18n:attributes="value label_go" />
-        </form>
-        <a href="#"
-           i18n:translate="referencebrowser_clearhistory"
-           id="clearhistory">Clear history</a>
-      </div>
-
     <dl id="message" class="portalMessage info"
          style="display:none; margin-top:0;">
       <dt i18n:translate="referencebrowser_text_added_reference"
@@ -45,10 +31,11 @@
 
     <!-- Search form -->
     <form action="search" method="post" name="search" id="search"
+          style="text-align: right"
           tal:condition="widget/allow_search"
           tal:attributes="action request/getURL">
 
-      <div class="field" style="float: right">
+      <div class="field" >
         <tal:indexes condition="widget/show_indexes">
         <label i18n:translate="referencebrowser_search_index_label">
              Search index
@@ -110,10 +97,28 @@
         <!-- <span i18n:translate="referencebrowser_heading_search_results"
             >Search results</span> -->
       </div>
+
+      <!-- history -->
+      <div tal:condition="python:widget.history_length > 0" style="float: right; clear: right;">
+        <form action="referencebrowser_popup" name="history" id="history">
+          <label for="path"
+                 i18n:translate="referencebrowser_history">History</label>
+          <select name="path">
+          </select>
+          <noscript>
+              <input class="context" type="button" value="Go" name="go"
+                     i18n:attributes="value label_go" />
+          </noscript>
+        </form>
+        <!-- <a href="#"
+           i18n:translate="referencebrowser_clearhistory"
+           id="clearhistory">Clear history</a> -->
+      </div>
+
       <!-- breadcrumbs -->
       <div tal:condition= "python:search_text=='' and allow_browse"
            tal:define="isRTL here/@@plone_portal_state/is_rtl;"
-           style="clear:both; margin-bottom: 1em">
+           style="margin-bottom: 1em">
 
         You are here:
         <tal:crumbs tal:repeat="
