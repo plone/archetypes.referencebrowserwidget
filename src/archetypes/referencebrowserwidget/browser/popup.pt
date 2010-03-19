@@ -31,7 +31,7 @@
           <input class="context" type="button" value="Go" name="go"
                  i18n:attributes="value label_go" />
         </form>
-        <a tal:attributes="href view/history_url"
+        <a href="#"
            i18n:translate="referencebrowser_clearhistory"
            id="clearhistory">Clear history</a>
       </div>
