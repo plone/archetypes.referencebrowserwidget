@@ -4,11 +4,15 @@ jq(function() {
   jq('.addreference').overlay({
        closeOnClick: false,
        onBeforeLoad: function() {
+           ov = jq('div#content').data('overlay');
+           // close overlay, if there is one already
+           // we only allow one referencebrowser per time
+           if (ov) {ov.close(); }
            var wrap = this.getContent().find('.overlaycontent');
            var src = this.getTrigger().attr('src');
            var srcfilter = src + ' >*';
            wrap.data('srcfilter', srcfilter);
-           wrap.data('overlay', this);
+           jq('div#content').data('overlay', this);
            resetHistory();
            wrap.load(srcfilter);
            }});
@@ -54,7 +58,7 @@ jq(function() {
       var uid = target.attr('rel');
       refbrowser_setReference(fieldname, uid, title, parseInt(multi));
       if (close_window === '1') {
-          overlay = wrap.data('overlay');
+          overlay = jq('div#content').data('overlay');
           overlay.close();
       } else {
           showMessage(title);
