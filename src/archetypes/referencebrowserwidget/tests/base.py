@@ -10,19 +10,24 @@ from Products.PloneTestCase.layer import PloneSite
 from Products.PloneTestCase.setup import default_user
 from Products.PloneTestCase.setup import default_password
 
+from archetypes.referencebrowserwidget.config import WITH_SAMPLE_TYPES
+
 # setup session
 app = ztc.app()
 ztc.utils.setupCoreSessions(app)
 ztc.close(app)
 
 # setup sample types
-from Products.GenericSetup import EXTENSION, profile_registry
-profile_registry.registerProfile('referencebrowserwidget_sampletypes',
-    'ReferenceBrowserWidget Sample Content Types',
-    'Extension profile including referencebrowserwidget sample content types',
-    'profiles/sample_types',
-    'archetypes.referencebrowserwidget',
-    EXTENSION)
+if not WITH_SAMPLE_TYPES:
+    # if WITH_SAMPLE_TYPES is True the the profile is registered in
+    # __init__.py already
+    from Products.GenericSetup import EXTENSION, profile_registry
+    profile_registry.registerProfile('referencebrowserwidget_sampletypes',
+        'ReferenceBrowserWidget Sample Content Types',
+        'Extension profile including referencebrowserwidget sample content types',
+        'profiles/sample_types',
+        'archetypes.referencebrowserwidget',
+        EXTENSION)
 
 # install site
 ptc.setupPloneSite(extension_profiles=[

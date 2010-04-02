@@ -1,3 +1,4 @@
  - Tom Gross, itconsense@gmail.com Author
- - Danny Bloemendaal, plone-developers@lists.sourceforge.net some portions of
-       Code taken from the ATReferenceBrowserWidget implementation
+ - Danny Bloemendaal, some portions of code taken from the 
+   ATReferenceBrowserWidget implementation
+ - Alexander Limi, limi@plone.org for improved UI 

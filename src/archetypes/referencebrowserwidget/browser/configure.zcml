@@ -42,4 +42,9 @@
       provides="zope.formlib.namedtemplate.INamedTemplate"
       />
 
+  <resourceDirectory
+      name="at.referencebrowser.js"
+      directory="js"
+      />
+
 </configure>

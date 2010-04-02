@@ -46,6 +46,7 @@ schema = BaseSchema.copy() +  Schema((
         relationship='Rel3',
         widget=ReferenceBrowserWidget(
             show_indexes=1,
+            history_length=5,
             description='And here is another field.',
             startup_directory='/Members')),
 

@@ -1,9 +1,3 @@
-// function to open the popup window
-function refbrowser_openBrowser(path, fieldName, at_url, fieldRealName, width, height)
-{
-    window.open(path + '/refbrowser_popup?fieldName=' + fieldName + '&fieldRealName=' + fieldRealName + '&at_url=' + at_url, 'refbrowser_popup', 'toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=' + width + ',height=' + height);
-}
-
 // function to return a reference from the popup window back into the widget
 function refbrowser_setReference(widget_id, uid, label, multi)
 {
@@ -57,18 +51,18 @@ function refbrowser_setReference(widget_id, uid, label, multi)
         li.appendChild(label_element);
         li.id = 'ref-' + widget_id + '-' + current_values.length;
 
-        up_element = document.createElement('img');
-        up_element.src = 'arrowUp.gif';
-        up_element.alt = 'up';
+        up_element = document.createElement('a');
+        up_element.title = 'Move Up';
+        up_element.innerHTML = '&#x25b2;';
         up_element.onclick = function () {
             refbrowser_moveReferenceUp(this);
         };
 
         li.appendChild(up_element);
 
-        down_element = document.createElement('img');
-        down_element.src = 'arrowDown.gif';
-        down_element.alt = 'down';
+        down_element = document.createElement('a');
+        down_element.title = 'Move Down';
+        down_element.innerHTML = '&#x25bc;';
         down_element.onclick = function () {
             refbrowser_moveReferenceDown(this);
         };
@@ -78,7 +72,6 @@ function refbrowser_setReference(widget_id, uid, label, multi)
 
         // fix on IE7 - check *after* adding to DOM
         input.checked = true;
-
     }
 }
 
@@ -117,7 +110,7 @@ function refbrowser_moveReferenceUp(self)
         widget_id = null,
         newelem = null,
         prevelem = null,
-        imgs = null,
+        arrows = null,
         cbs = null;
     if (elem === null) {
         return false;
@@ -138,13 +131,13 @@ function refbrowser_moveReferenceUp(self)
 
     prevelem = document.getElementById('ref-' + widget_id + '-' + (pos - 1));
 
-    // up img
-    imgs = newelem.getElementsByTagName("img");
-    imgs[0].onclick = function () {
+    // up arrow
+    arrows = newelem.getElementsByTagName("a");
+    arrows[0].onclick = function () {
         refbrowser_moveReferenceUp(this);
     };
-    // down img
-    imgs[1].onclick = function () {
+    // down arrow
+    arrows[1].onclick = function () {
         refbrowser_moveReferenceDown(this);
     };
 
@@ -164,7 +157,7 @@ function refbrowser_moveReferenceDown(self)
         newelem = null,
         nextelem = null,
         cbs = null,
-        imgs = null;
+        arrows = null;
     if (elem === null) {
         return false;
     }
@@ -184,12 +177,12 @@ function refbrowser_moveReferenceDown(self)
     }
 
     // up img
-    imgs = newelem.getElementsByTagName("img");
-    imgs[0].onclick = function () {
+    arrows = newelem.getElementsByTagName("a");
+    arrows[0].onclick = function () {
         refbrowser_moveReferenceUp(this);
     };
     // down img
-    imgs[1].onclick = function () {
+    arrows[1].onclick = function () {
         refbrowser_moveReferenceDown(this);
     };
 
@@ -201,4 +194,38 @@ function refbrowser_moveReferenceDown(self)
     nextelem.id = 'ref-' + widget_id + '-' + pos;
 }
 
+function showMessage(message) {
+    jq('#messageTitle').text(message);
+    jq('#message').show();
+}
 
+function submitHistoryForm() {
+     var form = document.history;
+     var path = form.path.options[form.path.selectedIndex].value;
+     form.action = path;
+     form.submit();
+}
+
+function pushToHistory(url) {
+  var history = jq(document).data('atrb_history');
+  history.push(url);
+  jq(document).data('atrb_history', history);
+}
+
+function resetHistory() {
+  jq(document).data('atrb_history', []);
+}
+
+function popFromHistory() {
+  var history = jq(document).data('atrb_history');
+  value = history.pop();
+  jq(document).data('atrb_history', history);
+  return value;
+}
+
+function refreshOverlay(wrap, srcfilter, newoption) {
+    var oldhistory = jq('[id^=atrb_] form#history select');
+    wrap.load(srcfilter, function() { 
+        jq('[id^=atrb_] form#history select').append(newoption + oldhistory.html());
+        });
+}
