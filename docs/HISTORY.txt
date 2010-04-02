@@ -1,6 +1,12 @@
 Changelog
 =========
 
+2.0b1 - (svn/unreleased)
+------------------------
+
+* Updated package description
+  [tom_gross]
+
 1.0rc1 - 02.04.2010
 -------------------
 

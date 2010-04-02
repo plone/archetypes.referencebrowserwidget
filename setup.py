@@ -4,7 +4,7 @@ import os
 def read(*rnames):
     return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
 
-version = '1.0b4 (svn/unreleased)'
+version = '2.0b1 (svn/unreleased)'
 
 long_description = (
     read('README.txt')
@@ -30,7 +30,7 @@ long_description = (
 
 setup(name='archetypes.referencebrowserwidget',
       version=version,
-      description="An alternate atreferencebrowser implementation",
+      description="A referencebrowser implementation for Archetypes",
       long_description=long_description,
       classifiers=[
         "Framework :: Plone",
