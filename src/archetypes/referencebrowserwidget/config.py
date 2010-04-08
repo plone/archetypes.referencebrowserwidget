@@ -1,3 +1,3 @@
 PROJECTNAME = "referencebrowserwidget"
 
-WITH_SAMPLE_TYPES = True
+WITH_SAMPLE_TYPES = False
