@@ -1,10 +1,13 @@
 Changelog
 =========
 
-2.0b1 - (svn/unreleased)
-------------------------
+2.0b1 - 08.04.2010
+------------------
 
 * Updated package description
+  [tom_gross]
+
+* Merged javascript files to one, which is included only with the widget
   [tom_gross]
 
 1.0rc1 - 02.04.2010

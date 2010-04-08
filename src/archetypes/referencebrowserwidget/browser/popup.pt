@@ -204,15 +204,6 @@
               structure item/additionalReferenceInfo | nothing"
               />
         </td>
-
-        <!-- <td i18n:domain="plone"
-            i18n:translate=""
-            tal:attributes="
-            style python:referenceable and '' or 'color:' + color"
-            tal:content="item/Type">
-          Title
-        </td> -->
-
           </tr>
         </tal:row>
       </tal:results>
