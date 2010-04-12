@@ -172,6 +172,7 @@ function refbrowser_setReference(widget_id, uid, label, multi)
         up_element.innerHTML = '&#x25b2;';
         up_element.onclick = function () {
             refbrowser_moveReferenceUp(this);
+            return false;
         };
 
         li.appendChild(up_element);
@@ -181,6 +182,7 @@ function refbrowser_setReference(widget_id, uid, label, multi)
         down_element.innerHTML = '&#x25bc;';
         down_element.onclick = function () {
             refbrowser_moveReferenceDown(this);
+            return false;
         };
 
         li.appendChild(down_element);
