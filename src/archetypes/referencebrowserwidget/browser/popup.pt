@@ -93,10 +93,6 @@
     </form>
     <!-- actual list of objects, either searchresults or folder contents -->
     <tal:block tal:define="batch view/getResult;">
-      <div tal:condition="view/has_queryresults">
-        <!-- <span i18n:translate="referencebrowser_heading_search_results"
-            >Search results</span> -->
-      </div>
 
       <!-- history -->
       <div tal:condition="python:widget.history_length > 0" style="float: right; clear: right;">
@@ -110,9 +106,6 @@
                      i18n:attributes="value label_go" />
           </noscript>
         </form>
-        <!-- <a href="#"
-           i18n:translate="referencebrowser_clearhistory"
-           id="clearhistory">Clear history</a> -->
       </div>
 
       <!-- breadcrumbs -->

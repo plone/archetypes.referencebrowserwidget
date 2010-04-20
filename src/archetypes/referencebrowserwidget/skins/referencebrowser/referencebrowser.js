@@ -15,19 +15,11 @@ jq(function() {
            jq('div#content').data('overlay', this);
            resetHistory();
            wrap.load(srcfilter);
-           }});
-
-  // the browse links on the right side of the widget
-  jq('[id^=atrb_] a.browse').live('click', function(event) {
-      var target = jq(this);
-      var src = target.attr('href');
-      var wrap = target.parents('.overlaycontent');
-      var srcfilter = src + ' #content';
-      pushToHistory(wrap.data('srcfilter'));
-      wrap.data('srcfilter', srcfilter);
-      wrap.load(srcfilter);
-      return false;
-      });
+           },
+       onLoad: function() {
+           widget_id = this.getTrigger().attr('rel').substring(6);
+           disablecurrentrelations(widget_id);
+       }});
 
   // the breadcrumb-links and the links of the 'tree'-navigation
   jq('[id^=atrb_] a.browsesite').live('click', function(event) {
@@ -63,23 +55,9 @@ jq(function() {
       } else {
           showMessage(title);
       };
-      return false;
+      jq(this).attr('disabled', 'disabled');
       });
 
-  // the back link
-  jq('[id^=atrb_] a.refbrowser_back').live('click', function(event) {
-      var target = jq(this);
-      var wrap = target.siblings('.overlaycontent');
-      srcfilter = popFromHistory();
-      refreshOverlay(wrap, srcfilter, '');
-      return false;
-      });
-
-  // the clearhistory link
-  jq('[id^=atrb_] a#clearhistory').live('click', function(event) {
-      jq('[id^=atrb_] form#history select').empty();
-      return false;
-      });
 
   // the history menu
   jq('[id^=atrb_] form#history select[name=path]').live('change', function(event) {
@@ -113,6 +91,17 @@ jq(function() {
       });
 
 });
+
+
+function disablecurrentrelations (widget_id) {
+   jq('ul#' + widget_id + ' :input').each(
+       function (intIndex) {
+         uid = jq(this).attr('value');
+         cb = jq('input[rel=' + uid + ']');
+         cb.attr('disabled', 'disabled');
+         cb.attr('checked', 'checked');
+       });
+}
 
 // function to return a reference from the popup window back into the widget
 function refbrowser_setReference(widget_id, uid, label, multi)
@@ -345,5 +334,8 @@ function refreshOverlay(wrap, srcfilter, newoption) {
     var oldhistory = jq('[id^=atrb_] form#history select');
     wrap.load(srcfilter, function() { 
         jq('[id^=atrb_] form#history select').append(newoption + oldhistory.html());
+        ov = jq('div#content').data('overlay');
+        widget_id = ov.getTrigger().attr('rel').substring(6);
+        disablecurrentrelations(widget_id);
         });
 }

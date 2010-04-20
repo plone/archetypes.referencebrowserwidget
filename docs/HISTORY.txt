@@ -7,6 +7,9 @@ Changelog
 * Adding missing return falses to prevent page reloads on reordering
   [cah190,esteele]
 
+* Mark already related objects visually in referencebrowser
+  [tom_gross]
+
 2.0b1 - 08.04.2010
 ------------------
 
