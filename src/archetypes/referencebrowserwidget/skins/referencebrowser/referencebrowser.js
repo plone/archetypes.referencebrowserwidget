@@ -92,7 +92,6 @@ jq(function() {
 
 });
 
-
 function disablecurrentrelations (widget_id) {
    jq('ul#' + widget_id + ' :input').each(
        function (intIndex) {
@@ -119,10 +118,8 @@ function refbrowser_setReference(widget_id, uid, label, multi)
     // differentiate between the single and mulitselect widget
     // since the single widget has an extra label field.
     if (multi === 0) {
-        element = document.getElementById(widget_id);
-        label_element = document.getElementById(widget_id + '_label');
-        element.value = uid;
-        label_element.value = label;
+        jq('#' + widget_id).attr('value', uid);
+        jq('#' + widget_id + '_label').attr('value', label);
     }  else {
         // check if the item isn't already in the list
         current_values = jq('#' + widget_id + ' input');
@@ -202,10 +199,8 @@ function refbrowser_removeReference(widget_id, multi)
             list[x].selected = 'selected';
         }
     } else {
-        element = document.getElementById(widget_id);
-        label_element = document.getElementById(widget_id + '_label');
-        label_element.value = "";
-        element.value = "";
+        jq('#' + widget_id).attr('value', "");
+        jq('#' + widget_id + '_label').attr('value', "");
     }
 }
 
