@@ -1,5 +1,5 @@
 from unittest import TestSuite
-from zope.testing import doctest
+import doctest
 from Testing import ZopeTestCase as ztc
 from archetypes.referencebrowserwidget.tests.base import FunctionalTestCase
 

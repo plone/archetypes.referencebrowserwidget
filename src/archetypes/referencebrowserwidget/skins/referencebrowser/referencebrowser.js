@@ -153,25 +153,28 @@ function refbrowser_setReference(widget_id, uid, label, multi)
         li.appendChild(label_element);
         li.id = 'ref-' + widget_id + '-' + current_values.length;
 
-        up_element = document.createElement('a');
-        up_element.title = 'Move Up';
-        up_element.innerHTML = '&#x25b2;';
-        up_element.onclick = function () {
-            refbrowser_moveReferenceUp(this);
-            return false;
-        };
+        sortable = jq('input[name=' + widget_id + '-sortable]').attr('value');
+        if (sortable === '1') {
+          up_element = document.createElement('a');
+          up_element.title = 'Move Up';
+          up_element.innerHTML = '&#x25b2;';
+          up_element.onclick = function () {
+              refbrowser_moveReferenceUp(this);
+              return false;
+          };
 
-        li.appendChild(up_element);
+          li.appendChild(up_element);
 
-        down_element = document.createElement('a');
-        down_element.title = 'Move Down';
-        down_element.innerHTML = '&#x25bc;';
-        down_element.onclick = function () {
-            refbrowser_moveReferenceDown(this);
-            return false;
-        };
+          down_element = document.createElement('a');
+          down_element.title = 'Move Down';
+          down_element.innerHTML = '&#x25bc;';
+          down_element.onclick = function () {
+              refbrowser_moveReferenceDown(this);
+              return false;
+          };
 
-        li.appendChild(down_element);
+          li.appendChild(down_element);
+        }
         list.appendChild(li);
 
         // fix on IE7 - check *after* adding to DOM

@@ -104,7 +104,7 @@
                     overlay_id string:atrb_${fieldName}">
 
       <input type="hidden" value=""
-          tal:condition="python:multiValued"
+          tal:condition="multiValued"
           tal:attributes="name string:$fieldName:default:list"
           />
 
@@ -147,6 +147,12 @@
 
       </tal:single>
       <tal:multi tal:condition="multiValued">
+
+        <input type="hidden" value="0"
+            tal:attributes="name string:$fieldName-sortable;
+                            value python:test(widget.allow_sorting, 1, 0);"
+            />
+
         <div style="float: left"> <!-- don't remove this. it is needed for DOM traversal -->
 
           <ul class="visualNoMarker"

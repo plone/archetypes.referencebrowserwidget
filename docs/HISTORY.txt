@@ -10,6 +10,12 @@ Changelog
 * Mark already related objects visually in referencebrowser
   [tom_gross]
 
+* Only show sorting arrows on adding, if field is really sortable
+  [tom_gross]
+
+* use Python doctest instead of zope.testing.doctest
+  [tom_gross]
+
 2.0b1 - 08.04.2010
 ------------------
 
