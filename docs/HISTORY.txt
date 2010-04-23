@@ -1,8 +1,8 @@
 Changelog
 =========
 
-2.0b2 - (svn/unreleased)
-------------------------
+2.0b2 - 23.04.2010
+------------------
 
 * Adding missing return falses to prevent page reloads on reordering
   [cah190,esteele]
