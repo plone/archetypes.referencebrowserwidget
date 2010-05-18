@@ -4,7 +4,9 @@ Changelog
 2.0b3 - (svn/unreleased)
 ------------------------
 
-*
+* Use getOverlay() instead of the deprecated getContent() 
+  Closes http://dev.plone.org/plone/ticket/10548
+  [esteele]
 
 2.0b2 - 23.04.2010
 ------------------

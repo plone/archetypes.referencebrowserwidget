@@ -8,7 +8,7 @@ jq(function() {
            // close overlay, if there is one already
            // we only allow one referencebrowser per time
            if (ov) {ov.close(); }
-           var wrap = this.getContent().find('.overlaycontent');
+           var wrap = this.getOverlay().find('.overlaycontent');
            var src = this.getTrigger().attr('src');
            var srcfilter = src + ' >*';
            wrap.data('srcfilter', srcfilter);
