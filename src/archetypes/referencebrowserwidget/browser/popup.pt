@@ -165,9 +165,7 @@
                tal:attributes="src string:${item/getURL}/$image_method"
                />
         </td>
-        <td>
-          <img src="#"
-               tal:attributes="src string:${here/portal_url}/${item/getIcon};alt title_or_id" />
+        <td tal:attributes="class python:'contenttype-' + item.portal_type.lower()">
           <a class="browsesite" tal:condition="python: item.is_folderish and allow_browse"
              tal:attributes="
              href python:view.genRefBrowserUrl(item.getURL());
