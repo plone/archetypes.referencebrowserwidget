@@ -1,12 +1,16 @@
 Changelog
 =========
 
-2.0b3 - (svn/unreleased)
-------------------------
+2.0b3 - 02.06.2010
+------------------
 
 * Use getOverlay() instead of the deprecated getContent() 
   Closes http://dev.plone.org/plone/ticket/10548
   [esteele]
+
+* Use content icons from sprite
+  Closes http://dev.plone.org/plone/ticket/10543
+  [tom_gross]
 
 2.0b2 - 23.04.2010
 ------------------
