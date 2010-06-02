@@ -46,7 +46,7 @@ jq(function() {
       var fieldname = wrap.find('input[name=fieldName]').attr('value');
       var multi = wrap.find('input[name=multiValued]').attr('value');
       var close_window = wrap.find('input[name=close_window]').attr('value');
-      var title = target.parents('tr').find('img').attr('alt');
+      var title = target.parent().next('td').find('strong').html();
       var uid = target.attr('rel');
       refbrowser_setReference(fieldname, uid, title, parseInt(multi));
       if (close_window === '1') {
