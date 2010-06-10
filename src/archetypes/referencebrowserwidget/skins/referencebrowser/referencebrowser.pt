@@ -108,7 +108,7 @@
           />
 
       <tal:single tal:condition="not:multiValued" >
-        <tal:value tal:condition="value">
+        <tal:value tal:condition="value">         
           <tal:block tal:define="
               obj python:refs[0];
               obj_path python: '/'.join(obj.getPhysicalPath())" >
@@ -146,6 +146,10 @@
 
       </tal:single>
       <tal:multi tal:condition="multiValued">
+          <input type="hidden" value="0"
+              tal:attributes="name string:$fieldName-sortable;
+                              value python:test(widget.allow_sorting, 1, 0);"
+                              />
         <div style="float: left"> <!-- don't remove this. it is needed for DOM traversal -->
 
           <ul class="visualNoMarker"
