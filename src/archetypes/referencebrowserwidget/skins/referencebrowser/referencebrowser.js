@@ -69,6 +69,16 @@ jq(function() {
       return false;
       });
 
+  // the pagination links
+  jq('[id^=atrb_] div.listingBar a').live('click', function(event) {
+      var target = jq(this);
+      var src = target.attr('href');
+      var wrap = target.parents('.overlaycontent');
+      var srcfilter = src + ' >*';
+      refreshOverlay(wrap, srcfilter, '');
+      return false;
+      });
+
   // the search form
   jq('[id^=atrb_] form#search input[name=submit]').live('click', function(event) {
       var target = jq(this);
