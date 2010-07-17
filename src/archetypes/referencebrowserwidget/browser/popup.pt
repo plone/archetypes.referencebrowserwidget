@@ -29,6 +29,9 @@
       <dd id="messageTitle"></dd>
     </dl>
 
+    <!-- remove when http://dev.plone.org/plone/ticket/10773 has been fixed -->
+    <p class="discreet">Press the ESC key to cancel.</p>
+
     <!-- Search form -->
     <form action="search" method="post" name="search" id="search"
           style="text-align: right"
