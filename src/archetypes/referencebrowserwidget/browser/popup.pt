@@ -60,7 +60,7 @@
           </tal:indexes>
         </select>
         </tal:indexes>
-        
+
         <input type="text"
                id="searchGadget"
                name="searchValue"
@@ -148,7 +148,7 @@
             uid python:view.getUid(item);
             isNotSelf python:view.isNotSelf(item);
             referenceable python:view.isReferencable(item);
-            title_or_id item/sortable_title|item/Title|item/getId;
+            title_or_id python:view.title_or_id(item);
             color view/discreetColor;">
 
           <tr tal:define="oddrow repeat/item/odd"

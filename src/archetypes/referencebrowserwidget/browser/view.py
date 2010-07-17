@@ -302,3 +302,10 @@ class ReferenceBrowserPopup(BrowserView):
                 (self.widget.only_for_review_states or ())
         return self.getUid(item) and item_referenceable and \
                review_state_allows and self.isNotSelf(item)
+
+    def title_or_id(self, item):
+        assert self._updated
+        _sortable_title = getattr(aq_base(item), 'sortable_title', None)
+        _title = getattr(aq_base(item), 'Title', None)
+        _id = getattr(aq_base(item), 'getId', None)
+        return _sortable_title or _title or _id
