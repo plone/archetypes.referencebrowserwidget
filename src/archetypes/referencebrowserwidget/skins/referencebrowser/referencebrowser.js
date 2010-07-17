@@ -2,7 +2,6 @@ jq(function() {
 
   // the overlay itself
   jq('.addreference').overlay({
-       closeOnClick: false,
        onBeforeLoad: function() {
            ov = jq('div#content').data('overlay');
            // close overlay, if there is one already

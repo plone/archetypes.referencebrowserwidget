@@ -1,10 +1,12 @@
 Changelog
 =========
 
-2.0rc2 - (svn/unrleased)
+2.0rc2 - (svn/unreleased)
 ------------------------
 
-* 
+* Make sure the popup can be closed by the same ways as other popups in Plone
+  4. Fixes http://dev.plone.org/plone/ticket/10773
+  [davisagli]
 
 2.0rc1 - 12.07.2010
 -------------------
