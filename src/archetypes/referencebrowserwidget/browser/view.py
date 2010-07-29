@@ -305,7 +305,5 @@ class ReferenceBrowserPopup(BrowserView):
 
     def title_or_id(self, item):
         assert self._updated
-        sortable_title = getattr(aq_base(item), 'sortable_title', None)
-        title = getattr(aq_base(item), 'Title', None)
-        id = getattr(aq_base(item), 'getId', None)
-        return sortable_title or title or id
+        item = aq_base(item)
+        return getattr(item, 'Title', '') or getattr(item, 'getId', '')

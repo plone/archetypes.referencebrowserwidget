@@ -255,6 +255,25 @@ class PopupTestCase(PopupBaseTestCase):
         assert batch[0].getObject() == self.obj
         assert popup.has_queryresults
 
+    def test_title_or_id(self):
+        fieldname = 'singleRef'
+        self.request.set('at_url', '/plone/layer1/layer2/ref')
+        self.request.set('fieldName', fieldname)
+        self.request.set('fieldRealName', fieldname)
+        popup = self._getPopup()
+        catalog = getToolByName(self.portal, 'portal_catalog')
+
+        # id
+        refbrain = catalog(id='ref')[0]
+        assert popup.title_or_id(refbrain) == 'ref'
+
+        # title
+        self.obj.setTitle('Lorem Ipsum')
+        self.obj.reindexObject()
+
+        refbrain = catalog(id='ref')[0]
+        assert popup.title_or_id(refbrain) == 'Lorem Ipsum'
+
 class PopupBreadcrumbTestCase(PopupBaseTestCase):
     """ Test the popup breadcrumbs """
 
