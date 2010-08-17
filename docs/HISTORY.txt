@@ -4,7 +4,8 @@ Changelog
 2.0 (svn/unreleased)
 --------------------
 
-*
+* set a minimum version for jquerytools, to avoid this problem #10939
+  [do3cc]
 
 2.0rc2 - 29.07.2010
 -------------------
