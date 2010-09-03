@@ -4,6 +4,7 @@ from archetypes.referencebrowserwidget import utils
 from archetypes.referencebrowserwidget.tests.base import TestCase
 from Products.Archetypes.tests.utils import makeContent
 
+
 class UtilsTestCase(unittest.TestCase):
 
     def test_emptyquotequery(self):
@@ -12,6 +13,11 @@ class UtilsTestCase(unittest.TestCase):
 
     def test_quotequery(self):
         assert utils.quotequery('foo and bar') == 'foo and bar'
+
+    def test_quotequery_quote(self):
+        assert utils.quotequery('foo and') == 'foo "and"'
+        assert utils.quotequery('or bar') == '"or" bar'
+        assert utils.quotequery('foo and or bar') == 'foo and "or" bar'
 
 
 class PloneUtilsTestCase(TestCase):
@@ -53,11 +59,7 @@ class PloneUtilsTestCase(TestCase):
             utils.getStartupDirectory(self.doc2, '../..'),
             'http://nohost/plone/layer1/layer2/folder1')
 
-def test_suite():
-    return unittest.TestSuite([
-        unittest.makeSuite(UtilsTestCase),
-        unittest.makeSuite(PloneUtilsTestCase)
-        ])
 
-if __name__ == '__main__':
-    unittest.main(defaultTest='test_suite')
+def test_suite():
+    return unittest.defaultTestLoader.loadTestsFromName(__name__)
+

@@ -166,8 +166,6 @@ class ReferenceBrowserPopup(BrowserView):
             # XXX This concept has changed in Plone 4.0
             self.discreetColor = DISCREETCOLOR
 
-
-
     def __call__(self):
         self.update()
         return self.template()

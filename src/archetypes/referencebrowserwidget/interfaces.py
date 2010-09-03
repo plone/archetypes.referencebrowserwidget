@@ -29,11 +29,12 @@ class IReferenceBrowserHelperView(Interface):
           """ """
 
       def getUidFromReference(ref):
-          """ Get UID in restricted code 
-          
+          """ Get UID in restricted code
+
               Can be used in restricted code without having rights to
               access the object.
           """
 
       def getPortalPath():
           """ Return the path to the portal """
+
