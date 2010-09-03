@@ -7,6 +7,9 @@ Changelog
 * set a minimum version for jquerytools, to avoid this problem #10939
   [do3cc]
 
+* Encode search-URL. Fixes http://dev.plone.org/plone/ticket/10942
+  [tom_gross]
+
 2.0rc2 - 29.07.2010
 -------------------
 

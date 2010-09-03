@@ -86,7 +86,7 @@ jq(function() {
       var fieldname = wrap.find('input[name=fieldName]').attr('value');
       var fieldrealname = wrap.find('input[name=fieldRealName]').attr('value');
       var at_url = wrap.find('input[name=at_url]').attr('value');
-      var searchvalue = wrap.find('input[name=searchValue]').attr('value');
+      var searchvalue = encodeURI(wrap.find('input[name=searchValue]').attr('value'));
       var multi = wrap.find('input[name=multiValued]').attr('value');
       var close_window = wrap.find('input[name=close_window]').attr('value');
       qs = 'searchValue=' + searchvalue + '&fieldRealName=' + fieldrealname +
