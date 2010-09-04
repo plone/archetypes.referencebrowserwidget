@@ -113,7 +113,8 @@
            tal:define="isRTL here/@@plone_portal_state/is_rtl;"
            style="margin-bottom: 1em">
 
-        You are here:
+        <span id="breadcrumbs-you-are-here" i18n:domain="plone"
+            i18n:translate="you_are_here">You are here:</span>
         <tal:crumbs tal:repeat="
             crumb python:view.breadcrumbs(widget.startup_directory)">
 

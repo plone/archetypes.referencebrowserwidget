@@ -4,6 +4,9 @@ Changelog
 2.0 (svn/unreleased)
 --------------------
 
+* Fixed i18n of "You are here:".
+  [vincentfretin]
+
 * set a minimum version for jquerytools, to avoid this problem #10939
   [do3cc]
 
