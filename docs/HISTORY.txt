@@ -1,8 +1,8 @@
 Changelog
 =========
 
-2.0 (svn/unreleased)
---------------------
+2.0 - 06.09.2010
+----------------
 
 * Fixed i18n of "You are here:".
   [vincentfretin]
