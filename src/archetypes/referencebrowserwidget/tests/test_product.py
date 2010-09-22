@@ -392,23 +392,23 @@ class HelperViewTestCase(TestCase):
         field.widget.startup_directory_method = ''
 
     def test_valuefromrequest_multi(self):
-        """ If the request provides UIDs take these, not the references 
+        """ If the request provides UIDs take these, not the references
             on the object for the edit-view of the widget.
-        """      
+        """
         makeContent(self.folder, portal_type='Document', id='doc1')
         makeContent(self.folder, portal_type='Document', id='doc2')
         makeContent(self.folder, portal_type='Document', id='doc3')
-        
+
         context = self.folder.doc1
         request = TestRequest()
         helper = ReferenceBrowserHelperView(context, request)
         field = context.getField('relatedItems')
-        
+
         # no relations
         self.assertEqual(helper.getFieldRelations(field), [])
-        
+
         # relations on the object
-        context.setRelatedItems(self.folder.doc3)        
+        context.setRelatedItems(self.folder.doc3)
         self.assertEqual(helper.getFieldRelations(field),
                          [self.folder.doc3])
 
@@ -416,25 +416,25 @@ class HelperViewTestCase(TestCase):
         uid = self.folder.doc2.UID()
         self.assertEqual(helper.getFieldRelations(field, [uid]),
                          [self.folder.doc2])
-        
+
         # invalid values
         self.assertEqual(helper.getFieldRelations(field, 1), [])
-        
+
     def test_valuefromrequest_single(self):
         makeContent(self.folder, portal_type='RefBrowserDemo', id='ref')
         makeContent(self.folder, portal_type='Document', id='doc2')
         makeContent(self.folder, portal_type='Document', id='doc3')
-        
+
         context = self.folder.ref
         request = TestRequest()
         field = context.getField('singleRef')
         helper = ReferenceBrowserHelperView(context, request)
-        
+
         # no relations
         self.assertEqual(helper.getFieldRelations(field), [])
-        
+
         # relations on the object
-        context.setSingleRef(self.folder.doc3)        
+        context.setSingleRef(self.folder.doc3)
         self.assertEqual(helper.getFieldRelations(field),
                          [self.folder.doc3])
 
@@ -442,10 +442,10 @@ class HelperViewTestCase(TestCase):
         uid = self.folder.doc2.UID()
         self.assertEqual(helper.getFieldRelations(field, uid),
                          [self.folder.doc2])
-  
+
 
 class IntegrationTestCase(FunctionalTestCase):
-    """ Browser/publish tests of referencebrowser widget 
+    """ Browser/publish tests of referencebrowser widget
     """
 
     def afterSetUp(self):
@@ -540,20 +540,20 @@ class IntegrationTestCase(FunctionalTestCase):
     def test_bc_navigationroot(self):
         makeContent(self.portal, portal_type='Folder', id='folder1')
         makeContent(self.portal.folder1, portal_type='Document', id='page1')
-        
+
         page = self.portal.folder1.page1
-        
+
         browser = Browser()
         data = {
           'fieldName': 'relatedItems',
           'fieldRealName': 'relatedItems',
           'at_url': page.absolute_url(1)}
-        
+
         basic = '%s:%s' % (portal_owner, default_password)
 
         browser.addHeader('Authorization', 'Basic %s' % basic)
         browser.open('%s/refbrowser_popup?%s' % (page.absolute_url(),
-                                                 urlencode(data)))        
+                                                 urlencode(data)))
         self.failUnless(('<a class="browsesite" href="http://nohost/plone/refbrowser_popup?'
                          'fieldName=relatedItems&amp;fieldRealName=relatedItems'
                          '&amp;at_url=plone/folder1/page1" rel="Home"> '
@@ -563,10 +563,10 @@ class IntegrationTestCase(FunctionalTestCase):
         # now let's change the navigation root
         zope.interface.alsoProvides(self.portal.folder1, INavigationRoot)
         browser.open('%s/refbrowser_popup?%s' % (page.absolute_url(),
-                                                 urlencode(data)))     
+                                                 urlencode(data)))
         self.failUnless(('<a class="browsesite" href="http://nohost/plone/folder1/refbrowser_popup?'
                          'fieldName=relatedItems&amp;fieldRealName=relatedItems'
-                         '&amp;at_url=plone/folder1/page1" rel="Home"> '                                                           
+                         '&amp;at_url=plone/folder1/page1" rel="Home"> '
                          '<span>Home</span> </a>')
                          in normalize(browser.contents))
 
