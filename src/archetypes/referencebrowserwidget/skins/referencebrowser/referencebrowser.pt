@@ -184,7 +184,8 @@
       </tal:multi>
       <div style="clear: both"
           tal:define="
-              global at_url at_url|python:'/'.join(here.getPhysicalPath());
+              pss modules/Products/PythonScripts/standard;
+              global at_url at_url|python:pss.url_quote('/'.join(here.getPhysicalPath()));
               startup_directory python:helper.getStartupDirectory(field)">
         <input type="button" class="searchButton addreference" value="Add..."
                i18n:attributes="value label_add;"

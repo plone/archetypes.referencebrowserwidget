@@ -505,12 +505,20 @@ class IntegrationTestCase(FunctionalTestCase):
                 'value="Add..." src="') in body
         assert '''<input type="button" class="destructive" value="Clear reference" onclick="javascript:refbrowser_removeReference('singleRef', 0)" />''' in body
 
-    def getNormalizedPopup(self):
+    def getNormalizedPopup(self, url=None):
+        if url is None:
+            url = self.demo1_url
         response = self.publish(
             '%s?fieldName=singleRef&fieldRealName=singleRef&at_url=%s'
-          % (self.popup_url, self.demo1_url), self.basic_auth)
+          % (self.popup_url, url), self.basic_auth)
 
         return normalize(response.getBody())
+
+    def test_quoted_url(self):
+        makeContent(self.portal, portal_type='RefBrowserDemo', id='spaced demo')
+        url = self.portal['spaced demo'].absolute_url(1)
+        body = self.getNormalizedPopup(url)
+        assert '<input type="hidden" name="at_url" value="plone/spaced%20demo" />' in body
 
     def test_popup_html(self):
         body = self.getNormalizedPopup()

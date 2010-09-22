@@ -4,7 +4,8 @@ Changelog
 2.1 - (svn/unreleased)
 ----------------------
 
-* 
+* Made sure to always quote ``at_url`` when forwarding it in the templates.
+  [deo]
 
 2.0 - 06.09.2010
 ----------------
@@ -12,7 +13,7 @@ Changelog
 * Fixed i18n of "You are here:".
   [vincentfretin]
 
-* set a minimum version for jquerytools, to avoid this problem #10939
+* Set a minimum version for jquerytools, to avoid this problem #10939
   [do3cc]
 
 * Encode search-URL. Fixes http://dev.plone.org/plone/ticket/10942
