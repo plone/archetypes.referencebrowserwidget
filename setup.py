@@ -59,7 +59,8 @@ setup(name='archetypes.referencebrowserwidget',
 #          'Zope2',
 #          'Acquisition',
           'plone.app.form',
-          'plone.app.jquerytools>=1.1b1'
+          'plone.app.jquerytools>=1.1b1',
+          'plone.uuid'
 # Older versions of jquerytools don't work. See #10939
       ],
       entry_points="""

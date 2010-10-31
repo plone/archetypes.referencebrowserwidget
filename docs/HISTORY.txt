@@ -4,6 +4,9 @@ Changelog
 2.1 - (svn/unreleased)
 ----------------------
 
+* Add plone.uuid as install_requires, needed to support dexterity contents
+  [toutpt]
+
 * Made sure to always quote ``at_url`` when forwarding it in the templates.
   [deo]
 
