@@ -31,6 +31,7 @@ from archetypes.referencebrowserwidget.tests.base import TestCase
 from archetypes.referencebrowserwidget.tests.base import FunctionalTestCase
 from archetypes.referencebrowserwidget.tests.base import PopupBaseTestCase
 from archetypes.referencebrowserwidget.tests.base import normalize
+from archetypes.referencebrowserwidget.tests.base import DummyObject
 from archetypes.referencebrowserwidget.interfaces import (
     IFieldRelation, IReferenceBrowserHelperView)
 from archetypes.referencebrowserwidget.browser.view import \
@@ -274,6 +275,16 @@ class PopupTestCase(PopupBaseTestCase):
         refbrain = catalog(id='ref')[0]
         assert popup.title_or_id(refbrain) == 'Lorem Ipsum'
 
+    def test_at_url(self):
+        makeContent(self.folder, portal_type='RefBrowserDemo', id='with space')
+        obj = self.folder['with space']
+        fieldname = 'singleRef'
+        self.request.set('at_url', '/plone/layer1/layer2/with space')
+        self.request.set('fieldName', fieldname)
+        self.request.set('fieldRealName', fieldname)
+        popup = self._getPopup(obj=obj)
+        self.assertEqual(popup.at_url, '/plone/layer1/layer2/with%20space')
+
 class PopupBreadcrumbTestCase(PopupBaseTestCase):
     """ Test the popup breadcrumbs """
 
@@ -442,6 +453,16 @@ class HelperViewTestCase(TestCase):
         uid = self.folder.doc2.UID()
         self.assertEqual(helper.getFieldRelations(field, uid),
                          [self.folder.doc2])
+
+    def test_getaturl(self):
+        context = DummyObject('/plone/layer1/layer2')
+        request = TestRequest()
+        helper = ReferenceBrowserHelperView(context, request)
+        self.assertEqual(helper.getAtURL(), '/plone/layer1/layer2')
+
+        context = DummyObject('/plone/layer1/with space')
+        helper = ReferenceBrowserHelperView(context, request)
+        self.assertEqual(helper.getAtURL(), '/plone/layer1/with%20space')
 
 
 class IntegrationTestCase(FunctionalTestCase):

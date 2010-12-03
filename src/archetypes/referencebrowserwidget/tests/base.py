@@ -81,9 +81,18 @@ class FunctionalTestCase(MixIn, ptc.FunctionalTestCase):
     basic_auth = '%s:%s' % (default_user, default_password)
 
 class DummySession(dict):
-    
+
     def set(self, key, value):
         self[key] = value
+
+
+class DummyObject(object):
+
+    def __init__(self, location):
+        self.location = location
+
+    def getPhysicalPath(self):
+        return self.location.split('/')
 
 class PopupBaseTestCase(TestCase):
 
@@ -98,7 +107,7 @@ class PopupBaseTestCase(TestCase):
         self.obj.reindexObject()
         self.request = self.app.REQUEST
         setattr(self.request, 'SESSION', DummySession())
-        
+
     def _getPopup(self, obj=None, request=None):
         if obj is None:
             obj = self.obj

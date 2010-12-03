@@ -20,7 +20,6 @@
                   allow_browse widget/allow_browse;
                   image_portal_types widget/image_portal_types;
                   image_method widget/image_method|string:;
-                  pss modules/Products/PythonScripts/standard;
                   ">
 
     <dl id="message" class="portalMessage info"
@@ -86,7 +85,7 @@
       <input type="hidden" name="fieldRealName" value=""
              tal:attributes="value fieldRealName" />
       <input type="hidden" name="at_url" value=""
-             tal:attributes="value python:pss.url_quote(view.at_url)" />
+             tal:attributes="value view/at_url" />
       <input type="hidden" name="multiValued" value=""
              tal:attributes="value multiValued" />
       <input type="hidden" name="close_window" value=""

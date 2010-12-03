@@ -10,6 +10,10 @@ Changelog
 * Made sure to always quote ``at_url`` when forwarding it in the templates.
   [deo]
 
+* Use URL quoting of ``at_url`` everywhere and quote in Python code not in
+  templates. Fixes http://dev.plone.org/plone/ticket/11297
+  [tom_gross]
+
 2.0 - 06.09.2010
 ----------------
 

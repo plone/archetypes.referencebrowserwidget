@@ -1,4 +1,5 @@
 from types import ListType, TupleType
+import urllib
 
 import zope.interface
 
@@ -99,6 +100,11 @@ class ReferenceBrowserHelperView(BrowserView):
                                 name='plone_tools')
         return tools.url().getPortalPath()
 
+    def getAtURL(self):
+        context = aq_inner(self.context)
+        return urllib.quote('/'.join(context.getPhysicalPath()))
+
+
 class QueryCatalogView(BrowserView):
 
     def __call__(self, show_all=0,
@@ -161,7 +167,7 @@ class ReferenceBrowserPopup(BrowserView):
     def __init__(self, context, request):
         super(ReferenceBrowserPopup, self).__init__(context, request)
 
-        self.at_url = request.get('at_url')
+        self.at_url = urllib.quote(request.get('at_url'))
         self.fieldName = request.get('fieldName')
         self.fieldRealName = request.get('fieldRealName')
         self.search_text = request.get('searchValue', '')
@@ -190,7 +196,7 @@ class ReferenceBrowserPopup(BrowserView):
             self.has_brain = True
             self.brainuid = at_brain.UID
         else:
-            self.at_obj = context.restrictedTraverse(self.at_url)
+            self.at_obj = context.restrictedTraverse(urllib.unquote(self.at_url))
         self.field = self.at_obj.Schema()[self.fieldRealName]
         self.widget = self.field.widget
         self.multiValued = int(self.field.multiValued)
