@@ -289,8 +289,8 @@ class ReferenceBrowserPopup(BrowserView):
             crumbs = crumbs[-1:]
             newcrumbs = []
         for c in crumbs:
-           c['absolute_url'] = self.genRefBrowserUrl(c['absolute_url'])
-           newcrumbs.append(c)
+            c['absolute_url'] = self.genRefBrowserUrl(c['absolute_url'])
+            newcrumbs.append(c)
         return newcrumbs
 
     def genRefBrowserUrl(self, urlbase):
