@@ -115,8 +115,7 @@
 
         <span id="breadcrumbs-you-are-here" i18n:domain="plone"
             i18n:translate="you_are_here">You are here:</span>
-        <tal:crumbs tal:repeat="
-            crumb python:view.breadcrumbs(widget.startup_directory)">
+        <tal:crumbs tal:repeat="crumb view/breadcrumbs">
 
         <a class="browsesite"
             tal:attributes="href crumb/absolute_url;

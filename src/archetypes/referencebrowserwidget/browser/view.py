@@ -31,6 +31,7 @@ except ImportError:
     from Products.CMFPlone.PloneBatch import Batch
 
 from archetypes.referencebrowserwidget import utils
+from archetypes.referencebrowserwidget.utils import getStartupDirectory
 from archetypes.referencebrowserwidget.interfaces import IFieldRelation
 from archetypes.referencebrowserwidget.interfaces import \
         IReferenceBrowserHelperView
@@ -76,9 +77,11 @@ class ReferenceBrowserHelperView(BrowserView):
             return ref.UID()
 
     def getStartupDirectory(self, field):
-        """ Return the path to the startup directory. """
+        """ Return the URL to the startup directory. """
         widget = field.widget
-        directory = widget.startup_directory
+
+        url_tool = self.context.restrictedTraverse('@@plone_tools').url()
+        basepath = '/'.join(url_tool.getRelativeContentPath(self.context))
         if getattr(widget, 'startup_directory_method', None):
             # First check that the method exists and isn't inherited.
             method = getattr(aq_base(self.context),
@@ -92,7 +95,14 @@ class ReferenceBrowserHelperView(BrowserView):
                                  False)
                 if callable(method):
                     method = method()
-                return method
+                directory = method
+        elif getattr(self, 'startup_directory', None):
+            directory = self.startup_directory
+            if not directory.startswith('/'):
+                directory = '/'.join([basepath, directory])
+        else:
+            directory = basepath
+
         return utils.getStartupDirectory(self.context, directory)
 
     def getPortalPath(self):
@@ -146,7 +156,7 @@ class QueryCatalogView(BrowserView):
 
         if show_query:
             try:
-                results=catalog(**query)
+                results = catalog(**query)
             except ParseError:
                 pass
 
@@ -260,33 +270,27 @@ class ReferenceBrowserPopup(BrowserView):
 
         return Batch(result, b_size, b_start, orphan=1)
 
-    def breadcrumbs(self, startup_directory):
+    def breadcrumbs(self, startup_directory=None):
         assert self._updated
-        context = aq_inner(self.context)
 
+        context = aq_inner(self.context)
         portal_state = getMultiAdapter((context, self.request),
                                        name=u'plone_portal_state')
-        portal = portal_state.portal()
-
-        crumbs = context.restrictedTraverse('@@breadcrumbs_view').breadcrumbs()
-
-        if startup_directory.startswith('/'):
-            startup_directory = startup_directory[1:]
-
-        startup_folder = portal.restrictedTraverse(startup_directory)
-        startup_folder_url = startup_folder.absolute_url()
-
-        newcrumbs = []
-        for c in crumbs:
-            if c['absolute_url'].startswith(startup_folder_url):
-                c['absolute_url'] = self.genRefBrowserUrl(c['absolute_url'])
-                newcrumbs.append(c)
+        bc_view = context.restrictedTraverse('@@breadcrumbs_view')
+        crumbs = bc_view.breadcrumbs()
 
         if not self.widget.restrict_browsing_to_startup_directory:
-            newcrumbs.insert(0,
-                {'Title': 'Home',
-                 'absolute_url': self.genRefBrowserUrl(
-                                    portal_state.navigation_root_url())})
+            newcrumbs = [{'Title': 'Home',
+                          'absolute_url': self.genRefBrowserUrl(
+                                portal_state.navigation_root_url())}]
+        else:
+            # browsing is restricted, so only the last item is
+            # interesting
+            crumbs = crumbs[-1:]
+            newcrumbs = []
+        for c in crumbs:
+           c['absolute_url'] = self.genRefBrowserUrl(c['absolute_url'])
+           newcrumbs.append(c)
         return newcrumbs
 
     def genRefBrowserUrl(self, urlbase):

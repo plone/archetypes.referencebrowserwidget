@@ -298,7 +298,7 @@ class PopupBreadcrumbTestCase(PopupBaseTestCase):
         self.request.set('fieldName', fieldname)
         self.request.set('fieldRealName', fieldname)
         popup = self._getPopup()
-        bc = popup.breadcrumbs('layer1')
+        bc = popup.breadcrumbs()
 
         path = ''
         pat = self.pat % (fieldname, fieldname)
@@ -311,18 +311,17 @@ class PopupBreadcrumbTestCase(PopupBaseTestCase):
             assert bc['Title'] == compare[1]
 
     def test_startup(self):
-        """ The startup dir doesn't match the path we start with.
-
-            -> the crumbs are empty except the home entry
+        """A completely different startup dir.
         """
         fieldname = 'multiRef3'
         self.request.set('at_url', '/plone/layer1/layer2/ref')
         self.request.set('fieldName', fieldname)
         self.request.set('fieldRealName', fieldname)
-        popup = self._getPopup()
-        bc = popup.breadcrumbs('news')
-        assert len(bc) == 1
-        assert bc[0]['Title'] == 'Home'
+        popup = self._getPopup(obj=self.portal.news)
+        bc = popup.breadcrumbs()
+        self.assertEqual(len(bc), 2)
+        self.assertEqual(bc[0]['Title'], 'Home')
+        self.assertEqual(bc[1]['Title'], 'News')
 
     def test_restrictedbrowsing(self):
         """ Only browse startup-dir and below """
@@ -331,16 +330,15 @@ class PopupBreadcrumbTestCase(PopupBaseTestCase):
         self.request.set('fieldName', fieldname)
         self.request.set('fieldRealName', fieldname)
 
-        field = self.obj.getField(fieldname)
-        field.widget.restrict_browsing_to_startup_directory = 1
+        widget = self.folder.ref.getField(fieldname).widget
+        widget.restrict_browsing_to_startup_directory = 1
 
-        popup = self._getPopup()
-        bc = popup.breadcrumbs('layer1/layer2')
-        assert len(bc) == 2
-        assert bc[0]['Title'] == 'Layer2'
-        assert bc[1]['Title'] == 'ref'
+        popup = self._getPopup(obj=self.portal.layer1.layer2)
+        bc = popup.breadcrumbs(widget)
+        self.assertEqual(len(bc), 1)
+        self.assertEqual(bc[0]['Title'], 'Layer2')
 
-        field.widget.restrict_browsing_to_startup_directory = 0
+        widget.restrict_browsing_to_startup_directory = 0
 
     def test_isNotSelf(self):
         catalog = getToolByName(self.portal, 'portal_catalog')
@@ -393,11 +391,13 @@ class HelperViewTestCase(TestCase):
 
         # dynamic query
         field.widget.startup_directory_method = 'dynamicDirectory'
-        assert helper.getStartupDirectory(field) == '/bar/dynamic'
+        self.assertEqual(helper.getStartupDirectory(field),
+                         'http://nohost/plone/bar/dynamic')
 
         # constant query
         field.widget.startup_directory_method = 'constantDirectory'
-        assert helper.getStartupDirectory(field) == '/foo/constant'
+        self.assertEqual(helper.getStartupDirectory(field),
+                         'http://nohost/plone/foo/constant')
 
         # clean up
         field.widget.startup_directory_method = ''
@@ -473,6 +473,7 @@ class IntegrationTestCase(FunctionalTestCase):
         self.setRoles(['Manager'])
         makeContent(self.portal, portal_type='RefBrowserDemo', id='demo1')
         makeContent(self.portal, portal_type='Document', id='page1')
+        makeContent(self.portal, portal_type='Folder', id='folder1')
         self.demo1_url = self.portal.demo1.absolute_url(1)
         self.popup_url = '%s/refbrowser_popup' % self.demo1_url
 
@@ -526,12 +527,16 @@ class IntegrationTestCase(FunctionalTestCase):
                 'value="Add..." src="') in body
         assert '''<input type="button" class="destructive" value="Clear reference" onclick="javascript:refbrowser_removeReference('singleRef', 0)" />''' in body
 
-    def getNormalizedPopup(self, url=None):
+    def getNormalizedPopup(self, url=None, field=None, startup_path=None):
         if url is None:
             url = self.demo1_url
+        if field is None:
+            field = 'singleRef'
+        if startup_path is None:
+            startup_path = self.popup_url
         response = self.publish(
-            '%s?fieldName=singleRef&fieldRealName=singleRef&at_url=%s'
-          % (self.popup_url, url), self.basic_auth)
+            '%s?fieldName=%s&fieldRealName=%s&at_url=%s'
+          % (startup_path, field, field, url), self.basic_auth)
 
         return normalize(response.getBody())
 
@@ -550,24 +555,23 @@ class IntegrationTestCase(FunctionalTestCase):
         assert '<input type="hidden" name="at_url" value="plone/demo1" />' in body
 
     def test_popup_items(self):
-        wanted_rows = 6
+        wanted_rows = 7
         wanted_insertlinks = 2
 
         body = self.getNormalizedPopup()
         INSERTLINK = re.compile(r'<input type="checkbox" class="insertreference" rel="[0-9a-f]*?" />')
 
         ROWS = re.compile(r'<tr.*?>(.*?)</tr>', re.MULTILINE|re.DOTALL)
-        assert len(ROWS.findall(body)) == wanted_rows
-        assert len(INSERTLINK.findall(body)) == wanted_insertlinks
+        self.assertEqual(len(ROWS.findall(body)), wanted_rows)
+        self.assertEqual(len(INSERTLINK.findall(body)), wanted_insertlinks)
 
         makeContent(self.portal, portal_type='News Item', id='newsitem')
         body = self.getNormalizedPopup()
 
-        assert len(ROWS.findall(body)) == wanted_rows + 1
-        assert len(INSERTLINK.findall(body)) == wanted_insertlinks
+        self.assertEqual(len(ROWS.findall(body)), wanted_rows + 1)
+        self.assertEqual(len(INSERTLINK.findall(body)), wanted_insertlinks)
 
     def test_bc_navigationroot(self):
-        makeContent(self.portal, portal_type='Folder', id='folder1')
         makeContent(self.portal.folder1, portal_type='Document', id='page1')
 
         page = self.portal.folder1.page1
@@ -583,7 +587,7 @@ class IntegrationTestCase(FunctionalTestCase):
         browser.addHeader('Authorization', 'Basic %s' % basic)
         browser.open('%s/refbrowser_popup?%s' % (page.absolute_url(),
                                                  urlencode(data)))
-        self.failUnless(('<a class="browsesite" href="http://nohost/plone/refbrowser_popup?'
+        self.assertTrue(('<a class="browsesite" href="http://nohost/plone/refbrowser_popup?'
                          'fieldName=relatedItems&amp;fieldRealName=relatedItems'
                          '&amp;at_url=plone/folder1/page1" rel="Home"> '
                          '<span>Home</span> </a>')
@@ -593,11 +597,28 @@ class IntegrationTestCase(FunctionalTestCase):
         zope.interface.alsoProvides(self.portal.folder1, INavigationRoot)
         browser.open('%s/refbrowser_popup?%s' % (page.absolute_url(),
                                                  urlencode(data)))
-        self.failUnless(('<a class="browsesite" href="http://nohost/plone/folder1/refbrowser_popup?'
+        self.assertTrue(('<a class="browsesite" href="http://nohost/plone/folder1/refbrowser_popup?'
                          'fieldName=relatedItems&amp;fieldRealName=relatedItems'
                          '&amp;at_url=plone/folder1/page1" rel="Home"> '
                          '<span>Home</span> </a>')
                          in normalize(browser.contents))
+
+    def test_startup_directory(self):
+        startup_path = self.portal.folder1.absolute_url(1)
+        body = self.getNormalizedPopup(startup_path=startup_path,
+                                       field='multiRef3')
+        self.assertTrue(
+            ('<div id="portal-breadcrumbs"> '
+               '<span id="breadcrumbs-you-are-here">You are here:</span> '
+               '<span id="breadcrumbs-home"> '
+                 '<a href="http://nohost/plone">Home</a> '
+                   '<span class="breadcrumbSeparator"> &rsaquo; </span> '
+               '</span> '
+               '<span id="breadcrumbs-1" dir="ltr"> '
+                 '<span id="breadcrumbs-current">folder1</span> '
+               '</span> '
+             '</div>') in body)
+
 
 def test_suite():
     return unittest.TestSuite([
