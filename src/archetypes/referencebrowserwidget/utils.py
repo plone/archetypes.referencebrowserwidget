@@ -98,13 +98,15 @@ def getStartupDirectory(context, directory=''):
                 dopath = psplit[1].strip()
                 if checkPath(dopath) == dopath:
                     return filterPortalFactory(dopath)
-                else: return checkPath(dopath)
+                else:
+                    return checkPath(dopath)
 
         return filterPortalFactory(None)
 
     # If we have an absolute URL, return it relative to the portal root
-    if checkPath(directory) != directory:
-        return checkPath(directory)
+    checked = checkPath(directory)
+    if checked != directory:
+        return checked
 
     # Else, if we have a relative URL, get it relative to the context.
     return filterPortalFactory(directory)

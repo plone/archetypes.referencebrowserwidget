@@ -14,6 +14,9 @@ Changelog
   templates. Fixes http://dev.plone.org/plone/ticket/11297
   [tom_gross]
 
+* Cleaned breadcrumb code Fixes https://dev.plone.org/plone/ticket/11289
+  [tom_gross]
+
 2.0 - 06.09.2010
 ----------------
 
