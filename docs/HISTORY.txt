@@ -4,6 +4,10 @@ Changelog
 2.1 - (svn/unreleased)
 ----------------------
 
+* Qualify input tag id to avoid name-clashing. Fixes
+  https://dev.plone.org/plone/ticket/11325.
+  [malthe]
+
 * Add plone.uuid as install_requires, needed to support dexterity contents
   [toutpt]
 

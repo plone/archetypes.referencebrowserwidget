@@ -118,7 +118,7 @@
                 tal:attributes="
                     value obj/title_or_id;
                     size python:test(widget.size=='', 30, widget.size);
-                    id string:${fieldName}_label"
+                    id string:ref_browser_${fieldName}_label"
                     />
 
             <img tal:condition="python: obj.portal_type in image_portal_types"
@@ -137,12 +137,12 @@
                value="No reference set. Click the add button to select."
                i18n:attributes="value label_no_reference_set;"
                tal:condition="not:value"
-               tal:attributes="id string:${fieldName}_label"
+               tal:attributes="id string:ref_browser_${fieldName}_label"
                />
         <input type="hidden" value="" name=""
                tal:attributes="name fieldName;
                                value value;
-                               id fieldName"
+                               id string:ref_browser_${fieldName}"
               />
 
       </tal:single>
@@ -156,7 +156,7 @@
         <div style="float: left"> <!-- don't remove this. it is needed for DOM traversal -->
 
           <ul class="visualNoMarker"
-              tal:attributes="id string:${fieldName};"
+              tal:attributes="id string:ref_browser_items_${fieldName};"
               tal:condition="refs">
             <li tal:repeat="set refs"
                 tal:attributes="
@@ -195,7 +195,7 @@
         <input type="button" class="destructive" value="Clear reference" onclick=""
                i18n:attributes="value label_remove_reference;"
                tal:condition="not:multiValued"
-               tal:attributes="onclick string:javascript:refbrowser_removeReference('${fieldName}', ${multiValued})" />
+               tal:attributes="onclick string:javascript:refbrowser_removeReference('ref_browser_${fieldName}', ${multiValued})" />
            </div><div id="atrb" tal:attributes="id overlay_id" class="overlay overlay-ajax"><div class="close"><span>Close</span></div>
            <div class="pb-ajax">
              <!-- <a href="" i18n:translate="referencebrowser_back" class="refbrowser_back">Back</a> -->

@@ -47,7 +47,7 @@ jq(function() {
       var close_window = wrap.find('input[name=close_window]').attr('value');
       var title = target.parent().next('td').find('strong').html();
       var uid = target.attr('rel');
-      refbrowser_setReference(fieldname, uid, title, parseInt(multi));
+      refbrowser_setReference('ref_browser_' + fieldname, uid, title, parseInt(multi));
       if (close_window === '1') {
           overlay = jq('div#content').data('overlay');
           overlay.close();
