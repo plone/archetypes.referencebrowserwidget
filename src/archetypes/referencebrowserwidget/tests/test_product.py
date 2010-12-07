@@ -394,6 +394,15 @@ class HelperViewTestCase(TestCase):
         self.assertEqual(helper.getStartupDirectory(field),
                          'http://nohost/plone/layer1/layer2/ref')
 
+        # string query
+        field.widget.startup_directory = 'layer2'
+        self.assertEqual(helper.getStartupDirectory(field),
+                         'http://nohost/plone/layer1/layer2')
+
+        field.widget.startup_directory = '/foo/constant'
+        self.assertEqual(helper.getStartupDirectory(field),
+                         'http://nohost/plone/foo/constant')
+
         # dynamic query
         field.widget.startup_directory_method = 'dynamicDirectory'
         self.assertEqual(helper.getStartupDirectory(field),
@@ -565,7 +574,7 @@ class IntegrationTestCase(FunctionalTestCase):
 
         body = self.getNormalizedPopup()
         INSERTLINK = re.compile(r'<input type="checkbox" class="insertreference" rel="[0-9a-f]*?" />')
-        INSERTLINK_UUID = re.compile(r'<input type="checkbox" class="insertreference" rel="[\w]{8}-[\w]{4}-[\w]{4}-[\w]{4}-[\w]{12}" />') 
+        INSERTLINK_UUID = re.compile(r'<input type="checkbox" class="insertreference" rel="[\w]{8}-[\w]{4}-[\w]{4}-[\w]{4}-[\w]{12}" />')
 
         ROWS = re.compile(r'<tr.*?>(.*?)</tr>', re.MULTILINE|re.DOTALL)
         self.assertEqual(len(ROWS.findall(body)), wanted_rows)
@@ -578,7 +587,7 @@ class IntegrationTestCase(FunctionalTestCase):
         body = self.getNormalizedPopup()
 
         self.assertEqual(len(ROWS.findall(body)), wanted_rows + 1)
-        if HAS_UUID: 
+        if HAS_UUID:
             self.assertEqual(len(INSERTLINK_UUID.findall(body)), wanted_insertlinks)
         else:
             self.assertEqual(len(INSERTLINK.findall(body)), wanted_insertlinks)

@@ -4,6 +4,9 @@ Changelog
 2.1 - (svn/unreleased)
 ----------------------
 
+* Fixed: startup_directory option was broken.
+  [thomasdesvenain]
+
 * Qualify input tag id to avoid name-clashing. Fixes
   https://dev.plone.org/plone/ticket/11325.
   [malthe]
@@ -58,7 +61,7 @@ Changelog
 2.0b3 - 02.06.2010
 ------------------
 
-* Use getOverlay() instead of the deprecated getContent() 
+* Use getOverlay() instead of the deprecated getContent()
   Closes http://dev.plone.org/plone/ticket/10548
   [esteele]
 
@@ -93,7 +96,7 @@ Changelog
 1.0rc1 - 02.04.2010
 -------------------
 
-* fixed widget for path-criterion in Plone 3.3 
+* fixed widget for path-criterion in Plone 3.3
   [tom_gross]
 
 1.0b4 - 18.02.2010

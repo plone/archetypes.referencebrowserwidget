@@ -96,8 +96,8 @@ class ReferenceBrowserHelperView(BrowserView):
                 if callable(method):
                     method = method()
                 directory = method
-        elif getattr(self, 'startup_directory', None):
-            directory = self.startup_directory
+        elif getattr(widget, 'startup_directory', None):
+            directory = widget.startup_directory
             if not directory.startswith('/'):
                 directory = '/'.join([basepath, directory])
         else:
