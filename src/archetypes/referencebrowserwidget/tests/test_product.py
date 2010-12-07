@@ -19,6 +19,11 @@ from Products.Archetypes.tests.utils import makeContent
 from Products.CMFCore.utils import getToolByName
 from Products.PloneTestCase.PloneTestCase import default_password
 from Products.PloneTestCase.PloneTestCase import portal_owner
+try:
+    import plone.uuid
+    HAS_UUID=True
+except:
+    HAS_UUID=False
 
 try:
     # Plone 4
@@ -560,16 +565,23 @@ class IntegrationTestCase(FunctionalTestCase):
 
         body = self.getNormalizedPopup()
         INSERTLINK = re.compile(r'<input type="checkbox" class="insertreference" rel="[0-9a-f]*?" />')
+        INSERTLINK_UUID = re.compile(r'<input type="checkbox" class="insertreference" rel="[\w]{8}-[\w]{4}-[\w]{4}-[\w]{4}-[\w]{12}" />') 
 
         ROWS = re.compile(r'<tr.*?>(.*?)</tr>', re.MULTILINE|re.DOTALL)
         self.assertEqual(len(ROWS.findall(body)), wanted_rows)
-        self.assertEqual(len(INSERTLINK.findall(body)), wanted_insertlinks)
+        if HAS_UUID:
+            self.assertEqual(len(INSERTLINK_UUID.findall(body)), wanted_insertlinks)
+        else:
+            self.assertEqual(len(INSERTLINK.findall(body)), wanted_insertlinks)
 
         makeContent(self.portal, portal_type='News Item', id='newsitem')
         body = self.getNormalizedPopup()
 
         self.assertEqual(len(ROWS.findall(body)), wanted_rows + 1)
-        self.assertEqual(len(INSERTLINK.findall(body)), wanted_insertlinks)
+        if HAS_UUID: 
+            self.assertEqual(len(INSERTLINK_UUID.findall(body)), wanted_insertlinks)
+        else:
+            self.assertEqual(len(INSERTLINK.findall(body)), wanted_insertlinks)
 
     def test_bc_navigationroot(self):
         makeContent(self.portal.folder1, portal_type='Document', id='page1')
