@@ -4,9 +4,6 @@ Changelog
 2.1 - (svn/unreleased)
 ----------------------
 
-* Fixed: startup_directory option was broken.
-  [thomasdesvenain]
-
 * Qualify input tag id to avoid name-clashing. Fixes
   https://dev.plone.org/plone/ticket/11325.
   [malthe]
