@@ -339,7 +339,8 @@ class PopupBreadcrumbTestCase(PopupBaseTestCase):
         widget.restrict_browsing_to_startup_directory = 1
 
         popup = self._getPopup(obj=self.portal.layer1.layer2)
-        bc = popup.breadcrumbs(widget)
+        widget.startup_directory = 'layer1/layer2'
+        bc = popup.breadcrumbs()
         self.assertEqual(len(bc), 1)
         self.assertEqual(bc[0]['Title'], 'Layer2')
 

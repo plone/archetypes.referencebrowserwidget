@@ -250,11 +250,10 @@ class ReferenceBrowserPopup(BrowserView):
 
     def breadcrumbs(self, startup_directory=None):
         assert self._updated
-
         context = aq_inner(self.context)
         portal_state = getMultiAdapter((context, self.request),
                                        name=u'plone_portal_state')
-        bc_view = context.restrictedTraverse('@@breadcrumbs_view')
+        bc_view = aq_inner(context).restrictedTraverse('@@breadcrumbs_view')
         crumbs = bc_view.breadcrumbs()
 
         if not self.widget.restrict_browsing_to_startup_directory:
@@ -262,14 +261,18 @@ class ReferenceBrowserPopup(BrowserView):
                           'absolute_url': self.genRefBrowserUrl(
                                 portal_state.navigation_root_url())}]
         else:
-            # browsing is restricted, so only the last item is
-            # interesting
-            crumbs = crumbs[-1:]
+            # display only crumbs into startup directory
+            startup_dir_url = startup_directory or \
+                utils.getStartupDirectory(context,
+                        self.widget.getStartupDirectory(context, self.field))
             newcrumbs = []
+            crumbs = [c for c in crumbs \
+                             if c['absolute_url'].startswith(startup_dir_url)]
+
         for c in crumbs:
             c['absolute_url'] = self.genRefBrowserUrl(c['absolute_url'])
             newcrumbs.append(c)
-            
+
         return newcrumbs
 
     def genRefBrowserUrl(self, urlbase):
