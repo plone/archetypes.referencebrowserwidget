@@ -164,7 +164,7 @@ function refbrowser_setReference(widget_id, uid, label, multi)
         li.appendChild(label_element);
         li.id = 'ref-' + widget_id + '-' + current_values.length;
 
-        sortable = jq('input[name=' + widget_id + '-sortable]').attr('value');
+        sortable = jq('input[name=' + fieldname + '-sortable]').attr('value');
         if (sortable === '1') {
           up_element = document.createElement('a');
           up_element.title = 'Move Up';
