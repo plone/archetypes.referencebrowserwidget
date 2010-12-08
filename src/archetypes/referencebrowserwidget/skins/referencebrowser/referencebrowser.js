@@ -124,6 +124,7 @@ function refbrowser_setReference(widget_id, uid, label, multi)
         up_element = null,
         down_element = null,
         container = null;
+    	fieldname = null;
     // differentiate between the single and mulitselect widget
     // since the single widget has an extra label field.
     if (multi === 0) {
@@ -138,10 +139,10 @@ function refbrowser_setReference(widget_id, uid, label, multi)
             }
         }
         // now add the new item
+        var fieldname = widget_id.substr('ref_browser_'.length);
         list = document.getElementById(widget_id);
         // add ul-element to DOM, if it is not there
         if (list === null) {
-        	fieldname = widget_id.substr('ref_browser_'.length);
             container = jq('#archetypes-fieldname-' + fieldname + ' input + div');
             if (!container.length) {
                 // fix for Plone 3.3 collections, with a weird widget-id
@@ -157,7 +158,7 @@ function refbrowser_setReference(widget_id, uid, label, multi)
         input.type = 'checkbox';
         input.value = uid;
         input.checked = true;
-        input.name = widget_id + ':list';
+        input.name = fieldname + ':list';
         label_element.appendChild(input);
         label_element.appendChild(document.createTextNode(' ' + label));
         li.appendChild(label_element);
@@ -340,7 +341,7 @@ function popFromHistory() {
 
 function refreshOverlay(wrap, srcfilter, newoption) {
     var oldhistory = jq('[id^=atrb_] form#history select');
-    wrap.load(srcfilter, function() { 
+    wrap.load(srcfilter, function() {
         jq('[id^=atrb_] form#history select').append(newoption + oldhistory.html());
         ov = jq('div#content').data('overlay');
         widget_id = ov.getTrigger().attr('rel').substring(6);
