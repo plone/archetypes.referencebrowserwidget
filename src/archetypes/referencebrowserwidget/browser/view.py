@@ -253,7 +253,7 @@ class ReferenceBrowserPopup(BrowserView):
         context = aq_inner(self.context)
         portal_state = getMultiAdapter((context, self.request),
                                        name=u'plone_portal_state')
-        bc_view = aq_inner(context).restrictedTraverse('@@breadcrumbs_view')
+        bc_view = context.restrictedTraverse('@@breadcrumbs_view')
         crumbs = bc_view.breadcrumbs()
 
         if not self.widget.restrict_browsing_to_startup_directory:
