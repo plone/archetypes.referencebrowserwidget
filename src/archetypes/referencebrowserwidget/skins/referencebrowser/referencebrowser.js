@@ -129,7 +129,7 @@ function refbrowser_setReference(widget_id, uid, label, multi)
     if (multi === 0) {
         jq('#' + widget_id).attr('value', uid);
         jq('#' + widget_id + '_label').attr('value', label);
-    }  else {
+    } else {
         // check if the item isn't already in the list
         current_values = jq('#' + widget_id + ' input');
         for (i = 0; i < current_values.length; i++) {
@@ -141,7 +141,8 @@ function refbrowser_setReference(widget_id, uid, label, multi)
         list = document.getElementById(widget_id);
         // add ul-element to DOM, if it is not there
         if (list === null) {
-            container = jq('#archetypes-fieldname-' + widget_id + ' input + div');
+        	fieldname = widget_id.substr('ref_browser_'.length);
+            container = jq('#archetypes-fieldname-' + fieldname + ' input + div');
             if (!container.length) {
                 // fix for Plone 3.3 collections, with a weird widget-id
                 container = jq('#archetypes-fieldname-value input + div');
