@@ -1,8 +1,14 @@
-from Products.Archetypes.Widget import ReferenceWidget
-from Products.Archetypes.Registry import registerWidget,registerPropertyType
-from AccessControl import ClassSecurityInfo
 from types import StringType
+
+from Acquisition import aq_base, aq_inner
+from AccessControl import ClassSecurityInfo
+
 from Products.Archetypes.utils import shasattr
+from Products.Archetypes.Registry import registerWidget,registerPropertyType
+from Products.Archetypes.Widget import ReferenceWidget
+from Products.CMFCore.utils import getToolByName
+from archetypes.referencebrowserwidget import utils
+
 
 class ReferenceBrowserWidget(ReferenceWidget):
     _properties = ReferenceWidget._properties.copy()
@@ -38,10 +44,39 @@ class ReferenceBrowserWidget(ReferenceWidget):
     # for documentation of properties see: README.txt
     security = ClassSecurityInfo()
 
+    security.declarePublic('getStartupDirectory')
+    def getStartupDirectory(self, instance, field):
+        """get widget startup directory
+        """
+        url_tool = instance.restrictedTraverse('@@plone_tools').url()
+        basepath = '/'.join(url_tool.getRelativeContentPath(instance))
+        if getattr(self, 'startup_directory_method', None):
+            # First check that the method exists and isn't inherited.
+            method = getattr(aq_base(instance), self.startup_directory_method,
+                             False)
+            if method:
+                # Then get the method again, but with acquisition context this
+                # time:
+                method = getattr(instance, self.startup_directory_method, False)
+                if callable(method):
+                    method = method()
+
+                directory = method
+
+        elif getattr(self, 'startup_directory', None):
+            directory = self.startup_directory
+            if not directory.startswith('/'):
+                directory = '/'.join([basepath, directory])
+
+        else:
+            directory = basepath
+
+        return directory
+
     security.declarePublic('getBaseQuery')
     def getBaseQuery(self, instance, field):
-        """Return base query to use for content search"""
-
+        """Return base query to use for content search
+        """
         query = self.base_query
         if query:
             if type(query) is StringType and shasattr(instance, query):
@@ -54,6 +89,16 @@ class ReferenceBrowserWidget(ReferenceWidget):
         else:
             results = {}
 
+        # If browser browse is restricted to startup_directory
+        # restrict search to it
+        if getattr(self, 'restrict_browsing_to_startup_directory', False):
+            startup_directory = self.getStartupDirectory(instance, field)
+            try:
+                startup_directory = aq_inner(instance.restrictedTraverse(startup_directory))
+                results['path'] = '/'.join(startup_directory.getPhysicalPath())
+            except KeyError:
+                pass
+
         # Add portal type restrictions based on settings in field, if not part
         # of original base_query the template tries to do this, but ignores
         # allowed_types_method, which should override allowed_types
@@ -63,14 +108,16 @@ class ReferenceBrowserWidget(ReferenceWidget):
             if allow_method is not None:
                 meth = getattr(instance, allow_method)
                 allowed_types = meth()
-            results['portal_type']=allowed_types
+
+            results['portal_type'] = allowed_types
 
         return results
 
     security.declarePublic('process_form')
     def process_form(self, instance, field, form, empty_marker=None,
                      emptyReturnsMarker=False, validating=True):
-        """Basic impl for form processing in a widget"""
+        """Basic impl for form processing in a widget
+        """
         result = super(ReferenceBrowserWidget,
                        self).process_form(instance, field, form, empty_marker,
                                           emptyReturnsMarker, validating)
@@ -81,6 +128,7 @@ class ReferenceBrowserWidget(ReferenceWidget):
         if field.required and field.multiValued and \
            not emptyReturnsMarker and result == ([''], {}):
             return [], {}
+
         return result
 
 registerWidget(ReferenceBrowserWidget,

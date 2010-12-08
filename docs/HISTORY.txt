@@ -4,6 +4,10 @@ Changelog
 2.1 - (svn/unreleased)
 ----------------------
 
+* Fixed: do not return results that are outside of startup directory
+  if browse is restricted to it.
+  [thomasdesvenain]
+
 * Qualify input tag id to avoid name-clashing. Fixes
   https://dev.plone.org/plone/ticket/11325.
   [malthe]

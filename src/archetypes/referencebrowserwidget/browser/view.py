@@ -31,7 +31,6 @@ except ImportError:
     from Products.CMFPlone.PloneBatch import Batch
 
 from archetypes.referencebrowserwidget import utils
-from archetypes.referencebrowserwidget.utils import getStartupDirectory
 from archetypes.referencebrowserwidget.interfaces import IFieldRelation
 from archetypes.referencebrowserwidget.interfaces import \
         IReferenceBrowserHelperView
@@ -79,30 +78,7 @@ class ReferenceBrowserHelperView(BrowserView):
     def getStartupDirectory(self, field):
         """ Return the URL to the startup directory. """
         widget = field.widget
-
-        url_tool = self.context.restrictedTraverse('@@plone_tools').url()
-        basepath = '/'.join(url_tool.getRelativeContentPath(self.context))
-        if getattr(widget, 'startup_directory_method', None):
-            # First check that the method exists and isn't inherited.
-            method = getattr(aq_base(self.context),
-                             widget.startup_directory_method,
-                             False)
-            if method:
-                # Then get the method again, but with acquisition context this
-                # time:
-                method = getattr(self.context,
-                                 widget.startup_directory_method,
-                                 False)
-                if callable(method):
-                    method = method()
-                directory = method
-        elif getattr(widget, 'startup_directory', None):
-            directory = widget.startup_directory
-            if not directory.startswith('/'):
-                directory = '/'.join([basepath, directory])
-        else:
-            directory = basepath
-
+        directory = widget.getStartupDirectory(self.context, field)
         return utils.getStartupDirectory(self.context, directory)
 
     def getPortalPath(self):
@@ -248,6 +224,8 @@ class ReferenceBrowserPopup(BrowserView):
         assert self._updated
         result = []
         if self.widget.show_results_without_query or self.search_text:
+            if self.widget.restrict_browsing_to_startup_directory:
+                pass
 
             qc = getMultiAdapter((self.context, self.request),
                                  name='refbrowser_querycatalog')
@@ -291,6 +269,7 @@ class ReferenceBrowserPopup(BrowserView):
         for c in crumbs:
             c['absolute_url'] = self.genRefBrowserUrl(c['absolute_url'])
             newcrumbs.append(c)
+            
         return newcrumbs
 
     def genRefBrowserUrl(self, urlbase):

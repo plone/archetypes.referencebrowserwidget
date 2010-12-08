@@ -399,6 +399,17 @@ class HelperViewTestCase(TestCase):
         self.assertEqual(helper.getStartupDirectory(field),
                          'http://nohost/plone/layer1/layer2')
 
+        # test base query is restricted on startup directory
+        self.assertFalse('path' in field.widget.getBaseQuery(context, field))
+        field.widget.restrict_browsing_to_startup_directory = 1
+        self.assertTrue('path' in field.widget.getBaseQuery(context, field))
+        self.assertEqual(field.widget.getBaseQuery(context, field)['path'],
+                         '/plone/layer1/layer2')
+
+        field.widget.startup_directory = 'layer1'
+        self.assertEqual(field.widget.getBaseQuery(context, field)['path'],
+                         '/plone/layer1')
+
         field.widget.startup_directory = '/foo/constant'
         self.assertEqual(helper.getStartupDirectory(field),
                          'http://nohost/plone/foo/constant')
