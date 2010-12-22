@@ -4,16 +4,17 @@ Changelog
 2.1 - (svn/unreleased)
 ----------------------
 
+* Fixed title display for images with preview
+  http://dev.plone.org/plone/ticket/11290
+  [tom_gross] 
+
 * Fixed: do not return results that are outside of startup directory
   if browse is restricted to it.
   [thomasdesvenain]
 
 * Qualify input tag id to avoid name-clashing. Fixes
-  https://dev.plone.org/plone/ticket/11325.
+  http://dev.plone.org/plone/ticket/11325.
   [malthe]
-
-* Add plone.uuid as install_requires, needed to support dexterity contents
-  [toutpt]
 
 * Made sure to always quote ``at_url`` when forwarding it in the templates.
   [deo]
@@ -22,7 +23,7 @@ Changelog
   templates. Fixes http://dev.plone.org/plone/ticket/11297
   [tom_gross]
 
-* Cleaned breadcrumb code Fixes https://dev.plone.org/plone/ticket/11289
+* Cleaned breadcrumb code Fixes http://dev.plone.org/plone/ticket/11289
   [tom_gross]
 
 2.0 - 06.09.2010

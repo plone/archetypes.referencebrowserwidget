@@ -19,7 +19,7 @@
                   available_indexes widget/available_indexes;
                   allow_browse widget/allow_browse;
                   image_portal_types widget/image_portal_types;
-                  image_method widget/image_method|string:;
+                  image_method widget/image_method|string:image_icon;
                   ">
 
     <dl id="message" class="portalMessage info"
