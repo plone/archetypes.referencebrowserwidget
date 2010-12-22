@@ -1,6 +1,9 @@
 from zope.component import getMultiAdapter
 
-from Products.Five import zcml
+try:
+    from Zope2.App import zcml  # Zope >= 2.13
+except ImportError:
+    from Products.Five import zcml  # Zope < 2.13
 from Products.Five import fiveconfigure
 from Testing import ZopeTestCase as ztc
 

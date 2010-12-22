@@ -10,7 +10,10 @@ from zope.publisher.browser import TestRequest
 
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.Five import BrowserView
-from Products.Five.testbrowser import Browser
+try:
+    from Testing.testbrowser import Browser  # Zope >= 2.13
+except ImportError:
+    from Products.Five.testbrowser import Browser  # Zope < 2.13
 
 from plone.app.form._named import named_template_adapter
 from plone.app.layout.navigation.interfaces import INavigationRoot

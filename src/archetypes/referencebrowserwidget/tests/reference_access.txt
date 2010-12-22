@@ -43,7 +43,10 @@ Next, we create a user who will be our editor:
 
 Fred logs in and visits the context and both targets. He has no access to either:
 
-  >>> from Products.Five.testbrowser import Browser
+  >>> try:
+  ...     from Testing.testbrowser import Browser
+  ... except ImportError:
+  ...     from Products.Five.testbrowser import Browser
   >>> browser = Browser()
   >>> browser.addHeader('Authorization', 'Basic %s:%s' % ('fred', 'secret'))
   >>> browser.open(context.absolute_url())
