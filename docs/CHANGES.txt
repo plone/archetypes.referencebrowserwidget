@@ -4,6 +4,11 @@ Changelog
 2.2 - Unreleased
 ----------------
 
+* Don't disable checkboxes in overlay when an item is selected.
+  Remove the item from the value list when it is unchecked in
+  the value list. Partly fixes http://dev.plone.org/plone/ticket/10786
+  [csenger]
+
 2.1 - 2011-01-03
 ----------------
 

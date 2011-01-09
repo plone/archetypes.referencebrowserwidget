@@ -20,7 +20,7 @@ jq(function() {
            disablecurrentrelations(widget_id);
        }});
 
-  // the breadcrumb-links and the links of the 'tree'-navigation
+  // the breadcrumb-links and the links of the 'tree'-navigati        on
   jq('[id^=atrb_] a.browsesite').live('click', function(event) {
       var target = jq(this);
       var src = target.attr('href');
@@ -48,14 +48,19 @@ jq(function() {
       var tablerow = target.parent().parent();
       var title = tablerow.find('strong').html();
       var uid = target.attr('rel');
-      refbrowser_setReference('ref_browser_' + fieldname, uid, title, parseInt(multi));
+      if (this.checked === true) {
+          refbrowser_setReference('ref_browser_' + fieldname,
+                                  uid, title, parseInt(multi));
+          }
+      else {
+          refbrowser_delReference('ref_browser_' + fieldname, uid);
+      }
       if (close_window === '1') {
           overlay = jq('div#content').data('overlay');
           overlay.close();
       } else {
           showMessage(title);
       };
-      jq(this).attr('disabled', 'disabled');
       });
 
 
@@ -192,6 +197,11 @@ function refbrowser_setReference(widget_id, uid, label, multi)
         // fix on IE7 - check *after* adding to DOM
         input.checked = true;
     }
+}
+
+
+function refbrowser_delReference(widget_id, uid) {
+    jq('#' + widget_id + ' input[value="' + uid + '"]').closest('li').remove()
 }
 
 // function to clear the reference field or remove items
@@ -343,9 +353,10 @@ function popFromHistory() {
 function refreshOverlay(wrap, srcfilter, newoption) {
     var oldhistory = jq('[id^=atrb_] form#history select');
     wrap.load(srcfilter, function() {
-        jq('[id^=atrb_] form#history select').append(newoption + oldhistory.html());
+        jq('[id^=atrb_] form#history select').append(newoption +
+                                                     oldhistory.html());
         ov = jq('div#content').data('overlay');
         widget_id = ov.getTrigger().attr('rel').substring(6);
-        disablecurrentrelations(widget_id);
+//        disablecurrentrelations(widget_id);
         });
 }
