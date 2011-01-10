@@ -200,9 +200,12 @@ function refbrowser_setReference(widget_id, uid, label, multi)
 }
 
 
+// remove the item for the uid from the reference widget
 function refbrowser_delReference(widget_id, uid) {
-    jq('#' + widget_id + ' input[value="' + uid + '"]').closest('li').remove()
+    var input= jq('#' + widget_id + ' input[value="' + uid + '"]');
+    input.closest('li').remove();
 }
+
 
 // function to clear the reference field or remove items
 // from the multivalued reference list.
@@ -357,6 +360,6 @@ function refreshOverlay(wrap, srcfilter, newoption) {
                                                      oldhistory.html());
         ov = jq('div#content').data('overlay');
         widget_id = ov.getTrigger().attr('rel').substring(6);
-//        disablecurrentrelations(widget_id);
+        disablecurrentrelations(widget_id);
         });
 }
