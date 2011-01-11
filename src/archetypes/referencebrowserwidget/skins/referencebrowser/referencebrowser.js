@@ -36,7 +36,8 @@ jq(function() {
       // is available, if the history_length-parameter is set on the widget
       // the srcfilter-history is used for storing the URLs to make the
       // 'Back'-link work.
-      var newoption = '<option value="' + src + '">' + target.attr('rel') + '</option>';
+      var newoption = '<option value="' + src + '">' +
+          target.attr('rel') + '</option>';
       refreshOverlay(wrap, srcfilter, newoption);
       return false;
       });
@@ -71,7 +72,9 @@ jq(function() {
   jq('[id^=atrb_] form#history select[name=path]').live('change', function(event) {
       var target = jq(this);
       var wrap = target.parents('.overlaycontent');
-      src = jq('[id^=atrb_] form#history select[name=path] :selected').attr('value');
+      var src_selector = '[id^=atrb_] form#history ' +
+          'select[name=path] :selected';
+      var src = jq(src_selector).attr('value');
       var srcfilter = src + ' >*';
       refreshOverlay(wrap, srcfilter, '');
       return false;
@@ -88,7 +91,8 @@ jq(function() {
       });
 
   // the search form
-  jq('[id^=atrb_] form#search input[name=submit]').live('click', function(event) {
+  jq('[id^=atrb_] form#search input[name=submit]').live('click',
+                                                        function(event) {
       var target = jq(this);
       var src = target.parents('form').attr('action');
       var wrap = target.parents('.overlaycontent');
@@ -132,8 +136,8 @@ function refbrowser_setReference(widget_id, uid, label, multi)
         input = null,
         up_element = null,
         down_element = null,
-        container = null;
-    	fieldname = null;
+        container = null,
+        fieldname = null;
     // differentiate between the single and mulitselect widget
     // since the single widget has an extra label field.
     if (multi === 0) {
@@ -152,7 +156,8 @@ function refbrowser_setReference(widget_id, uid, label, multi)
         list = document.getElementById(widget_id);
         // add ul-element to DOM, if it is not there
         if (list === null) {
-            container = jq('#archetypes-fieldname-' + fieldname + ' input + div');
+            container = jq('#archetypes-fieldname-' + fieldname +
+                           ' input + div');
             if (!container.length) {
                 // fix for Plone 3.3 collections, with a weird widget-id
                 container = jq('#archetypes-fieldname-value input + div');
