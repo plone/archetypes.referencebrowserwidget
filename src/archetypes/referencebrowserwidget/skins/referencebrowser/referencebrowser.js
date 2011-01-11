@@ -13,7 +13,10 @@ jq(function() {
            wrap.data('srcfilter', srcfilter);
            jq('div#content').data('overlay', this);
            resetHistory();
-           wrap.load(srcfilter);
+           wrap.load(srcfilter, function() {
+               var fieldname = wrap.find('input[name=fieldName]').attr('value');
+               check_referenced_items(fieldname);
+               });
            },
        onLoad: function() {
            widget_id = this.getTrigger().attr('rel').substring(6);
@@ -53,7 +56,7 @@ jq(function() {
                                   uid, title, parseInt(multi));
           }
       else {
-          refbrowser_delReference('ref_browser_' + fieldname, uid);
+          refbrowser_delReference(fieldname, uid);
       }
       if (close_window === '1') {
           overlay = jq('div#content').data('overlay');
@@ -199,13 +202,12 @@ function refbrowser_setReference(widget_id, uid, label, multi)
     }
 }
 
-
 // remove the item for the uid from the reference widget
-function refbrowser_delReference(widget_id, uid) {
-    var input= jq('#' + widget_id + ' input[value="' + uid + '"]');
-    input.closest('li').remove();
+function refbrowser_delReference(fieldname, uid) {
+    var selector = 'input[value="' + uid + '"][name="' + fieldname + ':list"]',
+        inputs = jq(selector);
+    inputs.closest('li').remove();
 }
-
 
 // function to clear the reference field or remove items
 // from the multivalued reference list.
@@ -361,5 +363,33 @@ function refreshOverlay(wrap, srcfilter, newoption) {
         ov = jq('div#content').data('overlay');
         widget_id = ov.getTrigger().attr('rel').substring(6);
         disablecurrentrelations(widget_id);
+        var fieldname = wrap.find('input[name=fieldName]').attr('value');
+        check_referenced_items(fieldname);
         });
+}
+
+// check all references in the overlay that are present in the widget
+function check_referenced_items(fieldname) {
+    var refs_in_overlay = jq('input.insertreference'),
+        uid_selector = "input[name='" + fieldname + ":list']",
+        current = jq(uid_selector), // the widget in the form
+        current_uids = current.map(function () {
+            if (jq(this).attr('checked') === true) {
+                return jq(this).attr('value');
+            }
+            return null;
+        });
+
+    refs_in_overlay.each(function () {
+        var overlay_ref = jq(this),
+            uid = jq(overlay_ref).attr('rel'),
+            i;
+
+        for (i = 0; i < current_uids.length; i++) {
+            if (uid === current_uids[i]) {
+                overlay_ref.attr('checked', true);
+                return true;  // break jq.each
+            }
+        }
+    });
 }

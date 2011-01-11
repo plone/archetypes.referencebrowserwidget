@@ -4,6 +4,10 @@ Changelog
 2.2 - Unreleased
 ----------------
 
+* check the references in the overlay that are checked in the widget
+  when the overlay is constructed or refreshed.
+  [csenger]
+
 * Don't disable checkboxes in overlay when an item is selected.
   Remove the item from the value list when it is unchecked in
   the value list. Partly fixes http://dev.plone.org/plone/ticket/10786
