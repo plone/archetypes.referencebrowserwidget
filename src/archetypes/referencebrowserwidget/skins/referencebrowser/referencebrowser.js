@@ -52,18 +52,21 @@ jq(function() {
       var tablerow = target.parent().parent();
       var title = tablerow.find('strong').html();
       var uid = target.attr('rel');
+      var messageType;
       if (this.checked === true) {
           refbrowser_setReference('ref_browser_' + fieldname,
                                   uid, title, parseInt(multi));
+          messageType = 'added';
           }
       else {
           refbrowser_delReference(fieldname, uid);
+          messageType = 'removed';
       }
       if (close_window === '1') {
           overlay = jq('div#content').data('overlay');
           overlay.close();
       } else {
-          showMessage(title);
+          showMessage(messageType, title);
       };
       });
 
@@ -331,10 +334,26 @@ function refbrowser_moveReferenceDown(self)
     nextelem.id = 'ref-' + widget_id + '-' + pos;
 }
 
-function showMessage(message) {
-    jq('#messageTitle').text(message);
-    jq('#message').show();
-}
+function showMessage(messageType, message) {
+    var new_info,
+        old_info;
+    if (messageType === 'added') {
+        new_info = jq('#messageAdded');
+        old_info = jq('#messageRemoved');
+    } else if (messageType === 'removed') {
+        new_info = jq('#messageRemoved');
+        old_info = jq('#messageAdded');
+    };
+    new_info.hide();
+    new_info.find('dd').text(message);
+    old_info.fadeTo(400, 0, function() {
+        new_info.css({opacity: 0});
+        new_info.show();
+        jq('#messageWrapper').animate({height: new_info.height() + 20 }, 400);
+        new_info.animate({opacity: 1}, 400);
+        old_info.hide();
+    });
+};
 
 function submitHistoryForm() {
      var form = document.history;

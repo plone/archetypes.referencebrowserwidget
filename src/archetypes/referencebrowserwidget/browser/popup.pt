@@ -22,16 +22,29 @@
                   image_method widget/image_method|string:image_icon;
                   ">
 
-    <dl id="message" class="portalMessage info"
-         style="display:none; margin-top:0;">
-      <dt i18n:translate="referencebrowser_text_added_reference"
-        >Added</dt>
-      <dd id="messageTitle"></dd>
-    </dl>
+    <div id="messageWrapper" style="position: relative">
+      <div style="position: absolute; width: 100%">
+        <dl id="messageAdded" class="portalMessage info"
+            style="display:none; margin-top:0">
+          <dt i18n:translate="referencebrowser_text_added_reference"
+              >Added</dt>
+          <dd></dd>
+        </dl>
+      </div>
+      <div style="position: absolute; width: 100%">
+        <dl id="messageRemoved" class="portalMessage info"
+            style="display:none; margin-top:0">
+          <dt i18n:translate="referencebrowser_text_removed_reference"
+              >Removed</dt>
+          <dd></dd>
+        </dl>
+      </div>
+    </div>
+
 
     <!-- Search form -->
     <form action="search" method="post" name="search" id="search"
-          style="text-align: right"
+          style="text-align: right;"
           tal:condition="widget/allow_search"
           tal:attributes="action request/getURL">
 
