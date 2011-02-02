@@ -52,21 +52,21 @@ jq(function() {
       var tablerow = target.parent().parent();
       var title = tablerow.find('strong').html();
       var uid = target.attr('rel');
-      var messageType;
+      var messageId;
       if (this.checked === true) {
           refbrowser_setReference('ref_browser_' + fieldname,
                                   uid, title, parseInt(multi));
-          messageType = 'added';
+          messageId = '#messageAdded';
           }
       else {
           refbrowser_delReference(fieldname, uid);
-          messageType = 'removed';
+          messageId = '#messageRemoved';
       }
       if (close_window === '1') {
           overlay = jq('div#content').data('overlay');
           overlay.close();
       } else {
-          showMessage(messageType, title);
+          showMessage(messageId, title);
       };
       });
 
@@ -334,24 +334,24 @@ function refbrowser_moveReferenceDown(self)
     nextelem.id = 'ref-' + widget_id + '-' + pos;
 }
 
-function showMessage(messageType, message) {
-    var new_info,
-        old_info;
-    if (messageType === 'added') {
-        new_info = jq('#messageAdded');
-        old_info = jq('#messageRemoved');
-    } else if (messageType === 'removed') {
-        new_info = jq('#messageRemoved');
-        old_info = jq('#messageAdded');
-    };
-    new_info.hide();
-    new_info.find('dd').text(message);
-    old_info.fadeTo(400, 0, function() {
-        new_info.css({opacity: 0});
-        new_info.show();
-        jq('#messageWrapper').animate({height: new_info.height() + 20 }, 400);
-        new_info.animate({opacity: 1}, 400);
-        old_info.hide();
+function showMessage(messageId, text) {
+    var template = jq(messageId).parent(),
+        message_div = template.clone(),
+        message = message_div.children(),
+        old_message = jq('#message'),
+        message_wrapper = jq('#messageWrapper');
+
+    // insert a new, cloned message
+    message_wrapper.prepend(message_div);
+    message.find('dd').text(text);
+    message.css({opacity: 0}).show();
+    message.attr('id', 'message');
+
+    // animate message switch and remove old message
+    message_wrapper.animate({height: message.height() + 20 }, 400);
+    message.fadeTo(400, 1);
+    old_message.fadeTo(400, 0, function() {
+        old_message.parent().remove();
     });
 };
 
