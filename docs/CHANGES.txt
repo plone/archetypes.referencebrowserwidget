@@ -4,6 +4,10 @@ Changelog
 2.2 - Unreleased
 ----------------
 
+* Fixed `getStartupDirectory` method if a `startup_directory_method` was
+  defined, which cannot be traversed to.
+  [hannosch]
+
 * check the references in the overlay that are checked in the widget
   when the overlay is constructed or refreshed.
   [csenger]

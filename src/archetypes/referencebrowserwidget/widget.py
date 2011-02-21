@@ -50,6 +50,7 @@ class ReferenceBrowserWidget(ReferenceWidget):
         """
         url_tool = instance.restrictedTraverse('@@plone_tools').url()
         basepath = '/'.join(url_tool.getRelativeContentPath(instance))
+        directory = ''
         if getattr(self, 'startup_directory_method', None):
             # First check that the method exists and isn't inherited.
             method = getattr(aq_base(instance), self.startup_directory_method,
