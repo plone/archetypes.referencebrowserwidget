@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.2 - Unreleased
+2.2 - 2011-02-25
 ----------------
 
 * Fixed `getStartupDirectory` method if a `startup_directory_method` was
