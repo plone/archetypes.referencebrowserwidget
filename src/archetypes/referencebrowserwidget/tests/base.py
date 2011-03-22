@@ -10,6 +10,7 @@ from Testing import ZopeTestCase as ztc
 from Products.Archetypes.tests.utils import makeContent
 from Products.PloneTestCase import PloneTestCase as ptc
 from Products.PloneTestCase.layer import PloneSite
+from Products.PloneTestCase.layer import onsetup
 from Products.PloneTestCase.setup import default_user
 from Products.PloneTestCase.setup import default_password
 
@@ -20,17 +21,20 @@ app = ztc.app()
 ztc.utils.setupCoreSessions(app)
 ztc.close(app)
 
-# setup sample types
-if not WITH_SAMPLE_TYPES:
-    # if WITH_SAMPLE_TYPES is True the the profile is registered in
-    # __init__.py already
-    from Products.GenericSetup import EXTENSION, profile_registry
-    profile_registry.registerProfile('referencebrowserwidget_sampletypes',
-        'ReferenceBrowserWidget Sample Content Types',
-        'Extension profile including referencebrowserwidget sample content types',
-        'profiles/sample_types',
-        'archetypes.referencebrowserwidget',
-        EXTENSION)
+@onsetup
+def setup_sample_types():
+    # setup sample types
+    if not WITH_SAMPLE_TYPES:
+        # if WITH_SAMPLE_TYPES is True the the profile is registered in
+        # __init__.py already
+        from Products.GenericSetup import EXTENSION, profile_registry
+        profile_registry.registerProfile('referencebrowserwidget_sampletypes',
+            'ReferenceBrowserWidget Sample Content Types',
+            'Extension profile including referencebrowserwidget sample content types',
+            'profiles/sample_types',
+            'archetypes.referencebrowserwidget',
+            EXTENSION)
+setup_sample_types()
 
 # install site
 ptc.setupPloneSite(extension_profiles=[
@@ -123,4 +127,3 @@ class PopupBaseTestCase(TestCase):
 def normalize(s):
     """ Helper method for integration tests """
     return ' '.join(s.split())
-
