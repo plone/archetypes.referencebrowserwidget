@@ -1,6 +1,9 @@
 Changelog
 =========
 
+* Fixed: widget did not work when search was disallowed.
+  [thomasdesvenain]
+
 1.0rc1 - 02.04.2010
 -------------------
 

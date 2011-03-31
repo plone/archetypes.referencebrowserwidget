@@ -41,13 +41,12 @@
       </div>
     </div>
 
-
     <!-- Search form -->
     <form action="search" method="post" name="search" id="search"
           style="text-align: right;"
-          tal:condition="widget/allow_search"
           tal:attributes="action request/getURL">
-
+     <tal:formactions
+          tal:condition="widget/allow_search">
       <div class="field" >
         <tal:indexes condition="widget/show_indexes">
         <label i18n:translate="referencebrowser_search_index_label">
@@ -91,18 +90,20 @@
                i18n:attributes="value label_search;"
                />
       </div>
-      <!-- add these to make sure that after a search result, we still have
-           these paremeters -->
-      <input type="hidden" name="fieldName" value=""
-             tal:attributes="value fieldName" />
-      <input type="hidden" name="fieldRealName" value=""
-             tal:attributes="value fieldRealName" />
-      <input type="hidden" name="at_url" value=""
-             tal:attributes="value view/at_url" />
-      <input type="hidden" name="multiValued" value=""
-             tal:attributes="value multiValued" />
-      <input type="hidden" name="close_window" value=""
-             tal:attributes="value view/close_window" />
+     </tal:formactions>
+
+     <!-- add these to make sure that after a search result, we still have
+          these paremeters -->
+     <input type="hidden" name="fieldName" value=""
+            tal:attributes="value fieldName" />
+     <input type="hidden" name="fieldRealName" value=""
+            tal:attributes="value fieldRealName" />
+     <input type="hidden" name="at_url" value=""
+            tal:attributes="value view/at_url" />
+     <input type="hidden" name="multiValued" value=""
+            tal:attributes="value multiValued" />
+     <input type="hidden" name="close_window" value=""
+            tal:attributes="value view/close_window" />
     </form>
     <!-- actual list of objects, either searchresults or folder contents -->
     <tal:block tal:define="batch view/getResult;">
