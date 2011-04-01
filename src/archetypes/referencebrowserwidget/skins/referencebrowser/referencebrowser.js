@@ -46,7 +46,6 @@ jq(function() {
   jq('[id^=atrb_] input.insertreference').live('click', function(event) {
       var target = jq(this);
       var wrap = target.parents('.overlaycontent');
-      console.log(wrap);
       var fieldname = wrap.find('input[name=fieldName]').attr('value');
       var multi = wrap.find('input[name=multiValued]').attr('value');
       var close_window = wrap.find('input[name=close_window]').attr('value');
@@ -55,7 +54,6 @@ jq(function() {
       var uid = target.attr('rel');
       var messageId;
       if (this.checked === true) {
-    	  console.log(fieldname);
           refbrowser_setReference('ref_browser_' + fieldname,
                                   uid, title, parseInt(multi));
           messageId = '#messageAdded';
@@ -159,7 +157,6 @@ function refbrowser_setReference(widget_id, uid, label, multi)
         // now add the new item
         var fieldname = widget_id.substr('ref_browser_'.length);
         list = document.getElementById(widget_id);
-        console.log(widget_id)
         // add ul-element to DOM, if it is not there
         if (list === null) {
             container = jq('#archetypes-fieldname-' + fieldname +
