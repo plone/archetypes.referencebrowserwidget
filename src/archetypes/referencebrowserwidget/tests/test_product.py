@@ -493,6 +493,14 @@ class HelperViewTestCase(TestCase):
         helper = ReferenceBrowserHelperView(context, request)
         self.assertEqual(helper.getAtURL(), '/plone/layer1/with%20space')
 
+    def test_getUidFromReference_fallback_to_UID(self):
+        _marker = object()
+        class DummyRef(object):
+            def UID(self):
+                return _marker
+        helper = ReferenceBrowserHelperView(DummyObject('/plone/foo'), TestRequest())
+        self.failUnless(helper.getUidFromReference(DummyRef()) is _marker)
+
 
 class IntegrationTestCase(FunctionalTestCase):
     """ Browser/publish tests of referencebrowser widget
