@@ -70,10 +70,12 @@ class ReferenceBrowserHelperView(BrowserView):
         """ Helper to get UID in restricted code without having rights to
             access the object
         """
+        uid = None
         if HAS_UUID:
-            return IUUID(ref, None)
-        else:
-            return ref.UID()
+            uid = IUUID(ref, None)
+        if uid is None and hasattr(aq_base(ref), 'UID'):
+            uid = ref.UID()
+        return uid
 
     def getStartupDirectory(self, field):
         """ Return the URL to the startup directory. """

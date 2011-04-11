@@ -4,6 +4,11 @@ Changelog
 2.4 - Unreleased
 ----------------
 
+* Fix regression in UID lookup in cases where plone.uuid is present, but not
+  used for Archetypes content (such as with plone.app.discussion 1.0 on Plone
+  4.0)
+  [davisagli]
+
 2.3 - 2011-04-01
 ----------------
 
