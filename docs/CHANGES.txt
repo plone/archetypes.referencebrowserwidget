@@ -4,6 +4,9 @@ Changelog
 2.5 - unreleased
 ----------------
 
+* Add js hack to move overlay div to be a direct child of body to avoid
+  IE7 z-index bug. Fixes #11465.
+  [smcmahon]
 
 2.4 - 2011-04-11
 ----------------

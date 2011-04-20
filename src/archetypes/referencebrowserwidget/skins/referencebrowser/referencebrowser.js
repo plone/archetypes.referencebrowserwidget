@@ -1,5 +1,10 @@
 jq(function() {
 
+  // Move the overlay div to be a direct child
+  // of body to avoid IE7 z-index bug.
+  // TODO: load this with prepOverlay to standardize this.
+  jq('[id^=atrb_]').detach().appendTo("body");
+
   // the overlay itself
   jq('.addreference').overlay({
        onBeforeLoad: function() {
