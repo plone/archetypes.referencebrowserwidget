@@ -3,3 +3,4 @@
    ATReferenceBrowserWidget implementation
  - Alexander Limi, limi@plone.org for improved UI 
  - Carsten Senger, senger@rehfisch.de, improve usability
+ - Mathieu Le Marec - Pasquet, template fix

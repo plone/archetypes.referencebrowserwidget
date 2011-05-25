@@ -17,6 +17,7 @@
           helper nocall:here/refbrowserhelper;
           portal context/@@plone_portal_state/portal;
           portal_path        helper/getPortalPath;
+          checkPermission python: here.portal_membership.checkPermission;
           refs python:helper.getFieldRelations(field);"
           condition="refs">
 
