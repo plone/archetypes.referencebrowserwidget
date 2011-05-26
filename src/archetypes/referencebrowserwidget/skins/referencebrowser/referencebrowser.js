@@ -67,7 +67,7 @@ jq(function() {
           refbrowser_delReference(fieldname, uid);
           messageId = '#messageRemoved';
       }
-      if (close_window === '1') {
+      if (close_window === '1' && multi != '1') {
           overlay = jq('div#content').data('overlay');
           overlay.close();
       } else {
