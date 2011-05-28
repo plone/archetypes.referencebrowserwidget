@@ -280,10 +280,12 @@ function refbrowser_moveReferenceUp(self)
     arrows = newelem.getElementsByTagName("a");
     arrows[0].onclick = function () {
         refbrowser_moveReferenceUp(this);
+        return false;
     };
     // down arrow
     arrows[1].onclick = function () {
         refbrowser_moveReferenceDown(this);
+        return false;
     };
 
     elem.parentNode.insertBefore(newelem, prevelem);
@@ -325,10 +327,12 @@ function refbrowser_moveReferenceDown(self)
     arrows = newelem.getElementsByTagName("a");
     arrows[0].onclick = function () {
         refbrowser_moveReferenceUp(this);
+        return false;
     };
     // down img
     arrows[1].onclick = function () {
         refbrowser_moveReferenceDown(this);
+        return false;
     };
 
     nextelem = document.getElementById('ref-' + widget_id + '-' + (pos + 1));

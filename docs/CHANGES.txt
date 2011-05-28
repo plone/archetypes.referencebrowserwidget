@@ -10,6 +10,10 @@ Changelog
 * Fix undefined variable checkPermission 
   [kiorky]
 
+* Fix error in refbrowser_moveReferenceDown and refbrowser_moveReferenceUp
+  which caused page reloads when a referenced item was moved twice.
+  [cewing]
+
 
 2.4.1 - 2011-05-12
 ------------------
