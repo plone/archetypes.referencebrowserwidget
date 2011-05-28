@@ -262,7 +262,7 @@ function refbrowser_moveReferenceUp(self)
     }
     eid = elem.id.split('-');
     pos = eid.pop();
-    if (pos === 0) {
+    if (pos === "0") {
         return false;
     }
     widget_id = eid.pop();
@@ -311,7 +311,7 @@ function refbrowser_moveReferenceDown(self)
     eid = elem.id.split('-');
     pos = parseInt(eid.pop(), 10);
     widget_id = eid.pop();
-    current_values = jq('#' + widget_id + ' input');
+    current_values = jq('#ref_browser_items_' + widget_id + ' input');
     if ((pos + 1) === current_values.length) {
         return false;
     }
