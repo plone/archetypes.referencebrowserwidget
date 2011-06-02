@@ -25,7 +25,7 @@ Changelog
 ------------------
 
 * Add js hack to move overlay div to be a direct child of body to avoid
-  IE7 z-index bug. Fixes #11465.
+  IE7 z-index bug. Fixes http://dev.plone.org/plone/ticket/11465.
   [smcmahon]
 
 2.4 - 2011-04-11
