@@ -12,11 +12,12 @@ Changelog
 
 * Fix error in refbrowser_moveReferenceDown and refbrowser_moveReferenceUp
   which caused page reloads when a referenced item was moved twice.
-  refs #11859
+  Refs http://dev.plone.org/plone/ticket/11859
   [cewing]
 
-* Fix errors in sorting scripts which caused failure to detect items at head 
-  or tail of list of referenced items.  refs #11859
+* Fix errors in sorting scripts which caused failure to detect items at head
+  or tail of list of referenced items. Refs
+  http://dev.plone.org/plone/ticket/11859
   [cewing]
 
 
