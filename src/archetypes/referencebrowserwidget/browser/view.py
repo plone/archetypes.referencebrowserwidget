@@ -12,6 +12,13 @@ from Acquisition import aq_base
 
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.Five import BrowserView
+
+try:
+    # Zope >= 2.13
+    from AccessControl.security import checkPermission
+except ImportError:
+    from Products.Five.security import checkPermission
+
 from Products.ZCTextIndex.ParseTree import ParseError
 
 from plone.app.form._named import named_template_adapter
@@ -92,6 +99,8 @@ class ReferenceBrowserHelperView(BrowserView):
         context = aq_inner(self.context)
         return urllib.quote('/'.join(context.getPhysicalPath()))
 
+    def canView(self, obj):
+        return checkPermission('zope2.View', obj)
 
 class QueryCatalogView(BrowserView):
 

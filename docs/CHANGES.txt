@@ -4,6 +4,9 @@ Changelog
 2.4.3 - Unreleased
 ------------------
 
+* moved checkPermission from widget template to helper
+  [tom_gross]
+
 2.4.2 - 2011-06-02
 ------------------
 

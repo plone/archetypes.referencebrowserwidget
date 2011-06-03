@@ -17,7 +17,6 @@
           helper nocall:here/refbrowserhelper;
           portal context/@@plone_portal_state/portal;
           portal_path        helper/getPortalPath;
-          checkPermission python: here.portal_membership.checkPermission;
           refs python:helper.getFieldRelations(field);"
           condition="refs">
 
@@ -25,7 +24,7 @@
                tal:condition="python: not field.multiValued and (can_view or not hide_inaccessible)"
                tal:define="obj python:refs[0];
                            obj_path python: '/'.join(obj.getPhysicalPath());
-                           can_view python: checkPermission('View', obj)">
+                           can_view python: helper.canView(obj)">
           <img src="#" alt="Image"
               tal:condition="python: obj.portal_type in image_portal_types"
               tal:attributes="src string:${obj/absolute_url}/$image_method"
@@ -58,7 +57,7 @@
             <tal:block
                 tal:define="
                     obj_path python: '/'.join(obj.getPhysicalPath());
-                    can_view python: checkPermission('View', obj)"
+                    can_view python: helper.canView(obj)"
                 tal:condition="python: can_view or not hide_inaccessible">
               <li>
                 <img tal:condition="python:obj.portal_type in image_portal_types"

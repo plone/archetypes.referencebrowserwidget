@@ -501,6 +501,13 @@ class HelperViewTestCase(TestCase):
         helper = ReferenceBrowserHelperView(DummyObject('/plone/foo'), TestRequest())
         self.failUnless(helper.getUidFromReference(DummyRef()) is _marker)
 
+    def test_canview(self):
+        makeContent(self.folder, portal_type='Document', id='doc1')
+        request = TestRequest()
+        helper = ReferenceBrowserHelperView(self.portal, request)
+        self.assertTrue(helper.canView(self.folder.doc1))
+        self.logout()
+        self.assertFalse(helper.canView(self.folder.doc1))
 
 class IntegrationTestCase(FunctionalTestCase):
     """ Browser/publish tests of referencebrowser widget

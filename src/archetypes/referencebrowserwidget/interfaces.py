@@ -38,3 +38,5 @@ class IReferenceBrowserHelperView(Interface):
       def getPortalPath():
           """ Return the path to the portal """
 
+      def canView(obj):
+          """ Check, if the logged in user has the view permission on `obj` """
