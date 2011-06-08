@@ -10,6 +10,7 @@ from zope.publisher.browser import TestRequest
 
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.Five import BrowserView
+from zope.interface.declarations import alsoProvides
 try:
     from Testing.testbrowser import Browser  # Zope >= 2.13
 except ImportError:
@@ -292,6 +293,21 @@ class PopupTestCase(PopupBaseTestCase):
         self.request.set('fieldRealName', fieldname)
         popup = self._getPopup(obj=obj)
         self.assertEqual(popup.at_url, '/plone/layer1/layer2/with%20space')
+
+    def test_subsite_query(self):
+        self.loginAsPortalOwner()
+        self.portal.invokeFactory('Document', 'welcome-site')
+        self.portal.invokeFactory('Folder', 'subsite')
+        subsite = self.portal.subsite
+        subsite.invokeFactory('Document', 'welcome-subsite')
+        zope.interface.alsoProvides(subsite, INavigationRoot)
+
+        fieldname = 'multiRef3'
+        self.request.set('SearchableText', 'welcome')
+        results = subsite.restrictedTraverse('@@refbrowser_querycatalog')()
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0].getId, 'welcome-subsite')
+
 
 class PopupBreadcrumbTestCase(PopupBaseTestCase):
     """ Test the popup breadcrumbs """

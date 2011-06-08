@@ -12,6 +12,7 @@ from Acquisition import aq_base
 
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.Five import BrowserView
+from plone.app.layout.navigation.root import getNavigationRoot
 
 try:
     # Zope >= 2.13
@@ -137,6 +138,9 @@ class QueryCatalogView(BrowserView):
             query[k] = q = {'query': qs}
             q.update(v)
 
+        if 'path' not in query:
+            query['path'] = getNavigationRoot(self.context)
+
 # doesn't normal call catalog unless some field has been queried
 # against. if you want to call the catalog _regardless_ of whether
 # any items were found, then you can pass show_all=1.
@@ -237,7 +241,6 @@ class ReferenceBrowserPopup(BrowserView):
         if self.widget.show_results_without_query or self.search_text:
             if self.widget.restrict_browsing_to_startup_directory:
                 pass
-
             qc = getMultiAdapter((self.context, self.request),
                                  name='refbrowser_querycatalog')
             result = (self.widget.show_results_without_query or \

@@ -4,13 +4,16 @@ Changelog
 2.4.3 - Unreleased
 ------------------
 
+* Fix: text search searches from navigation root.
+  [thomasdesvenain]
+
 * moved checkPermission from widget template to helper
   [tom_gross]
 
 2.4.2 - 2011-06-02
 ------------------
 
-* Fix : overlay is not closed at item selection when field is multivalued.
+* Fix: overlay is not closed at item selection when field is multivalued.
   [thomasdesvenain]
 
 * Fix undefined variable checkPermission 
