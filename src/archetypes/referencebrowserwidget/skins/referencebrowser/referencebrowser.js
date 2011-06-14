@@ -55,7 +55,7 @@ jq(function() {
       var multi = wrap.find('input[name=multiValued]').attr('value');
       var close_window = wrap.find('input[name=close_window]').attr('value');
       var tablerow = target.parent().parent();
-      var title = tablerow.find('strong').html();
+      var title = tablerow.find('label').html();
       var uid = target.attr('rel');
       var messageId;
       if (this.checked === true) {

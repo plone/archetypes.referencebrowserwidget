@@ -4,6 +4,9 @@ Changelog
 2.4.3 - Unreleased
 ------------------
 
+* Use label tags for selectable items.
+  [esteele]
+
 * Fix: text search searches from navigation root.
   [thomasdesvenain]
 

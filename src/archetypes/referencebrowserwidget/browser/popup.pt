@@ -170,7 +170,7 @@
 
         <td>
           <tal:referenceable tal:condition="referenceable">
-            <input type="checkbox" class="insertreference" tal:attributes="rel uid" />
+            <input type="checkbox" class="insertreference" tal:attributes="rel uid; id uid" />
           </tal:referenceable>
         </td>
 
@@ -184,15 +184,17 @@
              tal:attributes="
              href python:view.genRefBrowserUrl(item.getURL());
              rel item/Title">
-            <strong tal:condition="referenceable"
-                tal:content="title_or_id">Title</strong>
+            <label tal:condition="referenceable"
+                   tal:attributes="for uid;"
+                   tal:content="title_or_id">Title</label>
             <span tal:condition="not:referenceable" tal:content="title_or_id" />
           </a>
           <tal:foldercheck tal:condition="
               python:not((item.is_folderish and allow_browse) and isNotSelf)" >
-            <strong tal:condition="referenceable"
-                tal:content="title_or_id">Title
-            </strong>
+            <label tal:condition="referenceable"
+                   tal:attributes="for uid;"
+                   tal:content="title_or_id">Title
+            </label>
             <span tal:condition="not:referenceable" tal:content="title_or_id" />
           </tal:foldercheck>
 
