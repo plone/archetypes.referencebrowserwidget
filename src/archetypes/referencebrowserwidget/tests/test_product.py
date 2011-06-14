@@ -619,8 +619,8 @@ class IntegrationTestCase(FunctionalTestCase):
         wanted_insertlinks = 2
 
         body = self.getNormalizedPopup()
-        INSERTLINK = re.compile(r'<input type="checkbox" class="insertreference" rel="[0-9a-f]*?" />')
-        INSERTLINK_UUID = re.compile(r'<input type="checkbox" class="insertreference" rel="[\w]{8}-[\w]{4}-[\w]{4}-[\w]{4}-[\w]{12}" />')
+        INSERTLINK = re.compile(r'<input type="checkbox" class="insertreference" id="[0-9a-f]*?" rel="[0-9a-f]*?" />')
+        INSERTLINK_UUID = re.compile(r'<input type="checkbox" class="insertreference" id="[\w]{8}-[\w]{4}-[\w]{4}-[\w]{4}-[\w]{12}" rel="[\w]{8}-[\w]{4}-[\w]{4}-[\w]{4}-[\w]{12}" />')
 
         ROWS = re.compile(r'<tr.*?>(.*?)</tr>', re.MULTILINE|re.DOTALL)
         self.assertEqual(len(ROWS.findall(body)), wanted_rows)
