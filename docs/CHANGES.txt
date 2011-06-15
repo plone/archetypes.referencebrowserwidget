@@ -13,6 +13,9 @@ Changelog
 * moved checkPermission from widget template to helper
   [tom_gross]
 
+* Fix referencebrowser.js error when using allow_sorting = 1
+  [toutpt]
+
 2.4.2 - 2011-06-02
 ------------------
 

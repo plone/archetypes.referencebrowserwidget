@@ -277,7 +277,7 @@ function refbrowser_moveReferenceUp(self)
     prevelem = document.getElementById('ref-' + widget_id + '-' + (pos - 1));
 
     // up arrow
-    arrows = newelem.getElementsByTagName("a");
+    arrows = newelem.getElementsByTagName("img");
     arrows[0].onclick = function () {
         refbrowser_moveReferenceUp(this);
         return false;
@@ -324,7 +324,7 @@ function refbrowser_moveReferenceDown(self)
     }
 
     // up img
-    arrows = newelem.getElementsByTagName("a");
+    arrows = newelem.getElementsByTagName("img");
     arrows[0].onclick = function () {
         refbrowser_moveReferenceUp(this);
         return false;
