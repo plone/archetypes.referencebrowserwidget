@@ -29,7 +29,7 @@ jq(function() {
        }});
 
   // the breadcrumb-links and the links of the 'tree'-navigati        on
-  jq('[id^=atrb_] a.browsesite').live('click', function(event) {
+  jq('[id^=atrb_] a.browsesite', jq('body')[0]).live('click', function(event) {
       var target = jq(this);
       var src = target.attr('href');
       var wrap = target.parents('.overlaycontent');
@@ -48,7 +48,7 @@ jq(function() {
       });
 
   // the links for inserting referencens
-  jq('[id^=atrb_] input.insertreference').live('click', function(event) {
+  jq('[id^=atrb_] input.insertreference', jq('body')[0]).live('click', function(event) {
       var target = jq(this);
       var wrap = target.parents('.overlaycontent');
       var fieldname = wrap.find('input[name=fieldName]').attr('value');
@@ -77,7 +77,7 @@ jq(function() {
 
 
   // the history menu
-  jq('[id^=atrb_] form#history select[name=path]').live('change', function(event) {
+  jq('[id^=atrb_] form#history select[name=path]', jq('body')[0]).live('change', function(event) {
       var target = jq(this);
       var wrap = target.parents('.overlaycontent');
       var src_selector = '[id^=atrb_] form#history ' +
@@ -89,7 +89,7 @@ jq(function() {
       });
 
   // the pagination links
-  jq('[id^=atrb_] div.listingBar a').live('click', function(event) {
+  jq('[id^=atrb_] div.listingBar a', jq('body')[0]).live('click', function(event) {
       var target = jq(this);
       var src = target.attr('href');
       var wrap = target.parents('.overlaycontent');
@@ -99,7 +99,7 @@ jq(function() {
       });
 
   // the search form
-  jq('[id^=atrb_] form#search input[name=submit]').live('click',
+  jq('[id^=atrb_] form#search input[name=submit]', jq('body')[0]).live('click',
                                                         function(event) {
       var target = jq(this);
       var src = target.parents('form').attr('action');
