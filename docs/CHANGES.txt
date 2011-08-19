@@ -4,6 +4,9 @@ Changelog
 2.4.4 - unreleased
 ------------------
 
+* Fix: text searches should search outside navigation root
+  [gotcha]
+
 2.4.3 - 2011-07-04
 ------------------
 

@@ -138,9 +138,6 @@ class QueryCatalogView(BrowserView):
             query[k] = q = {'query': qs}
             q.update(v)
 
-        if 'path' not in query:
-            query['path'] = getNavigationRoot(self.context)
-
 # doesn't normal call catalog unless some field has been queried
 # against. if you want to call the catalog _regardless_ of whether
 # any items were found, then you can pass show_all=1.

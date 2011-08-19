@@ -295,6 +295,7 @@ class PopupTestCase(PopupBaseTestCase):
         self.assertEqual(popup.at_url, '/plone/layer1/layer2/with%20space')
 
     def test_subsite_query(self):
+        """searches should not be restricted to subsites"""
         self.loginAsPortalOwner()
         self.portal.invokeFactory('Document', 'welcome-site')
         self.portal.invokeFactory('Folder', 'subsite')
@@ -305,8 +306,8 @@ class PopupTestCase(PopupBaseTestCase):
         fieldname = 'multiRef3'
         self.request.set('SearchableText', 'welcome')
         results = subsite.restrictedTraverse('@@refbrowser_querycatalog')()
-        self.assertEqual(len(results), 1)
-        self.assertEqual(results[0].getId, 'welcome-subsite')
+        # content outside subsite should also be returned
+        self.assertTrue(len(results) > 1)
 
 
 class PopupBreadcrumbTestCase(PopupBaseTestCase):
