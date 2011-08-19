@@ -12,7 +12,6 @@ from Acquisition import aq_base
 
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.Five import BrowserView
-from plone.app.layout.navigation.root import getNavigationRoot
 
 try:
     # Zope >= 2.13
@@ -103,6 +102,7 @@ class ReferenceBrowserHelperView(BrowserView):
     def canView(self, obj):
         return checkPermission('zope2.View', obj)
 
+
 class QueryCatalogView(BrowserView):
 
     def __call__(self, show_all=0,
@@ -110,7 +110,7 @@ class QueryCatalogView(BrowserView):
                  quote_logic_indexes=['SearchableText'],
                  search_catalog=None):
 
-        results=[]
+        results = []
         catalog = utils.getSearchCatalog(aq_inner(self.context),
                                          search_catalog)
         indexes = catalog.indexes()
@@ -123,7 +123,7 @@ class QueryCatalogView(BrowserView):
                 if quote_logic and k in quote_logic_indexes:
                     v = utils.quotequery(v)
                 query.update({k: v})
-                show_query=1
+                show_query = 1
             elif k.endswith('_usage'):
                 key = k[:-6]
                 param, value = v.split(':')
@@ -154,6 +154,7 @@ BORDERCOLOR = '#8cacbb'
 FONTFAMILY = '"Lucida Grande", Verdana, Lucida, Helvetica, Arial, sans-serif'
 DISCREETCOLOR = '#76797c'
 
+
 class ReferenceBrowserPopup(BrowserView):
     """ View class of Popup window """
 
@@ -173,7 +174,8 @@ class ReferenceBrowserPopup(BrowserView):
         base_props = getToolByName(aq_inner(context), 'base_properties', None)
         if base_props is not None:
 
-            self.discreetColor = getattr(base_props, 'discreetColor', DISCREETCOLOR)
+            self.discreetColor = getattr(base_props, 'discreetColor',
+                    DISCREETCOLOR)
         else:
             # XXX This concept has changed in Plone 4.0
             self.discreetColor = DISCREETCOLOR
@@ -194,7 +196,8 @@ class ReferenceBrowserPopup(BrowserView):
             self.has_brain = True
             self.brainuid = at_brain.UID
         else:
-            self.at_obj = context.restrictedTraverse(urllib.unquote(self.at_url))
+            self.at_obj = context.restrictedTraverse(
+                    urllib.unquote(self.at_url))
         self.field = self.at_obj.Schema()[self.fieldRealName]
         self.widget = self.field.widget
         self.multiValued = int(self.field.multiValued)
