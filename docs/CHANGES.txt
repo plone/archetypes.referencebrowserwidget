@@ -1,178 +1,178 @@
 Changelog
 =========
 
-2.4.4 - unreleased
+2.4.4 (unreleased)
 ------------------
 
-* Fix: text searches should search outside navigation root
+- Fix: text searches should search outside navigation root
   [gotcha]
 
-2.4.3 - 2011-07-04
+2.4.3 (2011-07-04)
 ------------------
 
-* Use label tags for selectable items.
+- Use label tags for selectable items.
   [esteele]
 
-* Fix: text search searches from navigation root.
+- Fix: text search searches from navigation root.
   [thomasdesvenain]
 
-* moved checkPermission from widget template to helper
+- moved checkPermission from widget template to helper
   [tom_gross]
 
-* Fix referencebrowser.js error when using allow_sorting = 1
+- Fix referencebrowser.js error when using allow_sorting = 1
   [toutpt]
 
-2.4.2 - 2011-06-02
+2.4.2 (2011-06-02)
 ------------------
 
-* Fix: overlay is not closed at item selection when field is multivalued.
+- Fix: overlay is not closed at item selection when field is multivalued.
   [thomasdesvenain]
 
-* Fix undefined variable checkPermission 
+- Fix undefined variable checkPermission 
   [kiorky]
 
-* Fix error in refbrowser_moveReferenceDown and refbrowser_moveReferenceUp
+- Fix error in refbrowser_moveReferenceDown and refbrowser_moveReferenceUp
   which caused page reloads when a referenced item was moved twice.
   Refs http://dev.plone.org/plone/ticket/11859
   [cewing]
 
-* Fix errors in sorting scripts which caused failure to detect items at head
+- Fix errors in sorting scripts which caused failure to detect items at head
   or tail of list of referenced items. Refs
   http://dev.plone.org/plone/ticket/11859
   [cewing]
 
 
-2.4.1 - 2011-05-12
+2.4.1 (2011-05-12)
 ------------------
 
-* Add js hack to move overlay div to be a direct child of body to avoid
+- Add js hack to move overlay div to be a direct child of body to avoid
   IE7 z-index bug. Fixes http://dev.plone.org/plone/ticket/11465.
   [smcmahon]
 
-2.4 - 2011-04-11
+2.4 (2011-04-11)
 ----------------
 
-* Fix regression in UID lookup in cases where plone.uuid is present, but not
+- Fix regression in UID lookup in cases where plone.uuid is present, but not
   used for Archetypes content (such as with plone.app.discussion 1.0 on Plone
   4.0)
   [davisagli]
 
-2.3 - 2011-04-01
+2.3 (2011-04-01)
 ----------------
 
-* Fixed: widget did not work when search was disallowed.
+- Fixed: widget did not work when search was disallowed.
   [thomasdesvenain]
 
-2.2 - 2011-02-25
+2.2 (2011-02-25)
 ----------------
 
-* Fixed `getStartupDirectory` method if a `startup_directory_method` was
+- Fixed `getStartupDirectory` method if a `startup_directory_method` was
   defined, which cannot be traversed to.
   [hannosch]
 
-* check the references in the overlay that are checked in the widget
+- check the references in the overlay that are checked in the widget
   when the overlay is constructed or refreshed.
   [csenger]
 
-* Don't disable checkboxes in overlay when an item is selected.
+- Don't disable checkboxes in overlay when an item is selected.
   Remove the item from the value list when it is unchecked in
   the value list. fixes http://dev.plone.org/plone/ticket/10786
   [csenger]
 
-2.1 - 2011-01-03
+2.1 (2011-01-03)
 ----------------
 
-* Don't issue deprecation-warnings on Zope 2.13
+- Don't issue deprecation-warnings on Zope 2.13
   [tom_gross]
 
-* Fixed title display for images with preview
+- Fixed title display for images with preview
   http://dev.plone.org/plone/ticket/11290
   [tom_gross]
 
-* Fixed: do not return results that are outside of startup directory
+- Fixed: do not return results that are outside of startup directory
   if browse is restricted to it.
   [thomasdesvenain]
 
-* Qualify input tag id to avoid name-clashing. Fixes
+- Qualify input tag id to avoid name-clashing. Fixes
   http://dev.plone.org/plone/ticket/11325.
   [malthe]
 
-* Made sure to always quote ``at_url`` when forwarding it in the templates.
+- Made sure to always quote ``at_url`` when forwarding it in the templates.
   [deo]
 
-* Use URL quoting of ``at_url`` everywhere and quote in Python code not in
+- Use URL quoting of ``at_url`` everywhere and quote in Python code not in
   templates. Fixes http://dev.plone.org/plone/ticket/11297
   [tom_gross]
 
-* Cleaned breadcrumb code Fixes http://dev.plone.org/plone/ticket/11289
+- Cleaned breadcrumb code Fixes http://dev.plone.org/plone/ticket/11289
   [tom_gross]
 
-2.0 - 06.09.2010
+2.0 (2010-09-06)
 ----------------
 
-* Fixed i18n of "You are here:".
+- Fixed i18n of "You are here:".
   [vincentfretin]
 
-* Set a minimum version for jquerytools, to avoid this problem #10939
+- Set a minimum version for jquerytools, to avoid this problem #10939
   [do3cc]
 
-* Encode search-URL. Fixes http://dev.plone.org/plone/ticket/10942
+- Encode search-URL. Fixes http://dev.plone.org/plone/ticket/10942
   [tom_gross]
 
-2.0rc2 - 29.07.2010
+2.0rc2 (2010-07-29)
 -------------------
 
-* Make sure the popup can be closed by the same ways as other popups in Plone
+- Make sure the popup can be closed by the same ways as other popups in Plone
   4. Fixes http://dev.plone.org/plone/ticket/10773
   [davisagli]
 
-* Fixed bug: pop-up didn't render id of file with empty title because of
+- Fixed bug: pop-up didn't render id of file with empty title because of
   improper use of TALES Path expression. Now uses browser method instead.
   [kleist]
 
-2.0rc1 - 12.07.2010
+2.0rc1 (2010-07-12)
 -------------------
 
-* Fixed link rebinding of pagination links (thanks Mustapha Benali!)
+- Fixed link rebinding of pagination links (thanks Mustapha Benali!)
   [tom_gross]
 
-2.0b4 - 02.06.2010
+2.0b4 (2010-06-02)
 ------------------
 
-* Fixed display of title (introduced in 2.0b3)
+- Fixed display of title (introduced in 2.0b3)
 
-2.0b3 - 02.06.2010
+2.0b3 (2010-06-02)
 ------------------
 
-* Use getOverlay() instead of the deprecated getContent()
+- Use getOverlay() instead of the deprecated getContent()
   Closes http://dev.plone.org/plone/ticket/10548
   [esteele]
 
-* Use content icons from sprite
+- Use content icons from sprite
   Closes http://dev.plone.org/plone/ticket/10543
   [tom_gross]
 
-2.0b2 - 23.04.2010
+2.0b2 (2010-04-23)
 ------------------
 
-* Adding missing return falses to prevent page reloads on reordering
+- Adding missing return falses to prevent page reloads on reordering
   [cah190,esteele]
 
-* Mark already related objects visually in referencebrowser
+- Mark already related objects visually in referencebrowser
   [tom_gross]
 
-* Only show sorting arrows on adding, if field is really sortable
+- Only show sorting arrows on adding, if field is really sortable
   [tom_gross]
 
-* use Python doctest instead of zope.testing.doctest
+- use Python doctest instead of zope.testing.doctest
   [tom_gross]
 
-2.0b1 - 08.04.2010
+2.0b1 (2010-04-08)
 ------------------
 
-* Updated package description
+- Updated package description
   [tom_gross]
 
-* Merged javascript files to one, which is included only with the widget
+- Merged javascript files to one, which is included only with the widget
   [tom_gross]
 
