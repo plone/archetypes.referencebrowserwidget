@@ -25,9 +25,14 @@ from Products.PloneTestCase.PloneTestCase import default_password
 from Products.PloneTestCase.PloneTestCase import portal_owner
 try:
     import plone.uuid
-    HAS_UUID=True
-except:
-    HAS_UUID=False
+    import pkg_resources
+    uuid_version = pkg_resources.get_distribution("plone.uuid").version
+    if uuid_version < '1.0.2':
+        HAS_DASH_UUID = True
+    else:
+        HAS_DASH_UUID = False
+except ImportError:
+    HAS_DASH_UUID = False
 
 try:
     # Plone 4
@@ -625,7 +630,7 @@ class IntegrationTestCase(FunctionalTestCase):
 
         ROWS = re.compile(r'<tr.*?>(.*?)</tr>', re.MULTILINE|re.DOTALL)
         self.assertEqual(len(ROWS.findall(body)), wanted_rows)
-        if HAS_UUID:
+        if HAS_DASH_UUID:
             self.assertEqual(len(INSERTLINK_UUID.findall(body)), wanted_insertlinks)
         else:
             self.assertEqual(len(INSERTLINK.findall(body)), wanted_insertlinks)
@@ -634,7 +639,7 @@ class IntegrationTestCase(FunctionalTestCase):
         body = self.getNormalizedPopup()
 
         self.assertEqual(len(ROWS.findall(body)), wanted_rows + 1)
-        if HAS_UUID:
+        if HAS_DASH_UUID:
             self.assertEqual(len(INSERTLINK_UUID.findall(body)), wanted_insertlinks)
         else:
             self.assertEqual(len(INSERTLINK.findall(body)), wanted_insertlinks)

@@ -4,7 +4,8 @@ Changelog
 2.4.5 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fixed tests for plone.uuid >= 1.0.2
+  [tom_gross]
 
 
 2.4.4 (2011-08-19)
