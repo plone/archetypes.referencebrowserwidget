@@ -213,11 +213,6 @@ class ReferenceBrowserPopup(BrowserView):
         if base_query.keys():
             self.request.form.update(base_query)
 
-        self.request.form['sort_on'] = 'sortable_title'
-        self.request.form['path'] = {
-                          'query': '/'.join(self.context.getPhysicalPath()), 
-                          'depth':1}
-
         # close_window needs to be int, since it is used
         # with javascript
         self.close_window = int(not self.field.multiValued or
@@ -255,6 +250,9 @@ class ReferenceBrowserPopup(BrowserView):
             self.has_queryresults = bool(result)
 
         elif self.widget.allow_browse:
+            self.request.form['path'] = {
+                              'query': '/'.join(self.context.getPhysicalPath()), 
+                              'depth':1}
             result = qc(search_catalog=self.widget.search_catalog)
         else:
             result = []
