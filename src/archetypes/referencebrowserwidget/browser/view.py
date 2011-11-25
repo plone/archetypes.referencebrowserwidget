@@ -213,6 +213,11 @@ class ReferenceBrowserPopup(BrowserView):
         if base_query.keys():
             self.request.form.update(base_query)
 
+        self.request.form['sort_on'] = 'sortable_title'
+        self.request.form['path'] = {
+                          'query': '/'.join(self.context.getPhysicalPath()), 
+                          'depth':1}
+
         # close_window needs to be int, since it is used
         # with javascript
         self.close_window = int(not self.field.multiValued or
@@ -238,11 +243,11 @@ class ReferenceBrowserPopup(BrowserView):
     def getResult(self):
         assert self._updated
         result = []
+        qc = getMultiAdapter((self.context, self.request),
+                             name='refbrowser_querycatalog')
         if self.widget.show_results_without_query or self.search_text:
             if self.widget.restrict_browsing_to_startup_directory:
                 pass
-            qc = getMultiAdapter((self.context, self.request),
-                                 name='refbrowser_querycatalog')
             result = (self.widget.show_results_without_query or \
                       self.search_text) and \
                       qc(search_catalog=self.widget.search_catalog)
@@ -250,11 +255,7 @@ class ReferenceBrowserPopup(BrowserView):
             self.has_queryresults = bool(result)
 
         elif self.widget.allow_browse:
-            ploneview = getMultiAdapter((self.context, self.request),
-                                        name="plone")
-            folder = ploneview.getCurrentFolder()
-            result = folder.getFolderContents(
-                        contentFilter={'sort_on': 'sortable_title'})
+            result = qc(search_catalog=self.widget.search_catalog)
         else:
             result = []
         b_size = int(self.request.get('b_size', 20))
