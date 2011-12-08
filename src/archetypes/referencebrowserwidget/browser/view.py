@@ -250,9 +250,13 @@ class ReferenceBrowserPopup(BrowserView):
             self.has_queryresults = bool(result)
 
         elif self.widget.allow_browse:
+            ploneview = getMultiAdapter((self.context, self.request),
+                                        name="plone")
+            folder = ploneview.getCurrentFolder()
             self.request.form['path'] = {
-                              'query': '/'.join(self.context.getPhysicalPath()), 
+                              'query': '/'.join(folder.getPhysicalPath()),
                               'depth':1}
+            self.request.form['portal_type'] = []
             result = qc(search_catalog=self.widget.search_catalog)
         else:
             result = []
