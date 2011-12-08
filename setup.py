@@ -23,7 +23,7 @@ long_description = (
     '************\n'
     + '\n' +
     read('CONTRIBUTORS.txt')
-    + '\n' +
+    + '\n\n' +
     'Download\n'
     '********\n'
     )
