@@ -98,10 +98,11 @@ jq(function() {
       return false;
       });
 
-  // the search form
-  jq('[id^=atrb_] form#search input[name=submit]', jq('body')[0]).live('click',
-                                                        function(event) {
-      var target = jq(this);
+
+
+  function do_atref_search(event) {
+      event.preventDefault();
+      var target = jq(event.target);
       var src = target.parents('form').attr('action');
       var wrap = target.parents('.overlaycontent');
       var fieldname = wrap.find('input[name=fieldName]').attr('value');
@@ -118,7 +119,14 @@ jq(function() {
       wrap.data('srcfilter', srcfilter);
       refreshOverlay(wrap, srcfilter, '');
       return false;
-      });
+      }
+
+  // the search form
+  // // This does not catch form submission via enter in FF but does in IE  
+  jq('[id^=atrb_] form#search').live('submit', do_atref_search);
+  //     // This catches form submission in FF
+  jq('[id^=atrb_] form#search input[name=submit]',
+      jq('body')[0]).live('click',do_atref_search);
 
 });
 
