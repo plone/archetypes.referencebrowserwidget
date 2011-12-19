@@ -8,6 +8,7 @@ ReferenceBrowserWidget # pyflakes
 
 def initialize(context):
     import demo
+    demo   # pyflakes
     content_types, constructors, ftis = process_types(
         listTypes(PROJECTNAME),
         PROJECTNAME)

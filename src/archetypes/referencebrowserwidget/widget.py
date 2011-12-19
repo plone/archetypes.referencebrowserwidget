@@ -6,8 +6,6 @@ from AccessControl import ClassSecurityInfo
 from Products.Archetypes.utils import shasattr
 from Products.Archetypes.Registry import registerWidget,registerPropertyType
 from Products.Archetypes.Widget import ReferenceWidget
-from Products.CMFCore.utils import getToolByName
-from archetypes.referencebrowserwidget import utils
 
 
 class ReferenceBrowserWidget(ReferenceWidget):

@@ -2,6 +2,7 @@ from zope.component import getMultiAdapter
 
 try:
     from Zope2.App import zcml  # Zope >= 2.13
+    zcml  # pyflakes
 except ImportError:
     from Products.Five import zcml  # Zope < 2.13
 from Products.Five import fiveconfigure

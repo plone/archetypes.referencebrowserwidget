@@ -16,6 +16,7 @@ from Products.Five import BrowserView
 try:
     # Zope >= 2.13
     from AccessControl.security import checkPermission
+    checkPermission   # pyflakes
 except ImportError:
     from Products.Five.security import checkPermission
 
@@ -30,12 +31,7 @@ try:
     HAS_UUID = True
 except ImportError:
     HAS_UUID = False
-try:
-    # Plone >= 4.0
-    from plone.sequencebatch import Batch
-except ImportError:
-    # Plone <= 3.x
-    from Products.CMFPlone.PloneBatch import Batch
+from Products.CMFPlone.PloneBatch import Batch
 
 from archetypes.referencebrowserwidget import utils
 from archetypes.referencebrowserwidget.interfaces import IFieldRelation

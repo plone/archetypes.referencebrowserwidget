@@ -10,9 +10,9 @@ from zope.publisher.browser import TestRequest
 
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.Five import BrowserView
-from zope.interface.declarations import alsoProvides
 try:
     from Testing.testbrowser import Browser  # Zope >= 2.13
+    Browser   # pyflakes
 except ImportError:
     from Products.Five.testbrowser import Browser  # Zope < 2.13
 
@@ -25,6 +25,7 @@ from Products.PloneTestCase.PloneTestCase import default_password
 from Products.PloneTestCase.PloneTestCase import portal_owner
 try:
     import plone.uuid
+    plone.uuid   # pyflakes
     import pkg_resources
     uuid_version = pkg_resources.get_distribution("plone.uuid").version
     if uuid_version < '1.0.2':
@@ -34,12 +35,7 @@ try:
 except ImportError:
     HAS_DASH_UUID = False
 
-try:
-    # Plone 4
-    from plone.sequencebatch import Batch
-except ImportError:
-    # Plone <4
-    from Products.CMFPlone import Batch
+from Products.CMFPlone import Batch
 
 from archetypes.referencebrowserwidget.tests.base import TestCase
 from archetypes.referencebrowserwidget.tests.base import FunctionalTestCase
@@ -308,7 +304,6 @@ class PopupTestCase(PopupBaseTestCase):
         subsite.invokeFactory('Document', 'welcome-subsite')
         zope.interface.alsoProvides(subsite, INavigationRoot)
 
-        fieldname = 'multiRef3'
         self.request.set('SearchableText', 'welcome')
         results = subsite.restrictedTraverse('@@refbrowser_querycatalog')()
         # content outside subsite should also be returned
