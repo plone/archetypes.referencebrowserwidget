@@ -4,7 +4,8 @@ Changelog
 2.4.10 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- We can restrict browsable types, with browsable_types parameter on widget.
+  [thomasdesvenain]
 
 
 2.4.9 (2011-12-08)

@@ -1,7 +1,8 @@
  - Tom Gross, itconsense@gmail.com Author
- - Danny Bloemendaal, some portions of code taken from the 
+ - Danny Bloemendaal, some portions of code taken from the
    ATReferenceBrowserWidget implementation
- - Alexander Limi, limi@plone.org for improved UI 
+ - Alexander Limi, limi@plone.org for improved UI
  - Carsten Senger, senger@rehfisch.de, improve usability
  - Mathieu Le Marec - Pasquet, template fix
+ - Thomas Desvenan, thomasdesvenain@gmail.com - fixes and minor features
  - Peter Holzer, hpeter@agitator.com - query update/fix

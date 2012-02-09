@@ -216,6 +216,7 @@ class ReferenceBrowserPopup(BrowserView):
         popup_name = getattr(self.widget, 'popup_name', 'popup')
         self.template = getAdapter(self, namedtemplate.INamedTemplate,
                                    name=popup_name or 'popup')
+        self.browsable_types = self.widget.browsable_types
         self._updated = True
 
     @property
@@ -313,6 +314,12 @@ class ReferenceBrowserPopup(BrowserView):
                 (self.widget.only_for_review_states or ())
         return self.getUid(item) and item_referenceable and \
                review_state_allows and self.isNotSelf(item)
+
+    def isBrowsable(self, item):
+        if not self.browsable_types:
+            return item.is_folderish
+        else:
+            return item.portal_type in self.browsable_types
 
     def title_or_id(self, item):
         assert self._updated

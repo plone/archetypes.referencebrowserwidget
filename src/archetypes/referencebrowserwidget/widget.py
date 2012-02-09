@@ -37,6 +37,7 @@ class ReferenceBrowserWidget(ReferenceWidget):
         'popup_width': 500,
         'popup_height': 550,
         'popup_name': 'popup',
+        'browsable_types': (),
         })
 
     # for documentation of properties see: README.txt
@@ -85,6 +86,8 @@ class ReferenceBrowserWidget(ReferenceWidget):
                 results = query()
             elif isinstance(query,dict):
                 results = query
+            else:
+                raise ValueError("Wrong format for reference widget base_query parameter")
         else:
             results = {}
 
@@ -108,7 +111,7 @@ class ReferenceBrowserWidget(ReferenceWidget):
                 meth = getattr(instance, allow_method)
                 allowed_types = meth()
 
-            results['portal_type'] = allowed_types
+            results['portal_type'] = allowed_types# + self.browsable_types
 
         return results
 

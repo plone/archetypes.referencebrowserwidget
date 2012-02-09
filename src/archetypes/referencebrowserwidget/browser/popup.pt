@@ -162,6 +162,7 @@
             uid python:view.getUid(item);
             isNotSelf python:view.isNotSelf(item);
             referenceable python:view.isReferencable(item);
+            browsable python:allow_browse and view.isBrowsable(item);
             title_or_id python:view.title_or_id(item);
             color view/discreetColor;">
 
@@ -180,7 +181,7 @@
                />
         </td>
         <td tal:attributes="class python:'contenttype-' + item.portal_type.lower()">
-          <a class="browsesite" tal:condition="python: item.is_folderish and allow_browse"
+          <a class="browsesite" tal:condition="browsable"
              tal:attributes="
              href python:view.genRefBrowserUrl(item.getURL());
              rel item/Title">
@@ -190,12 +191,13 @@
             <span tal:condition="not:referenceable" tal:content="title_or_id" />
           </a>
           <tal:foldercheck tal:condition="
-              python:not((item.is_folderish and allow_browse) and isNotSelf)" >
+              python:not(browsable and isNotSelf)" >
             <label tal:condition="referenceable"
                    tal:attributes="for uid;"
                    tal:content="title_or_id">Title
             </label>
-            <span tal:condition="not:referenceable" tal:content="title_or_id" />
+            <span tal:condition="not:referenceable"
+                  tal:content="title_or_id" />
           </tal:foldercheck>
 
           <div tal:condition="widget/show_review_state">
