@@ -5,6 +5,7 @@ import zope.interface
 
 from zope.component import getAdapter
 from zope.component import getMultiAdapter, queryMultiAdapter
+from zope.i18nmessageid import MessageFactory
 from zope.formlib import namedtemplate
 
 from Acquisition import aq_inner
@@ -41,6 +42,7 @@ from archetypes.referencebrowserwidget.interfaces import \
 default_popup_template = named_template_adapter(
     ViewPageTemplateFile('popup.pt'))
 
+PMF = MessageFactory('plone')
 
 class ReferenceBrowserHelperView(BrowserView):
     """ A helper view for the reference browser widget.
@@ -271,7 +273,7 @@ class ReferenceBrowserPopup(BrowserView):
         crumbs = bc_view.breadcrumbs()
 
         if not self.widget.restrict_browsing_to_startup_directory:
-            newcrumbs = [{'Title': 'Home',
+            newcrumbs = [{'Title': PMF('Home'),
                           'absolute_url': self.genRefBrowserUrl(
                                 portal_state.navigation_root_url())}]
         else:
