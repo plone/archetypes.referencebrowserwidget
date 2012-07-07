@@ -680,7 +680,7 @@ class IntegrationTestCase(FunctionalTestCase):
                '<span id="breadcrumbs-you-are-here">You are here:</span> '
                '<span id="breadcrumbs-home"> '
                  '<a href="http://nohost/plone">Home</a> '
-                   '<span class="breadcrumbSeparator"> &rsaquo; </span> '
+                   '<span class="breadcrumbSeparator"> / </span> '
                '</span> '
                '<span id="breadcrumbs-1" dir="ltr"> '
                  '<span id="breadcrumbs-current">folder1</span> '
