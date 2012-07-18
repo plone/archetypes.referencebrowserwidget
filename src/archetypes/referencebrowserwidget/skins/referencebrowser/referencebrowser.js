@@ -120,7 +120,6 @@ jq(function() {
       qs += '&fieldRealName=' + fieldrealname +
         '&fieldName=' + fieldname + '&multiValued=' + multi +
         '&close_window' + close_window + '&at_url=' + at_url;
-      alert(qs)
       var srcfilter = src + '?' + qs + ' >*';
       pushToHistory(wrap.data('srcfilter'));
       wrap.data('srcfilter', srcfilter);
