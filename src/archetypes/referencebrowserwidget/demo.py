@@ -18,7 +18,7 @@ schema = BaseSchema.copy() +  Schema((
         relationship='Rel1',
         widget=ReferenceBrowserWidget(
             default_search_index='SearchableText',
-            description='This is the first field. Pick an object.')),
+            description='This is the first field. Pick an object. Restricted to Document, File and RefBrowserDemo.')),
 
     ReferenceField('multiRef',
         multiValued=1,
