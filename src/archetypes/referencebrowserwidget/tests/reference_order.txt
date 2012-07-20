@@ -31,22 +31,13 @@ both portlet columns, since they will contain references to both at all times
   >>> context.setMultiRef((doc1.UID(), doc2.UID()))
   >>> context.reindexObject()
 
-Next, we create a user who will be our editor:
-
-  >>> membership = self.portal.portal_membership
-  >>> membership.addMember('fred', 'secret', [], [])
-  >>> fred = membership.getMemberById('fred')
-
 For now, doc1 appears before doc2 (order is kept) on the edit form:
   >>> try:
   ...     from Testing.testbrowser import Browser
   ... except ImportError:
   ...     from Products.Five.testbrowser import Browser
   >>> browser = Browser()
-  >>> browser.addHeader('Authorization', 'Basic %s:%s' % ('fred', 'secret'))
-  >>> context.manage_setLocalRoles('fred', ('Authenticated', 'Reader', 'Member', 'Owner',))
-  >>> doc1.manage_setLocalRoles('fred', ('Authenticated', 'Reader', 'Member', 'Owner',))
-  >>> doc2.manage_setLocalRoles('fred', ('Authenticated', 'Reader', 'Member', 'Owner',))
+  >>> browser.addHeader('Authorization', 'Basic %s:%s' % ('test_user_1_', 'secret'))
   >>> browser.open(context.absolute_url() + "/edit")
   >>> browser.url
   'http://nohost/plone/Members/test_user_1_/ref/edit'
