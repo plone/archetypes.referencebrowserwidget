@@ -7,7 +7,7 @@ Changelog
 - Show item icons in popup.
   [thomasdesvenain]
 
-- Restrict width of checkbox columns in popup.
+- Limit the width of checkboxes column in popup.
   [thomasdesvenain]
 
 2.4.11 (2012-04-09)
