@@ -4,7 +4,8 @@ Changelog
 2.4.12 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Fixed referenced elements sort order on widget view. [gbastien]
+- Take search_index into account while used in popup search form. [gbastien] 
 
 
 2.4.11 (2012-04-09)
