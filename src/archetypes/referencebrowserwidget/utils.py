@@ -1,6 +1,7 @@
 from Products.CMFCore.utils import getToolByName
 from ZODB.POSException import ConflictError
 
+
 def getStartupDirectory(context, directory=''):
     """ Construct a path from `context` and `directory`
 
@@ -43,10 +44,10 @@ def getStartupDirectory(context, directory=''):
             url = '/' + url
         else:
             url = ''
-        basePath = ''
 
-        if portal_factory.isTemporary (context):
-            pathParts = context.getPhysicalPath ()
+        basePath = ''
+        if portal_factory.isTemporary(context):
+            pathParts = context.getPhysicalPath()
 
             # Remove the factory from the path
             pathParts = pathParts[:-3]
@@ -54,17 +55,17 @@ def getStartupDirectory(context, directory=''):
             # If the object is in the portal factory, we'll be relative to the
             # parent folder, not the temporary object which does not yet exist,
             # so remove any explicit ../ from the relative path
-            if url.startswith ('/..'):
+            if url.startswith('/..'):
                 url = url[3:]
 
-            basePath = '/'.join (pathParts)
+            basePath = '/'.join(pathParts)
         else:
-            basePath = context.absolute_url (relative = 1)
+            basePath = context.absolute_url(relative = 1)
 
         # Resolve the URL
         try:
             targetPath = basePath + url
-            obj = context.restrictedTraverse (targetPath)
+            obj = context.restrictedTraverse(targetPath)
             return obj.absolute_url()
         except ConflictError:
             raise
@@ -77,8 +78,8 @@ def getStartupDirectory(context, directory=''):
             if, then path is relative to portal root
         """
         if path.startswith('/'):
-            portal_url = getToolByName (context, 'portal_url')
-            return portal_url () + path
+            portal_url = getToolByName(context, 'portal_url')
+            return portal_url() + path
         else:
             return path
 
@@ -111,6 +112,7 @@ def getStartupDirectory(context, directory=''):
     # Else, if we have a relative URL, get it relative to the context.
     return filterPortalFactory(directory)
 
+
 def quotestring(s):
     """ Return a double-quoted string
 
@@ -118,6 +120,7 @@ def quotestring(s):
         '"hello world!"'
     """
     return '"%s"' % s
+
 
 def quotequery(s):
     """ Quote a string query
@@ -130,22 +133,26 @@ def quotequery(s):
     """
     if not s:
         return s
+
     try:
         terms = s.split()
     except (ConflictError, KeyboardInterrupt):
         raise
     except:
         return s
+
     tokens = ('OR', 'AND', 'NOT')
     s_tokens = ('OR', 'AND')
     check = (0, -1)
     for idx in check:
         if terms[idx].upper() in tokens:
             terms[idx] = quotestring(terms[idx])
+
     for idx in range(1, len(terms)):
         if (terms[idx].upper() in s_tokens and
             terms[idx-1].upper() in tokens):
             terms[idx] = quotestring(terms[idx])
+
     return ' '.join(terms)
 
 
@@ -157,6 +164,7 @@ def getSearchCatalog(context, name=''):
     catalog = getToolByName(context, search_catalog, portal_catalog)
     if not hasattr(catalog, 'searchResults'):
         catalog = portal_catalog
+
     return catalog
 
 
