@@ -184,7 +184,7 @@ class ReferenceBrowserPopup(BrowserView):
 
     def update(self):
         context = aq_inner(self.context)
-
+        self.portal_url = getToolByName(context, 'portal_url')()
         catalog = getToolByName(context, 'portal_catalog')
         at_result = catalog.searchResults(dict(path={'query': self.at_url,
                                                      'depth': 0}))

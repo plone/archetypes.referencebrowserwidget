@@ -4,6 +4,9 @@ Changelog
 2.4.12 (unreleased)
 -------------------
 
+- Show item icons in popup.
+  [thomasdesvenain]
+
 - Restrict width of checkbox columns in popup.
   [thomasdesvenain]
 

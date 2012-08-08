@@ -185,6 +185,9 @@
                />
         </td>
         <td tal:attributes="class python:'contenttype-' + item.portal_type.lower()">
+          <img tal:define="icon item/getIcon"
+               tal:condition="icon"
+               tal:attributes="src string:${view/portal_url}/$icon" />
           <a class="browsesite" tal:condition="browsable"
              tal:attributes="
              href python:view.genRefBrowserUrl(item.getURL());
