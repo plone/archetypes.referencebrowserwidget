@@ -20,6 +20,7 @@
                   allow_browse widget/allow_browse;
                   image_portal_types widget/image_portal_types;
                   image_method widget/image_method|string:image_icon;
+				  types_use_view context/portal_properties/site_properties/typesUseViewActionInListings;
                   ">
 
     <div id="messageWrapper" style="position: relative">
@@ -206,6 +207,12 @@
             <span tal:condition="not:referenceable"
                   tal:content="title_or_id" />
           </tal:foldercheck>
+          <a class="discreet"
+		     tal:condition="referenceable"
+			 tal:attributes="href python: item.portal_type in types_use_view and item.getURL()+'/view' or item.getURL();
+			                 onclick string:window.open(jq(this).attr('href'), '${item/id}');;return false;;">
+          	(<span i18n:translate="" i18n:domain="plone">View</span>)
+          </a>
 
           <div tal:condition="widget/show_review_state">
             <span tal:define="state item/review_state"
