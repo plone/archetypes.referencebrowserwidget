@@ -209,8 +209,8 @@
           </tal:foldercheck>
           <a class="discreet"
 		     tal:condition="referenceable"
-			 tal:attributes="href python: item.portal_type in types_use_view and item.getURL()+'/view' or item.getURL();
-			                 onclick string:window.open(jq(this).attr('href'), '${item/id}');;return false;;">
+			 onclick="window.open(jq(this).attr('href'));return false;"
+			 tal:attributes="href python: item.portal_type in types_use_view and item.getURL()+'/view' or item.getURL();">
           	(<span i18n:translate="" i18n:domain="plone">View</span>)
           </a>
 
