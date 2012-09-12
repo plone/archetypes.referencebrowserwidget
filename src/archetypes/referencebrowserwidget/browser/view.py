@@ -327,3 +327,12 @@ class ReferenceBrowserPopup(BrowserView):
         assert self._updated
         item = aq_base(item)
         return getattr(item, 'Title', '') or getattr(item, 'getId', '')
+
+    def preview_url(self, item):
+        portal_properties = getMultiAdapter((self.context, self.request),
+                                            name=u'plone_tools').properties()
+        site_properties = portal_properties.site_properties
+        types_use_view = site_properties.typesUseViewActionInListings
+        if item.portal_type in types_use_view:
+            return item.getURL()+'/view'
+        return item.getURL()

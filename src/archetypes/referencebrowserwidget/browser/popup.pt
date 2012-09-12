@@ -206,6 +206,12 @@
             <span tal:condition="not:referenceable"
                   tal:content="title_or_id" />
           </tal:foldercheck>
+          <a class="discreet"
+		     tal:condition="referenceable"
+			 onclick="window.open(jQuery(this).attr('href'));return false;"
+			 tal:attributes="href python:view.preview_url(item)">
+          	(<span i18n:translate="" i18n:domain="plone">View</span>)
+          </a>
 
           <div tal:condition="widget/show_review_state">
             <span tal:define="state item/review_state"
