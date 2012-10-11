@@ -6,3 +6,4 @@
  - Mathieu Le Marec - Pasquet, template fix
  - Thomas Desvenan, thomasdesvenain@gmail.com - fixes and minor features
  - Peter Holzer, hpeter@agitator.com - query update/fix
+ - Gauthier Bastien, gauthier@imio.be - bug fixes
