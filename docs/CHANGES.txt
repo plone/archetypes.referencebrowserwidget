@@ -7,8 +7,13 @@ Changelog
 - Restored a "*view*" link on linkable items (as with Plone 3):
   It will open a preview of the element in a popup window.
   [keul]
-- Fixed referenced elements sort order on widget view. [gbastien]
-- Take search_index into account while used in popup search form. [gbastien] 
+
+- Fixed referenced elements sort order on widget view. 
+  [gbastien]
+
+- Take search_index into account while used in popup search form. 
+  [gbastien] 
+
 
 2.4.12 (2012-08-11)
 -------------------
