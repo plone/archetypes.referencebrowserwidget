@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.4.13 (unreleased)
+2.4.13 (2012-10-11)
 -------------------
 
 - Restored a "*view*" link on linkable items (as with Plone 3):
