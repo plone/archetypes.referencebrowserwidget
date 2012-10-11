@@ -17,12 +17,14 @@
           helper nocall:here/refbrowserhelper;
           portal context/@@plone_portal_state/portal;
           portal_path        helper/getPortalPath;
-          refs python:helper.getFieldRelations(field);"
+          value python: field.getEditAccessor(context)();
+          refs python:helper.getFieldRelations(field, value);"
           condition="refs">
 
-        <tal:block
-               tal:condition="python: not field.multiValued and (can_view or not hide_inaccessible)"
-               tal:define="obj python:refs[0];
+
+        <tal:notMultivalued condition="not:field/multiValued"> 
+        <tal:block condition="python: (can_view or not hide_inaccessible)"
+                   define="obj python:refs[0];
                            obj_path python: '/'.join(obj.getPhysicalPath());
                            can_view python: helper.canView(obj)">
           <img src="#" alt="Image"
@@ -51,14 +53,13 @@
             </tal:if>
 
         </tal:block>
+        </tal:notMultivalued> 
 
         <ul tal:condition="field/multiValued">
           <tal:block tal:repeat="obj refs">
-            <tal:block
-                tal:define="
-                    obj_path python: '/'.join(obj.getPhysicalPath());
-                    can_view python: helper.canView(obj)"
-                tal:condition="python: can_view or not hide_inaccessible">
+            <tal:block define="obj_path python: '/'.join(obj.getPhysicalPath());
+                               can_view python: helper.canView(obj)"
+                       condition="python: can_view or not hide_inaccessible">
               <li>
                 <img tal:condition="python:obj.portal_type in image_portal_types"
                     tal:attributes="src string:${obj/absolute_url}/$image_method" />

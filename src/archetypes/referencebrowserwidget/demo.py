@@ -18,16 +18,20 @@ schema = BaseSchema.copy() +  Schema((
         relationship='Rel1',
         widget=ReferenceBrowserWidget(
             default_search_index='SearchableText',
-            description='This is the first field. Pick an object.')),
+            description='This is the first field. Pick an object. Restricted to Document, File and RefBrowserDemo.')),
 
     ReferenceField('multiRef',
         multiValued=1,
         relationship='Rel2',
+        referencesSortable=1,
         widget=ReferenceBrowserWidget(
+            hide_inaccessible=1,
             show_indexes=1,
+            allow_sorting=1,
             description=('And here is another field with a longer '
                          'description text to explain the user better what '
-                         'to do with this field.'))),
+                         'to do with this field.  Sort order can be changed for this field. Moreover, "hide_inaccessible" '
+                         'is activated so referenced elements are hidden for members that can not access them.'))),
 
     ReferenceField('multiRef2',
         multiValued=1,
@@ -39,7 +43,7 @@ schema = BaseSchema.copy() +  Schema((
             show_indexes=1,
             available_indexes={'SearchableText':'Free text search',
                                'Description': "Object's description"},
-            description='And here is another field.')),
+            description='And here is another field.  Available indexes are "SearchableText" and "Description"')),
 
     ReferenceField('multiRef3',
         multiValued=1,
@@ -47,7 +51,7 @@ schema = BaseSchema.copy() +  Schema((
         widget=ReferenceBrowserWidget(
             show_indexes=1,
             history_length=5,
-            description='And here is another field.',
+            description='And here is another field.  Startup directory is /Members.',
             startup_directory='/Members')),
 
     ReferenceField('multiRef4',

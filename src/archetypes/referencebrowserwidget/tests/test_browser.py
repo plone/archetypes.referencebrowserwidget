@@ -13,4 +13,8 @@ def test_suite():
             package='archetypes.referencebrowserwidget.tests',
             test_class=FunctionalTestCase,
             optionflags=optionflags),
+        ztc.FunctionalDocFileSuite('reference_order.txt',
+            package='archetypes.referencebrowserwidget.tests',
+            test_class=FunctionalTestCase,
+            optionflags=optionflags),
     ])
