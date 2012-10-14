@@ -4,7 +4,9 @@ Changelog
 2.4.14 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Use normalizeString to create class names for an item's portal type
+  and review state. Fixes #11400.
+  [danjacka]
 
 
 2.4.13 (2012-10-11)

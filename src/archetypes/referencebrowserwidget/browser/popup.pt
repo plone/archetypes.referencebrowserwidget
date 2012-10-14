@@ -160,7 +160,9 @@
            <col />
          </colgroup>
     <tbody>
-      <tal:results tal:repeat="item batch">
+      <tal:results tal:define="plone_view context/@@plone;
+                               normalizeString nocall:plone_view/normalizeString;"
+                   tal:repeat="item batch">
         <tal:row
         tal:define="
             uid python:view.getUid(item);
@@ -184,7 +186,7 @@
                tal:attributes="src string:${item/getURL}/$image_method"
                />
         </td>
-        <td tal:attributes="class python:'contenttype-' + item.portal_type.lower()">
+        <td tal:attributes="class python:'contenttype-' + normalizeString(item.portal_type)">
           <img tal:define="icon item/getIcon"
                tal:condition="icon"
                tal:attributes="src string:${view/portal_url}/$icon" />
@@ -215,7 +217,7 @@
 
           <div tal:condition="widget/show_review_state">
             <span tal:define="state item/review_state"
-              tal:attributes="class string:state-$state"
+              tal:attributes="class python:'state-' + normalizeString(state)"
               i18n:translate="" i18n:domain="plone"
               tal:content="state"
               />
