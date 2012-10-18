@@ -303,8 +303,16 @@ class ReferenceBrowserPopup(BrowserView):
 
     def isNotSelf(self, item):
         assert self._updated
+
+        def safe_get_object(item):
+            """ Return an object from the catalog, if it exists """
+            try:
+                return item.getObject()
+            except AttributError:
+                return None
+
         return self.has_brain and self.getUid(item) != self.brainuid or \
-               item.getObject() != self.at_obj
+               safe_get_object(item) != self.at_obj
 
     def isReferencable(self, item):
         assert self._updated
