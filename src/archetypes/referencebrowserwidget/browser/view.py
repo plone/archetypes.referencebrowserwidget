@@ -308,7 +308,7 @@ class ReferenceBrowserPopup(BrowserView):
             """ Return an object from the catalog, if it exists """
             try:
                 return item.getObject()
-            except AttributError:
+            except AttributeError:
                 return None
 
         return self.has_brain and self.getUid(item) != self.brainuid or \
