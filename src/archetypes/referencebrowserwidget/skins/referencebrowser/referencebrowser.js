@@ -59,7 +59,7 @@ jq(function() {
       var uid = target.attr('rel');
       var messageId;
       if (this.checked === true) {
-          refbrowser_setReference('ref_browser_' + fieldname,
+          refbrowser_setReference('ref_browser_items_' + fieldname,
                                   uid, title, parseInt(multi));
           messageId = '#messageAdded';
           }
@@ -174,7 +174,7 @@ function refbrowser_setReference(widget_id, uid, label, multi)
             }
         }
         // now add the new item
-        var fieldname = widget_id.substr('ref_browser_'.length);
+        var fieldname = widget_id.substr('ref_browser_items_'.length);
         list = document.getElementById(widget_id);
         // add ul-element to DOM, if it is not there
         if (list === null) {
@@ -198,12 +198,13 @@ function refbrowser_setReference(widget_id, uid, label, multi)
         label_element.appendChild(input);
         label_element.appendChild(document.createTextNode(' ' + label));
         li.appendChild(label_element);
-        li.id = 'ref-' + widget_id + '-' + current_values.length;
+        li.id = 'ref-' + fieldname + '-' + current_values.length;
 
         sortable = jq('input[name=' + fieldname + '-sortable]').attr('value');
         if (sortable === '1') {
           up_element = document.createElement('a');
           up_element.title = 'Move Up';
+          up_element.href = '';
           up_element.innerHTML = '&#x25b2;';
           up_element.onclick = function () {
               refbrowser_moveReferenceUp(this);
@@ -214,6 +215,7 @@ function refbrowser_setReference(widget_id, uid, label, multi)
 
           down_element = document.createElement('a');
           down_element.title = 'Move Down';
+          down_element.href = '';
           down_element.innerHTML = '&#x25bc;';
           down_element.onclick = function () {
               refbrowser_moveReferenceDown(this);
