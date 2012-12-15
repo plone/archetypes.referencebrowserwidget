@@ -129,7 +129,7 @@ Changelog
 - Fix: overlay is not closed at item selection when field is multivalued.
   [thomasdesvenain]
 
-- Fix undefined variable checkPermission 
+- Fix undefined variable checkPermission 
   [kiorky]
 
 - Fix error in refbrowser_moveReferenceDown and refbrowser_moveReferenceUp
