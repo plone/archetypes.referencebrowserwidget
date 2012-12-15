@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.4.15 (unreleased)
+2.4.15 (2012-12-14)
 -------------------
 
 - Make new added references sortable with already existing ones
