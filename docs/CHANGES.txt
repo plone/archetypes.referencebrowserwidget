@@ -5,7 +5,8 @@ Changelog
 -------------------
 
 - Make new added references sortable with already existing ones
-  while editing a content.  Fixes #13271 [gbastien]
+  while editing a content.  Fixes http://dev.plone.org/plone/ticket/13271
+  [gbastien]
 
 - Use HTML5 placeholder attribute on search box. Replaces deprecated
   inputLabel class.
@@ -23,7 +24,7 @@ Changelog
 -------------------
 
 - Use normalizeString to create class names for an item's portal type
-  and review state. Fixes #11400.
+  and review state. Fixes http://dev.plone.org/plone/ticket/11400.
   [danjacka]
 
 - don't let search fail on broken catalog
