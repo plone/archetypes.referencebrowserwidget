@@ -1,5 +1,6 @@
 from types import ListType, TupleType
 import urllib
+import re
 
 import zope.interface
 
@@ -118,10 +119,23 @@ class QueryCatalogView(BrowserView):
 
         for k, v in self.request.items():
             if v and k in indexes:
-                if quote_logic and k in quote_logic_indexes:
-                    v = utils.quotequery(v)
-                query.update({k: v})
+                if type(v) == str and v.strip().lower().startswith('path:'):
+                    # Searching for exact path enabled! This will return the
+                    # item on the specified path and all items in its subtree
+                    # NOTE: Multiple spaces, slashes and/or a trailing slash in
+                    # the path, while easily overlooked by users, might cause
+                    # no results to be found. Let's take care of this for the
+                    # convenience of the user. Besides, we need to strip
+                    # 'path:' from the path string.
+                    path = re.sub("/{2,}", "/", v.strip()[5:]).rstrip("/")
+                    d = {"path": {"query": path}}
+                else:
+                    if quote_logic and k in quote_logic_indexes:
+                        v = utils.quotequery(v)
+                    d = {k: v}
+                query.update(d)
                 show_query = 1
+
             elif k.endswith('_usage'):
                 key = k[:-6]
                 param, value = v.split(':')

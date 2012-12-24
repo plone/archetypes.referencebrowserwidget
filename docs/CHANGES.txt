@@ -4,7 +4,8 @@ Changelog
 2.4.16 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Add an option of searching for related items by path.
+  [plamut]
 
 
 2.4.15 (2012-12-14)

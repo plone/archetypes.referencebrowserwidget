@@ -251,6 +251,23 @@ class PopupTestCase(PopupBaseTestCase):
         assert batch[0].getObject() == self.portal.news
         assert popup.has_queryresults
 
+    def test_path_query(self):
+        # querying by path
+        fieldname = 'multiRef3'
+        self.request.set('at_url', '/plone/layer1/layer2/ref')
+        self.request.set('fieldName', fieldname)
+        self.request.set('fieldRealName', fieldname)
+        self.request.set('search_index', 'getId')
+        self.request.set('searchValue', 'path:/plone/events')
+        popup = self._getPopup()
+        batch = popup.getResult()
+        assert isinstance(batch, Batch)
+        # expected to have both the folder at "path" and its contents
+        assert len(batch) == 2
+        assert batch[0].getObject() == self.portal.events
+        assert batch[1].getObject() == self.portal.events.aggregator
+        assert popup.has_queryresults
+
     def test_noquery(self):
         # no query
         fieldname = 'multiRef3'
@@ -295,7 +312,7 @@ class PopupTestCase(PopupBaseTestCase):
         catalog = getToolByName(self.portal, 'portal_catalog')
         brain = catalog(id='ref')[0]
         assert popup.preview_url(brain) == brain.getURL()
-        
+
         # now testing what URL is get for content's where "/view" if forced
         site_properties = self.portal.portal_properties.site_properties
         site_properties.typesUseViewActionInListings = ('RefBrowserDemo',)
