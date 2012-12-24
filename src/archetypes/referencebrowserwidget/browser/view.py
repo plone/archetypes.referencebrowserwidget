@@ -240,8 +240,6 @@ class ReferenceBrowserPopup(BrowserView):
         qc = getMultiAdapter((self.context, self.request),
                              name='refbrowser_querycatalog')
         if self.widget.show_results_without_query or self.search_text:
-            if self.widget.restrict_browsing_to_startup_directory:
-                pass
             result = (self.widget.show_results_without_query or \
                       self.search_text) and \
                       qc(search_catalog=self.widget.search_catalog)
