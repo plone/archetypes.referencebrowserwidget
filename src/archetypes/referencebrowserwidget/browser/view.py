@@ -117,6 +117,9 @@ class QueryCatalogView(BrowserView):
         show_query = show_all
         second_pass = {}
 
+        purl_tool = getToolByName(self.context, 'portal_url')
+        portal_path = purl_tool.getPortalPath()
+
         for k, v in self.request.items():
             if v and k in indexes:
                 if type(v) == str and v.strip().lower().startswith('path:'):
@@ -128,6 +131,15 @@ class QueryCatalogView(BrowserView):
                     # convenience of the user. Besides, we need to strip
                     # 'path:' from the path string.
                     path = re.sub("/{2,}", "/", v.strip()[5:]).rstrip("/")
+
+                    if not path.startswith("/"):
+                        path = "/" + path
+
+                    # Since we might be in a virtual-hosting environment, we
+                    # need to prepend the portal path if not present yet
+                    if not path.startswith(portal_path):
+                        path = portal_path + path
+
                     d = {"path": {"query": path}}
                 else:
                     if quote_logic and k in quote_logic_indexes:
