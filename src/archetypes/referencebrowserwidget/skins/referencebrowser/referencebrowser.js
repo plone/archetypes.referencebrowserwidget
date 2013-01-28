@@ -58,8 +58,12 @@ jq(function() {
       var title = tablerow.find('label').html();
       var uid = target.attr('rel');
       var messageId;
+      var widget_id_base = 'ref_browser_';
+      if (multi !== '0') {
+        widget_id_base = 'ref_browser_items_';
+      }
       if (this.checked === true) {
-          refbrowser_setReference('ref_browser_items_' + fieldname,
+          refbrowser_setReference(widget_id_base + fieldname,
                                   uid, title, parseInt(multi));
           messageId = '#messageAdded';
           }
@@ -128,7 +132,7 @@ jq(function() {
       }
 
   // the search form
-  // // This does not catch form submission via enter in FF but does in IE  
+  // // This does not catch form submission via enter in FF but does in IE
   jq('[id^=atrb_] form#search').live('submit', do_atref_search);
   //     // This catches form submission in FF
   jq('[id^=atrb_] form#search input[name=submit]',
