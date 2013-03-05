@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.4.17 (unreleased)
+2.4.17 (2013-03-05)
 -------------------
 
 - 2.4.15 broke non-multi reference selection. Added code to discriminate
