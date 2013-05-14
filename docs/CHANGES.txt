@@ -4,6 +4,9 @@ Changelog
 2.4.18 (unreleased)
 -------------------
 
+- Added css ids in popup.
+  [thomasdesvenain]
+
 - Wrap jQuery functions for better compatibility.
   [esteele]
 

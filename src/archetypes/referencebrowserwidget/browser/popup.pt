@@ -1,5 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html
-      xmlns:tal="http://xml.zope.org/namespaces/tal"
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:tal="http://xml.zope.org/namespaces/tal"
       xmlns:metal="http://xml.zope.org/namespaces/metal"
       i18n:domain="atreferencebrowserwidget">
   <head>
@@ -108,7 +108,7 @@
             tal:attributes="value view/close_window" />
     </form>
     <!-- actual list of objects, either searchresults or folder contents -->
-    <tal:block tal:define="batch view/getResult;">
+    <div id="atrbResults" tal:define="batch view/getResult;">
 
       <!-- history -->
       <div tal:condition="python:widget.history_length > 0" style="float: right; clear: right;">
@@ -153,11 +153,12 @@
 
       <!-- object list -->
       <p tal:condition="not:view/has_queryresults"
+         id="atrbNoResults"
          i18n:translate="referencebrowser_no_items_found">No items found.</p>
 
       <table class="group" width="100%" cellspacing="0" cellpadding="2"
          tal:condition="batch"
-         id="atrbResults">
+         id="atrbResultsTable">
          <colgroup>
            <col width="20px" />
            <col />
@@ -241,6 +242,6 @@
     <div metal:use-macro="here/batch_macros/macros/navigation" />
       </tal:var>
 
-    </tal:block>
+    </div>
   </body>
 </html>
