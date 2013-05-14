@@ -4,7 +4,8 @@ Changelog
 2.4.18 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Wrap jQuery functions for better compatibility.
+  [esteele]
 
 
 2.4.17 (2013-03-05)
