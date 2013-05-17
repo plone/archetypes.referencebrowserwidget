@@ -38,6 +38,8 @@ class ReferenceBrowserWidget(ReferenceWidget):
         'popup_height': 550,
         'popup_name': 'popup',
         'browsable_types': (),
+        'top_popup_helper': None,
+        'bottom_popup_helper': None,
         })
 
     # for documentation of properties see: README.txt

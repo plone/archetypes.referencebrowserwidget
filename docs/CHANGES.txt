@@ -4,6 +4,10 @@ Changelog
 2.4.18 (unreleased)
 -------------------
 
+- Added two widget properties that allow to add help messages on popup,
+  in two slots (top and bottom).
+  [thomasdesvenain]
+
 - Added css ids in popup.
   [thomasdesvenain]
 

@@ -22,6 +22,12 @@
                   image_method widget/image_method|string:image_icon;
                   ">
 
+    <div id="atrefbrowserpopup-top-helper"
+         tal:condition="widget/top_popup_helper"
+
+         tal:content="structure widget/top_popup_helper"
+         i18n:translate="" />
+
     <div id="messageWrapper" style="position: relative">
       <div style="position: absolute; width: 100%">
         <dl id="messageAdded" class="portalMessage info"
@@ -241,6 +247,11 @@
       <tal:var tal:define="template_id view/__name__">
     <div metal:use-macro="here/batch_macros/macros/navigation" />
       </tal:var>
+
+    <div id="atrefbrowserpopup-bottom-helper"
+         tal:condition="widget/bottom_popup_helper"
+         tal:content="structure widget/bottom_popup_helper"
+         i18n:translate="" />
 
     </div>
   </body>
