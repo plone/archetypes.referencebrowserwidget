@@ -4,7 +4,7 @@ import os
 def read(*rnames):
     return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
 
-version = '2.4.18.dev0'
+version = '2.4.18'
 
 long_description = (
     read('README.txt')
