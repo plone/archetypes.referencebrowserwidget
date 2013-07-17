@@ -93,7 +93,7 @@ jQuery(function(jq) {
       });
 
   // the pagination links
-  jq('[id^=atrb_] div.listingBar a', jq('body')[0]).live('click', function(event) {
+  jq('[id^=atrb_] .listingBar a', jq('body')[0]).live('click', function(event) {
       var target = jq(this);
       var src = target.attr('href');
       var wrap = target.parents('.overlaycontent');

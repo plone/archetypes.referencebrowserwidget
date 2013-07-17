@@ -4,6 +4,11 @@ Changelog
 2.4.19 (unreleased)
 -------------------
 
+- Modified pagination links selector to use only ".listingBar" instead of
+  "div.listingBar". The batchnavigation.pt template can be customized in a
+  theme and use a different structure, "ul.listingBar" for example.
+  [vincentfretin]
+
 - If we have a sort_on parameter in base_query,
   use it instead of getObjPositionInParent to display folder content.
   [thomasdesvenain]
