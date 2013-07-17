@@ -4,7 +4,9 @@ Changelog
 2.4.19 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- If we have a sort_on parameter in base_query,
+  use it instead of getObjPositionInParent to display folder content.
+  [thomasdesvenain]
 
 
 2.4.18 (2013-05-23)

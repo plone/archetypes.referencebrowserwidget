@@ -280,7 +280,11 @@ class ReferenceBrowserPopup(BrowserView):
                               'query': '/'.join(folder.getPhysicalPath()),
                               'depth':1}
             self.request.form['portal_type'] = []
-            self.request.form['sort_on'] = 'getObjPositionInParent'
+            if 'sort_on' in self.widget.base_query:
+                self.request.form['sort_on'] = self.widget.base_query['sort_on']
+            else:
+                self.request.form['sort_on'] = 'getObjPositionInParent'
+
             result = qc(search_catalog=self.widget.search_catalog)
         else:
             result = []
