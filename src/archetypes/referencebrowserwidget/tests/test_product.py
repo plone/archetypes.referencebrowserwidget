@@ -608,8 +608,8 @@ class IntegrationTestCase(FunctionalTestCase):
                 '</script>') in body
 
         widgetdiv = re.compile((
-            r'<div class="field ArchetypesReferenceBrowserWidget .*?" '
-             'id="archetypes-fieldname-singleRef">'))
+            r'<div class="field ArchetypesReferenceBrowserWidget [^"]*" '
+             'id="archetypes-fieldname-singleRef"'))
         assert widgetdiv.search(body)
         assert (
             '<input id="ref_browser_singleRef_label" size="50" type="text" readonly="readonly" '

@@ -187,7 +187,7 @@
 
         <td>
           <tal:referenceable tal:condition="referenceable">
-            <input type="checkbox" class="insertreference" tal:attributes="rel uid; id uid" />
+            <input type="checkbox" class="insertreference" tal:attributes="id uid; rel uid" />
           </tal:referenceable>
         </td>
 
