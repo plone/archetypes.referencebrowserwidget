@@ -62,15 +62,17 @@ class ReferenceBrowserHelperView(BrowserView):
             is supported it needs to be a list of UIDs.
         """
         if not value:
-            return queryMultiAdapter((self.context, field),
-                                     interface=IFieldRelation, default=[])
+            items = queryMultiAdapter((self.context, field),
+                                       interface=IFieldRelation, default=[])
+            return [item for item in items if item is not None]
         else:
             if isinstance(value, basestring):
                 value = [value]
             if type(value) != ListType and type(value) != TupleType:
                 return []
             catalog = getToolByName(aq_inner(self.context), REFERENCE_CATALOG)
-            return [catalog.lookupObject(uid) for uid in value if uid]
+            items = [catalog.lookupObject(uid) for uid in value if uid]
+            return [item for item in items if item is not None]
 
     def getUidFromReference(self, ref):
         """ Helper to get UID in restricted code without having rights to

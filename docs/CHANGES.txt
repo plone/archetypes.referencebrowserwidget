@@ -4,7 +4,10 @@ Changelog
 2.4.20 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Filter out references that are None.  This may happen when the
+  reference_catalog has links from a source to a no longer existing
+  target.
+  [maurits]
 
 
 2.4.19 (2013-08-13)
