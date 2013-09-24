@@ -611,8 +611,10 @@ class IntegrationTestCase(FunctionalTestCase):
                 'src="http://nohost/plone/referencebrowser.js"> '
                 '</script>') in body
 
+        # Check the div.  Allow for the existence of extra classes and
+        # extra data attributes.
         widgetdiv = re.compile((
-            r'<div class="field ArchetypesReferenceBrowserWidget [^"]*" '
+            r'<div class="field ArchetypesReferenceBrowserWidget [^"]*"[^>]*'
             'id="archetypes-fieldname-singleRef"'))
         assert widgetdiv.search(body)
         assert (
