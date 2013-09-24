@@ -150,7 +150,7 @@ def quotequery(s):
 
     for idx in range(1, len(terms)):
         if (terms[idx].upper() in s_tokens and
-            terms[idx-1].upper() in tokens):
+                terms[idx-1].upper() in tokens):
             terms[idx] = quotestring(terms[idx])
 
     return ' '.join(terms)
@@ -166,5 +166,3 @@ def getSearchCatalog(context, name=''):
         catalog = portal_catalog
 
     return catalog
-
-

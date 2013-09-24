@@ -10,11 +10,11 @@ from DateTime import DateTime
 from archetypes.referencebrowserwidget.config import PROJECTNAME
 from archetypes.referencebrowserwidget.widget import ReferenceBrowserWidget
 
-schema = BaseSchema.copy() +  Schema((
+schema = BaseSchema.copy() + Schema((
 
     ReferenceField('singleRef',
         multiValued=0,
-        allowed_types=('Document','File', 'RefBrowserDemo'),
+        allowed_types=('Document', 'File', 'RefBrowserDemo'),
         relationship='Rel1',
         widget=ReferenceBrowserWidget(
             default_search_index='SearchableText',
@@ -41,7 +41,7 @@ schema = BaseSchema.copy() +  Schema((
             allow_browse=0,
             force_close_on_insert=1,
             show_indexes=1,
-            available_indexes={'SearchableText':'Free text search',
+            available_indexes={'SearchableText': 'Free text search',
                                'Description': "Object's description"},
             description='And here is another field.  Available indexes are "SearchableText" and "Description"')),
 
@@ -62,7 +62,7 @@ schema = BaseSchema.copy() +  Schema((
             allow_browse=0,
             description=('And here is another field with a fixed query '
                          'restriction (only published objects will appear).'),
-            base_query={'review_state':'published'})),
+            base_query={'review_state': 'published'})),
 
     ReferenceField('multiRef5',
         multiValued=1,
@@ -78,6 +78,7 @@ schema = BaseSchema.copy() +  Schema((
             popup_height=209))
      ))
 
+
 class RefBrowserDemo(BaseContent):
     """
     Demo from archetypes.referencebrowserwidget
@@ -90,8 +91,8 @@ class RefBrowserDemo(BaseContent):
              only objects whose start property is within one week of the
              current day
         """
-        current_week = [DateTime()-7,DateTime()+7]
-        return {'start': {'query':current_week, 'range':'minmax'}}
+        current_week = [DateTime()-7, DateTime()+7]
+        return {'start': {'query': current_week, 'range': 'minmax'}}
 
     def dynamicDirectory(self):
         return '/bar/dynamic'

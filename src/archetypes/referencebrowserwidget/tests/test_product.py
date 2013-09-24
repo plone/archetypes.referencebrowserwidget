@@ -49,6 +49,7 @@ from archetypes.referencebrowserwidget.browser.view import \
 
 _marker = []
 
+
 class ProductsTestCase(TestCase):
     """ Basic product unit tests """
 
@@ -99,7 +100,7 @@ class ProductsTestCase(TestCase):
         form = {'singleRef': '',
                 'multiRef2': ['']}
         value = field.widget.process_form(context, field, form,
-                                           empty_marker=_marker)
+                                          empty_marker=_marker)
         assert value is _marker
 
         # without value
@@ -107,7 +108,7 @@ class ProductsTestCase(TestCase):
                 'multiRef2': [''],
                 'multiRef': []}
         value = field.widget.process_form(context, field, form,
-                                           empty_marker=_marker)
+                                          empty_marker=_marker)
         assert len(value) == 2
         assert value[0] == []
         assert value[0] is not _marker
@@ -145,7 +146,7 @@ class ProductsTestCase(TestCase):
         # without key
         form = {'multiRef2': ['']}
         value = field.widget.process_form(context, field, form,
-                                           empty_marker=_marker)
+                                          empty_marker=_marker)
         assert value is _marker
 
         # without value
@@ -153,7 +154,7 @@ class ProductsTestCase(TestCase):
                 'multiRef2': [''],
                 'multiRef': []}
         value = field.widget.process_form(context, field, form,
-                                           empty_marker=_marker)
+                                          empty_marker=_marker)
         assert len(value) == 2
         assert value[0] == ''
 
@@ -164,9 +165,11 @@ class ProductsTestCase(TestCase):
                                           empty_marker=_marker)
         assert value is _marker
 
+
 def getPTName(filename):
     basepath, ext = os.path.splitext(filename)
     return os.path.basename(basepath)
+
 
 class PopupTestCase(PopupBaseTestCase):
     """ Test the popup view """
@@ -417,8 +420,8 @@ class PopupBreadcrumbTestCase(PopupBaseTestCase):
         copybrain = catalog(id='copy_of_ref')[0]
 
         popup = self._getPopup()
-        assert popup.isNotSelf(copybrain) == True
-        assert popup.isNotSelf(refbrain) == False
+        assert popup.isNotSelf(copybrain) is True
+        assert popup.isNotSelf(refbrain) is False
 
 
 class HelperViewTestCase(TestCase):
@@ -559,6 +562,7 @@ class HelperViewTestCase(TestCase):
         self.logout()
         self.assertFalse(helper.canView(self.folder.doc1))
 
+
 class IntegrationTestCase(FunctionalTestCase):
     """ Browser/publish tests of referencebrowser widget
     """
@@ -601,7 +605,7 @@ class IntegrationTestCase(FunctionalTestCase):
 
     def test_basewidget(self):
         response = self.publish('%s/base_edit' % self.demo1_url,
-                                                 self.basic_auth)
+                                self.basic_auth)
         body = normalize(response.getBody())
         assert ('<script type="text/javascript" charset="iso-8859-1" '
                 'src="http://nohost/plone/referencebrowser.js"> '
@@ -609,14 +613,13 @@ class IntegrationTestCase(FunctionalTestCase):
 
         widgetdiv = re.compile((
             r'<div class="field ArchetypesReferenceBrowserWidget [^"]*" '
-             'id="archetypes-fieldname-singleRef"'))
+            'id="archetypes-fieldname-singleRef"'))
         assert widgetdiv.search(body)
         assert (
             '<input id="ref_browser_singleRef_label" size="50" type="text" readonly="readonly" '
             'value="No reference set. Click the add button to select." /> '
             ) in body
-        assert ('<input type="hidden" name="singleRef" id="ref_browser_singleRef" /> ') \
-                in body
+        assert ('<input type="hidden" name="singleRef" id="ref_browser_singleRef" /> ') in body
         assert ('<input type="button" class="searchButton addreference" '
                 'value="Add..." src="') in body
         assert '''<input type="button" class="destructive" value="Clear reference" onclick="javascript:refbrowser_removeReference('ref_browser_singleRef', 0)" />''' in body
@@ -630,7 +633,7 @@ class IntegrationTestCase(FunctionalTestCase):
             startup_path = self.popup_url
         response = self.publish(
             '%s?fieldName=%s&fieldRealName=%s&at_url=%s'
-          % (startup_path, field, field, url), self.basic_auth)
+            % (startup_path, field, field, url), self.basic_auth)
 
         return normalize(response.getBody())
 
@@ -679,9 +682,9 @@ class IntegrationTestCase(FunctionalTestCase):
 
         browser = Browser()
         data = {
-          'fieldName': 'relatedItems',
-          'fieldRealName': 'relatedItems',
-          'at_url': page.absolute_url(1)}
+            'fieldName': 'relatedItems',
+            'fieldRealName': 'relatedItems',
+            'at_url': page.absolute_url(1)}
 
         basic = '%s:%s' % (portal_owner, default_password)
 
@@ -692,7 +695,7 @@ class IntegrationTestCase(FunctionalTestCase):
                          'fieldName=relatedItems&amp;fieldRealName=relatedItems'
                          '&amp;at_url=plone/folder1/page1" rel="Home"> '
                          '<span>Home</span> </a>')
-                         in normalize(browser.contents))
+                        in normalize(browser.contents))
 
         # now let's change the navigation root
         zope.interface.alsoProvides(self.portal.folder1, INavigationRoot)
@@ -702,7 +705,7 @@ class IntegrationTestCase(FunctionalTestCase):
                          'fieldName=relatedItems&amp;fieldRealName=relatedItems'
                          '&amp;at_url=plone/folder1/page1" rel="Home"> '
                          '<span>Home</span> </a>')
-                         in normalize(browser.contents))
+                        in normalize(browser.contents))
 
     def test_startup_directory(self):
         startup_path = self.portal.folder1.absolute_url(1)
@@ -710,14 +713,14 @@ class IntegrationTestCase(FunctionalTestCase):
                                        field='multiRef3')
         self.assertTrue(
             ('<div id="portal-breadcrumbs"> '
-               '<span id="breadcrumbs-you-are-here">You are here:</span> '
-               '<span id="breadcrumbs-home"> '
-                 '<a href="http://nohost/plone">Home</a> '
-                   '<span class="breadcrumbSeparator"> / </span> '
-               '</span> '
-               '<span id="breadcrumbs-1" dir="ltr"> '
-                 '<span id="breadcrumbs-current">folder1</span> '
-               '</span> '
+             '<span id="breadcrumbs-you-are-here">You are here:</span> '
+             '<span id="breadcrumbs-home"> '
+             '<a href="http://nohost/plone">Home</a> '
+             '<span class="breadcrumbSeparator"> / </span> '
+             '</span> '
+             '<span id="breadcrumbs-1" dir="ltr"> '
+             '<span id="breadcrumbs-current">folder1</span> '
+             '</span> '
              '</div>') in body)
 
 

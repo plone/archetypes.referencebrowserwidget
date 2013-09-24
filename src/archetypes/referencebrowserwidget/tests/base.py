@@ -22,6 +22,7 @@ app = ztc.app()
 ztc.utils.setupCoreSessions(app)
 ztc.close(app)
 
+
 @onsetup
 def setup_sample_types():
     # setup sample types
@@ -44,6 +45,7 @@ ptc.setupPloneSite(extension_profiles=[
     ])
 
 import archetypes.referencebrowserwidget
+
 
 class MixIn(object):
     """ Mixin for setting up the necessary bits for testing the
@@ -83,10 +85,12 @@ class MixIn(object):
 class TestCase(MixIn, ptc.PloneTestCase):
     """ Base TestCase for archetypes.referencebrowserwidget """
 
+
 class FunctionalTestCase(MixIn, ptc.FunctionalTestCase):
     """ Base FunctionalTestCase for archetypes.referencebrowserwidget """
 
     basic_auth = '%s:%s' % (default_user, default_password)
+
 
 class DummySession(dict):
 
@@ -101,6 +105,7 @@ class DummyObject(object):
 
     def getPhysicalPath(self):
         return self.location.split('/')
+
 
 class PopupBaseTestCase(TestCase):
 
@@ -124,6 +129,7 @@ class PopupBaseTestCase(TestCase):
         popup = getMultiAdapter((obj, request), name='refbrowser_popup')
         popup.update()
         return popup
+
 
 def normalize(s):
     """ Helper method for integration tests """

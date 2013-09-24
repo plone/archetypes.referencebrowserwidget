@@ -1,4 +1,6 @@
-import unittest, doctest
+import doctest
+import unittest
+
 
 def test_suite():
     suite = unittest.TestSuite()
@@ -6,4 +8,3 @@ def test_suite():
             'archetypes.referencebrowserwidget.utils',
             ))
     return suite
-

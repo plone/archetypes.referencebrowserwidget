@@ -9,7 +9,7 @@ class UtilsTestCase(unittest.TestCase):
 
     def test_emptyquotequery(self):
         assert utils.quotequery('') == ''
-        assert utils.quotequery(None) == None
+        assert utils.quotequery(None) is None
 
     def test_quotequery(self):
         assert utils.quotequery('foo and bar') == 'foo and bar'
@@ -62,4 +62,3 @@ class PloneUtilsTestCase(TestCase):
 
 def test_suite():
     return unittest.defaultTestLoader.loadTestsFromName(__name__)
-
