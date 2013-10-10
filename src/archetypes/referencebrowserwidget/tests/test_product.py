@@ -552,7 +552,7 @@ class HelperViewTestCase(TestCase):
             def UID(self):
                 return _marker
         helper = ReferenceBrowserHelperView(DummyObject('/plone/foo'), TestRequest())
-        self.failUnless(helper.getUidFromReference(DummyRef()) is _marker)
+        self.assertTrue(helper.getUidFromReference(DummyRef()) is _marker)
 
     def test_canview(self):
         makeContent(self.folder, portal_type='Document', id='doc1')
