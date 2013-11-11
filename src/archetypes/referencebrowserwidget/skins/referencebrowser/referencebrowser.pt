@@ -40,7 +40,7 @@
               >Sole target object's title</a>
 
             <a href="#"
-               tal:condition="python:obj_interface_info.provides(obj, 'Products.Archetypes.interfaces.referenceengine.IContentReference')"
+               tal:condition="python:obj_interface_info.provides('Products.Archetypes.interfaces.referenceengine.IContentReference')"
                tal:attributes="href python:ref.getContentObject().absolute_url();
                                class python:obj.portal_type.replace(' ', '_')"
                tal:content="field/relationship"
@@ -58,7 +58,8 @@
         <ul tal:condition="field/multiValued">
           <tal:block tal:repeat="obj refs">
             <tal:block define="obj_path python: '/'.join(obj.getPhysicalPath());
-                               can_view python: helper.canView(obj)"
+                               can_view python: helper.canView(obj);
+                               obj_interface_info nocall:obj/@@plone_interface_info"
                        condition="python: can_view or not hide_inaccessible">
               <li>
                 <img tal:condition="python:obj.portal_type in image_portal_types"
@@ -72,7 +73,7 @@
                     >Target Title</a>
 
                 <a href="#"
-                    tal:condition="python:obj_interface_info.provides(obj, 'Products.Archetypes.interfaces.referenceengine.IContentReference')"
+                    tal:condition="python:obj_interface_info.provides('Products.Archetypes.interfaces.referenceengine.IContentReference')"
                     tal:attributes="href python:ref.getContentObject().absolute_url();
                                     class python:obj.portal_type.replace(' ', '_')"
                     tal:content="field/relationship"
