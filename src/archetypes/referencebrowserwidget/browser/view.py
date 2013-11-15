@@ -123,9 +123,9 @@ class QueryCatalogView(BrowserView):
         purl_tool = getToolByName(self.context, 'portal_url')
         portal_path = purl_tool.getPortalPath()
 
-        for k, v in self.request.items():
-            if v and k in indexes:
-                if type(v) == str and v.strip().lower().startswith('path:'):
+        for k, v in self.request.form.iteritems():
+            if k in indexes:
+                if v and type(v) == str and v.strip().lower().startswith('path:'):
                     # Searching for exact path enabled! This will return the
                     # item on the specified path and all items in its subtree
                     # NOTE: Multiple spaces, slashes and/or a trailing slash in
@@ -145,7 +145,7 @@ class QueryCatalogView(BrowserView):
 
                     d = {"path": {"query": path}}
                 else:
-                    if quote_logic and k in quote_logic_indexes:
+                    if v and quote_logic and k in quote_logic_indexes:
                         v = utils.quotequery(v)
                     d = {k: v}
                 query.update(d)
@@ -158,7 +158,7 @@ class QueryCatalogView(BrowserView):
             elif k in ('sort_on', 'sort_order', 'sort_limit'):
                 query.update({k: v})
 
-        for k, v in second_pass.items():
+        for k, v in second_pass.iteritems():
             qs = query.get(k)
             if qs is None:
                 continue
