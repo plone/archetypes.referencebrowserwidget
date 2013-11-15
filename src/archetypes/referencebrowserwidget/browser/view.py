@@ -357,6 +357,16 @@ class ReferenceBrowserPopup(BrowserView):
         return self.getUid(item) and item_referenceable and \
             review_state_allows and self.isNotSelf(item)
 
+    def showItem(self, item):
+        if self.widget.hide_only_for_review_states:
+            # TODO: for such filtering we should apply
+            # a negative filter on the query itself
+            # Products.AdvancedQuery needed tough :S
+            filter_review_states = self.widget.only_for_review_states or ()
+            if item.review_state in filter_review_states:
+                return False
+        return True
+
     def isBrowsable(self, item):
         if not self.browsable_types:
             return item.is_folderish

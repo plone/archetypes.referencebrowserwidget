@@ -28,6 +28,7 @@ class ReferenceBrowserWidget(ReferenceWidget):
         'show_review_state': 0,
         'show_path': 0,
         'only_for_review_states': None,
+        'hide_only_for_review_states': False,
         'image_portal_types': (),
         'image_method': None,
         'history_length': 0,

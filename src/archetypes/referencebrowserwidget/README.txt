@@ -108,6 +108,10 @@ The popup window can be configured using the following widget properties:
 * only_for_review_states: items are only referencable if their workflow
   state matches the ones
   a specified (default: None = no filtering by workflow state)
+  Not matching results are showed but not referenceable.
+  Set `show_only_for_review_states' True to hide them.
+
+* show_only_for_review_states: hides results not matching `only_for_review_states`
 
 * history_length: enable a history feature that show the paths of the last
   N visited folders (default : 0 = no history)

@@ -174,13 +174,14 @@
                                normalizeString nocall:plone_view/normalizeString;"
                    tal:repeat="item batch">
         <tal:row
-        tal:define="
+          define="
             uid python:view.getUid(item);
             isNotSelf python:view.isNotSelf(item);
             referenceable python:view.isReferencable(item);
             browsable python:allow_browse and view.isBrowsable(item);
             title_or_id python:view.title_or_id(item);
-            color view/discreetColor;">
+            color view/discreetColor;"
+          condition="python:view.showItem(item)">
 
           <tr tal:define="oddrow repeat/item/odd"
           tal:attributes="class python:oddrow and 'even' or 'odd'">
