@@ -195,9 +195,9 @@ jQuery(function(jq) {
           }
           // now add the new item
           var fieldname = widget_id.substr('ref_browser_items_'.length);
-          list = document.getElementById(widget_id);
+          var list_element = jq('ul#' + widget_id);
           // add ul-element to DOM, if it is not there
-          if (list === null) {
+          if ( list_element.length === 0) {
               container = jq('#archetypes-fieldname-' + fieldname +
                              ' input + div');
               if (!container.length) {
@@ -206,42 +206,26 @@ jQuery(function(jq) {
               }
               container.after(
                  '<ul class="visualNoMarker" id="' + widget_id + '"></ul>');
-              list = document.getElementById(widget_id);
+              list_element = jq('ul#' + widget_id);
           }
-          li = document.createElement('li');
-          label_element = document.createElement('label');
-          input = document.createElement('input');
-          input.type = 'checkbox';
-          input.value = uid;
-          input.checked = true;
-          input.name = fieldname + ':list';
-          label_element.appendChild(input);
-          label_element.appendChild(document.createTextNode(' ' + label));
-          li.appendChild(label_element);
-          li.id = 'ref-' + fieldname + '-' + current_values.length;
+
+          var input_element = jq('<input type="checkbox" checked=""/>');
+          input_element.attr({value: uid, name: fieldname + ':list'});
+
+          var label_element = jq('<label/>');
+          label_element.text(' ' + label);
+          label_element.prepend(input_element);
+          
+          var li_element = jq('<li />');
+          li_element.attr('id', 'ref-' + fieldname + '-' + current_values.length);
+          li_element.append(label_element);
 
           sortable = jq('input[name=' + fieldname + '-sortable]').attr('value');
           if (sortable === '1') {
-            up_element = document.createElement('a');
-            up_element.title = 'Move Up';
-            up_element.href = '';
-            up_element.className = 'atrb_move_up';
-            up_element.innerHTML = '&#x25b2;';
-
-            li.appendChild(up_element);
-
-            down_element = document.createElement('a');
-            down_element.title = 'Move Down';
-            down_element.href = '';
-            down_element.className = 'atrb_move_down';
-            down_element.innerHTML = '&#x25bc;';
-
-            li.appendChild(down_element);
+            li_element.append('<a title="Move Up" class="atrb_move_up" href="">&#x25b2;</a>')
+            li_element.append('<a title="Move Down" class="atrb_move_down" href="">&#x25bc;</a>')
           }
-          list.appendChild(li);
-
-          // fix on IE7 - check *after* adding to DOM
-          input.checked = true;
+          list_element.append(li_element);
       }
   }
 
