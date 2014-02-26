@@ -28,6 +28,23 @@ jQuery(function(jq) {
            disablecurrentrelations(widget_id);
        }});
 
+  jq('a.atrb_move_up').live('click', function(event) {
+      event.preventDefault()
+      refbrowser_moveReferenceUp(this);
+  });
+
+  jq('a.atrb_move_down').live('click', function(event) {
+      event.preventDefault()
+      refbrowser_moveReferenceDown(this);
+  });
+
+  jq('input.atrb_remove').live('click', function(event) {
+      event.preventDefault()
+      var fieldname = jq(this.parentNode.parentNode).data('fieldname');
+      var widget_id = 'ref_browser_' + fieldname;
+      refbrowser_removeReference(widget_id, 0);
+  });
+
   // the breadcrumb-links and the links of the 'tree'-navigati        on
   jq('[id^=atrb_] a.browsesite', jq('body')[0]).live('click', function(event) {
       var target = jq(this);
@@ -208,22 +225,16 @@ jQuery(function(jq) {
             up_element = document.createElement('a');
             up_element.title = 'Move Up';
             up_element.href = '';
+            up_element.className = 'atrb_move_up';
             up_element.innerHTML = '&#x25b2;';
-            up_element.onclick = function () {
-                refbrowser_moveReferenceUp(this);
-                return false;
-            };
 
             li.appendChild(up_element);
 
             down_element = document.createElement('a');
             down_element.title = 'Move Down';
             down_element.href = '';
+            down_element.className = 'atrb_move_down';
             down_element.innerHTML = '&#x25bc;';
-            down_element.onclick = function () {
-                refbrowser_moveReferenceDown(this);
-                return false;
-            };
 
             li.appendChild(down_element);
           }
@@ -295,18 +306,6 @@ jQuery(function(jq) {
 
       prevelem = document.getElementById('ref-' + widget_id + '-' + (pos - 1));
 
-      // up arrow
-      arrows = newelem.getElementsByTagName("a");
-      arrows[0].onclick = function () {
-          refbrowser_moveReferenceUp(this);
-          return false;
-      };
-      // down arrow
-      arrows[1].onclick = function () {
-          refbrowser_moveReferenceDown(this);
-          return false;
-      };
-
       elem.parentNode.insertBefore(newelem, prevelem);
       elem.parentNode.removeChild(elem);
       newelem.id = 'ref-' + widget_id + '-' + (pos - 1);
@@ -341,18 +340,6 @@ jQuery(function(jq) {
       if (cbs.length > 0) {
           cbs[0].checked = elem.getElementsByTagName("input")[0].checked;
       }
-
-      // up img
-      arrows = newelem.getElementsByTagName("a");
-      arrows[0].onclick = function () {
-          refbrowser_moveReferenceUp(this);
-          return false;
-      };
-      // down img
-      arrows[1].onclick = function () {
-          refbrowser_moveReferenceDown(this);
-          return false;
-      };
 
       nextelem = document.getElementById('ref-' + widget_id + '-' + (pos + 1));
 
