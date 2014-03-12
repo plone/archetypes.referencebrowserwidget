@@ -27,7 +27,8 @@ class UtilsIntegrationTestCase(unittest.TestCase):
     layer = ATRB_WITH_DATA_INTEGRATION
 
     def setUp(self):
-        self.folder = self.layer['layer2']
+        portal = self.layer['portal']
+        self.folder = portal.layer1.layer2
         makeContent(self.folder, portal_type='Document', id='doc1')
         makeContent(self.folder, portal_type='Folder', id='folder1')
         makeContent(self.folder, portal_type='Folder', id='folder2')
@@ -40,25 +41,25 @@ class UtilsIntegrationTestCase(unittest.TestCase):
     def test_emptystartupdir(self):
         self.assertEqual(
             utils.getStartupDirectory(self.doc1, ''),
-            '/plone/layer1/layer2/doc1')
+            'http://nohost/plone/layer1/layer2/doc1')
 
     def test_absstartupdir(self):
         self.assertEqual(
             utils.getStartupDirectory(self.doc1, '/rootfolder'),
-            '/plone/rootfolder')
+            'http://nohost/plone/rootfolder')
 
     def test_relstartupdir(self):
         self.assertEqual(
             utils.getStartupDirectory(self.doc2, '../../folder2'),
-            '/plone/layer1/layer2/folder2')
+            'http://nohost/plone/layer1/layer2/folder2')
 
         self.assertEqual(
             utils.getStartupDirectory(self.doc2, '..'),
-            '/plone/layer1/layer2/folder1/subfolder1')
+            'http://nohost/plone/layer1/layer2/folder1/subfolder1')
 
         self.assertEqual(
             utils.getStartupDirectory(self.doc2, '../..'),
-            '/plone/layer1/layer2/folder1')
+            'http://nohost/plone/layer1/layer2/folder1')
 
 
 def test_suite():

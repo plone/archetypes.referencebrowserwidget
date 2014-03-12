@@ -11,6 +11,7 @@ from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 
 from plone.app.robotframework.testing import REMOTE_LIBRARY_BUNDLE_FIXTURE
+from plone.app.robotframework.testing import SIMPLE_PUBLICATION_FIXTURE
 
 import archetypes.referencebrowserwidget
 
@@ -26,34 +27,35 @@ ATRB_SAMPLE_TYPES = PloneWithPackageLayer(
 
 class ReferenceBrowserWidgetWithData(Layer):
 
-    def testSetUp(self):
+    def setUp(self):
+        self.createMemberArea()
         self.createDefaultStructure()
 
-    def testTearDown(self):
-        self.removeDefaultStructure()
+    def createMemberArea(self):
+        with ploneSite() as portal:
+            setRoles(portal, TEST_USER_ID, ['Manager'])
+            members = makeContent(portal, portal_type='Folder', id='Members')
+            portal.portal_membership.memberareaCreationFlag = True
+            portal.portal_membership.createMemberArea()
+            pw = portal.portal_workflow
+            pw.doActionFor(members, 'publish')
 
     def createDefaultStructure(self):
         with ploneSite() as portal:
-            if 'layer1' not in portal.objectIds():
-                setRoles(portal, TEST_USER_ID, ['Manager'])
-                makeContent(portal, portal_type='Folder', id='layer1')
-                portal.layer1.setTitle('Layer1')
-                portal.layer1.reindexObject()
-                makeContent(portal.layer1, portal_type='Folder', id='layer2')
-                self.folder = portal.layer1.layer2
-                self.folder.setTitle('Layer2')
-                self.folder.reindexObject()
-                setRoles(portal, TEST_USER_ID, ['Member'])
-        self['layer2'] = portal.layer1.layer2
+            makeContent(portal, portal_type='Folder', id='layer1')
+            portal.layer1.setTitle('Layer1')
+            portal.layer1.reindexObject()
+            makeContent(portal.layer1, portal_type='Folder', id='layer2')
+            folder = portal.layer1.layer2
+            folder.setTitle('Layer2')
+            folder.reindexObject()
+            setRoles(portal, TEST_USER_ID, ['Member'])
 
-    def removeDefaultStructure(self):
-        with ploneSite() as portal:
-            if 'layer1' in portal.objectIds():
-                portal._delObject('layer1')
 
 ATRB_WITH_DATA = ReferenceBrowserWidgetWithData(
     bases=(
         ATRB_SAMPLE_TYPES,
+        SIMPLE_PUBLICATION_FIXTURE,
     ),
     name="ATRB_WITH_DATA",
 )
