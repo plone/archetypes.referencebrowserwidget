@@ -4,19 +4,21 @@ from Products.CMFCore.permissions import AddPortalContent
 from archetypes.referencebrowserwidget.config import PROJECTNAME
 from archetypes.referencebrowserwidget.config import WITH_SAMPLE_TYPES
 from archetypes.referencebrowserwidget.widget import ReferenceBrowserWidget
-ReferenceBrowserWidget # pyflakes
+
+ReferenceBrowserWidget  # pyflakes
+
 
 def initialize(context):
     import demo
-    demo   # pyflakes
+    demo  # pyflakes
     content_types, constructors, ftis = process_types(
         listTypes(PROJECTNAME),
         PROJECTNAME)
 
     ContentInit(
         PROJECTNAME + ' Content',
-        content_types      = content_types,
-        permission         = AddPortalContent,
+        content_types = content_types,
+        permission = AddPortalContent,
         extra_constructors = constructors,
         ).initialize(context)
 
@@ -29,4 +31,3 @@ if WITH_SAMPLE_TYPES:
         'profiles/sample_types',
         'archetypes.referencebrowserwidget',
         EXTENSION)
-

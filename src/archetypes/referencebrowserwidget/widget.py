@@ -4,7 +4,7 @@ from Acquisition import aq_base, aq_inner
 from AccessControl import ClassSecurityInfo
 
 from Products.Archetypes.utils import shasattr
-from Products.Archetypes.Registry import registerWidget,registerPropertyType
+from Products.Archetypes.Registry import registerWidget, registerPropertyType
 from Products.Archetypes.Widget import ReferenceWidget
 
 
@@ -86,7 +86,7 @@ class ReferenceBrowserWidget(ReferenceWidget):
                 results = method()
             elif callable(query):
                 results = query()
-            elif isinstance(query,dict):
+            elif isinstance(query, dict):
                 results = query
             else:
                 raise ValueError("Wrong format for reference widget base_query parameter")
@@ -106,14 +106,14 @@ class ReferenceBrowserWidget(ReferenceWidget):
         # Add portal type restrictions based on settings in field, if not part
         # of original base_query the template tries to do this, but ignores
         # allowed_types_method, which should override allowed_types
-        if not results.has_key('portal_type'):
+        if 'portal_type' not in results:
             allowed_types = getattr(field, 'allowed_types', ())
             allow_method = getattr(field, 'allowed_types_method', None)
             if allow_method is not None:
                 meth = getattr(instance, allow_method)
                 allowed_types = meth()
 
-            results['portal_type'] = allowed_types# + self.browsable_types
+            results['portal_type'] = allowed_types  # + self.browsable_types
 
         return results
 
@@ -130,7 +130,7 @@ class ReferenceBrowserWidget(ReferenceWidget):
         # to trigger the isempty-validator and not use the previous content of
         # the field.
         if field.required and field.multiValued and \
-           not emptyReturnsMarker and result == ([''], {}):
+                not emptyReturnsMarker and result == ([''], {}):
             return [], {}
 
         return result

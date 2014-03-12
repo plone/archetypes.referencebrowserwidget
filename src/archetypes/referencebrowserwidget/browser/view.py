@@ -45,6 +45,7 @@ default_popup_template = named_template_adapter(
 
 PMF = MessageFactory('plone')
 
+
 class ReferenceBrowserHelperView(BrowserView):
     """ A helper view for the reference browser widget.
 
@@ -62,15 +63,17 @@ class ReferenceBrowserHelperView(BrowserView):
             is supported it needs to be a list of UIDs.
         """
         if not value:
-            return queryMultiAdapter((self.context, field),
-                                     interface=IFieldRelation, default=[])
+            items = queryMultiAdapter((self.context, field),
+                                      interface=IFieldRelation, default=[])
+            return [item for item in items if item is not None]
         else:
             if isinstance(value, basestring):
                 value = [value]
             if type(value) != ListType and type(value) != TupleType:
                 return []
             catalog = getToolByName(aq_inner(self.context), REFERENCE_CATALOG)
-            return [catalog.lookupObject(uid) for uid in value if uid]
+            items = [catalog.lookupObject(uid) for uid in value if uid]
+            return [item for item in items if item is not None]
 
     def getUidFromReference(self, ref):
         """ Helper to get UID in restricted code without having rights to
@@ -266,9 +269,9 @@ class ReferenceBrowserPopup(BrowserView):
         qc = getMultiAdapter((self.context, self.request),
                              name='refbrowser_querycatalog')
         if self.widget.show_results_without_query or self.search_text:
-            result = (self.widget.show_results_without_query or \
-                      self.search_text) and \
-                      qc(search_catalog=self.widget.search_catalog)
+            result = (self.widget.show_results_without_query or
+                self.search_text) and \
+                qc(search_catalog=self.widget.search_catalog)
 
             self.has_queryresults = bool(result)
 
@@ -277,8 +280,8 @@ class ReferenceBrowserPopup(BrowserView):
                                         name="plone")
             folder = ploneview.getCurrentFolder()
             self.request.form['path'] = {
-                              'query': '/'.join(folder.getPhysicalPath()),
-                              'depth':1}
+                'query': '/'.join(folder.getPhysicalPath()),
+                'depth': 1}
             self.request.form['portal_type'] = []
             if 'sort_on' in self.widget.base_query:
                 self.request.form['sort_on'] = self.widget.base_query['sort_on']
@@ -304,15 +307,15 @@ class ReferenceBrowserPopup(BrowserView):
         if not self.widget.restrict_browsing_to_startup_directory:
             newcrumbs = [{'Title': PMF('Home'),
                           'absolute_url': self.genRefBrowserUrl(
-                                portal_state.navigation_root_url())}]
+                              portal_state.navigation_root_url())}]
         else:
             # display only crumbs into startup directory
             startup_dir_url = startup_directory or \
                 utils.getStartupDirectory(context,
                         self.widget.getStartupDirectory(context, self.field))
             newcrumbs = []
-            crumbs = [c for c in crumbs \
-                             if c['absolute_url'].startswith(startup_dir_url)]
+            crumbs = [c for c in crumbs
+                      if c['absolute_url'].startswith(startup_dir_url)]
 
         for c in crumbs:
             c['absolute_url'] = self.genRefBrowserUrl(c['absolute_url'])
@@ -323,7 +326,7 @@ class ReferenceBrowserPopup(BrowserView):
     def genRefBrowserUrl(self, urlbase):
         assert self._updated
         return "%s/%s?fieldName=%s&fieldRealName=%s&at_url=%s" % (
-       urlbase, self.__name__, self.fieldName, self.fieldRealName, self.at_url)
+            urlbase, self.__name__, self.fieldName, self.fieldRealName, self.at_url)
 
     def getUid(self, item):
         assert self._updated
@@ -340,7 +343,7 @@ class ReferenceBrowserPopup(BrowserView):
                 return None
 
         return self.has_brain and self.getUid(item) != self.brainuid or \
-               safe_get_object(item) != self.at_obj
+            safe_get_object(item) != self.at_obj
 
     def isReferencable(self, item):
         assert self._updated
@@ -352,7 +355,7 @@ class ReferenceBrowserPopup(BrowserView):
             review_state_allows = item.review_state in \
                 (self.widget.only_for_review_states or ())
         return self.getUid(item) and item_referenceable and \
-               review_state_allows and self.isNotSelf(item)
+            review_state_allows and self.isNotSelf(item)
 
     def isBrowsable(self, item):
         if not self.browsable_types:

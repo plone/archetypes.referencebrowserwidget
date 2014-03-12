@@ -1,10 +1,11 @@
 from setuptools import setup, find_packages
 import os
 
+
 def read(*rnames):
     return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
 
-version = '2.4.20.dev0'
+version = '2.5.1.dev0'
 
 long_description = (
     read('README.txt')
@@ -33,10 +34,10 @@ setup(name='archetypes.referencebrowserwidget',
       description="A referencebrowser implementation for Archetypes",
       long_description=long_description,
       classifiers=[
-        "Framework :: Plone",
-        "Programming Language :: Python",
-        "Topic :: Software Development :: Libraries :: Python Modules",
-        ],
+          "Framework :: Plone",
+          "Programming Language :: Python",
+          "Topic :: Software Development :: Libraries :: Python Modules",
+          ],
       keywords='Relation Widget',
       author='Tom Gross',
       author_email='itconsense@gmail.com',
