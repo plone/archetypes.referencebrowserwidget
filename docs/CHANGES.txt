@@ -4,7 +4,13 @@ Changelog
 2.4.21 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- Migrate calls to jQuery live() to calls to jQuery 1.7 on()
+  Iow, break with plone.app.jquery==1.4.x
+  [gotcha]
+
+- Fix reference reordering and remove reference (for single value)
+  See https://dev.plone.org/ticket/13879
+  [gotcha]
 
 
 2.4.20 (2014-01-28)
