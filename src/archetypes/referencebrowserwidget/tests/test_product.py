@@ -620,7 +620,7 @@ class IntegrationTestCase(FunctionalTestCase):
         assert ('<input type="hidden" name="singleRef" id="ref_browser_singleRef" /> ') in body
         assert ('<input type="button" class="searchButton addreference" '
                 'value="Add..." src="') in body
-        assert '''<input type="button" class="destructive atrb_remove" value="Clear reference" onclick="" />''' in body
+        assert '''<input type="button" class="destructive atrb_remove" value="Clear reference" />''' in body
 
     def getNormalizedPopup(self, url=None, field=None, startup_path=None):
         if url is None:
