@@ -1,9 +1,11 @@
 jQuery(function(jq) {
 
+  var atrb_overlays = jq('[id^=atrb_]');
+
   // Move the overlay div to be a direct child
   // of body to avoid IE7 z-index bug.
   // TODO: load this with prepOverlay to standardize this.
-  jq('[id^=atrb_]').detach().appendTo("body");
+  atrb_overlays.detach().appendTo("body");
 
   // the overlay itself
   jq('.addreference').overlay({
@@ -28,25 +30,27 @@ jQuery(function(jq) {
            disablecurrentrelations(widget_id);
        }});
 
-  jq('a.atrb_move_up').live('click', function(event) {
+  var atrb_widgets = jq('[id^=ref_browser_items_]');
+
+  atrb_widgets.on('click', 'a.atrb_move_up', function(event) {
       event.preventDefault()
       refbrowser_moveReferenceUp(this);
   });
 
-  jq('a.atrb_move_down').live('click', function(event) {
+  atrb_widgets.on('click', 'a.atrb_move_down', function(event) {
       event.preventDefault()
       refbrowser_moveReferenceDown(this);
   });
 
-  jq('input.atrb_remove').live('click', function(event) {
+  jq('input.atrb_remove').click(function(event) {
       event.preventDefault()
       var fieldname = jq(this.parentNode.parentNode).data('fieldname');
       var widget_id = 'ref_browser_' + fieldname;
       refbrowser_removeReference(widget_id, 0);
   });
 
-  // the breadcrumb-links and the links of the 'tree'-navigati        on
-  jq('[id^=atrb_] a.browsesite', jq('body')[0]).live('click', function(event) {
+  // the breadcrumb-links and the links of the 'tree'-navigation
+  atrb_overlays.on('click', 'a.browsesite', function(event) {
       var target = jq(this);
       var src = target.attr('href');
       var wrap = target.parents('.overlaycontent');
@@ -65,7 +69,7 @@ jQuery(function(jq) {
       });
 
   // the links for inserting referencens
-  jq('[id^=atrb_] input.insertreference', jq('body')[0]).live('click', function(event) {
+  atrb_overlays.on('click', 'input.insertreference', function(event) {
       var target = jq(this);
       var wrap = target.parents('.overlaycontent');
       var fieldname = wrap.find('input[name=fieldName]').attr('value');
@@ -98,7 +102,7 @@ jQuery(function(jq) {
 
 
   // the history menu
-  jq('[id^=atrb_] form#history select[name=path]', jq('body')[0]).live('change', function(event) {
+  atrb_overlays.on('change', 'form#history select[name=path]', function(event) {
       var target = jq(this);
       var wrap = target.parents('.overlaycontent');
       var src_selector = '[id^=atrb_] form#history ' +
@@ -110,7 +114,7 @@ jQuery(function(jq) {
       });
 
   // the pagination links
-  jq('[id^=atrb_] .listingBar a', jq('body')[0]).live('click', function(event) {
+  atrb_overlays.on('click', '.listingBar a', function(event) {
       var target = jq(this);
       var src = target.attr('href');
       var wrap = target.parents('.overlaycontent');
@@ -150,10 +154,9 @@ jQuery(function(jq) {
 
   // the search form
   // // This does not catch form submission via enter in FF but does in IE
-  jq('[id^=atrb_] form#search').live('submit', do_atref_search);
+  atrb_overlays.on('submit', 'form#search', do_atref_search);
   //     // This catches form submission in FF
-  jq('[id^=atrb_] form#search input[name=submit]',
-      jq('body')[0]).live('click',do_atref_search);
+  atrb_overlays.on('click', 'form#search input[name=submit]', do_atref_search);
 
   function disablecurrentrelations (widget_id) {
      jq('ul#' + widget_id + ' :input').each(
