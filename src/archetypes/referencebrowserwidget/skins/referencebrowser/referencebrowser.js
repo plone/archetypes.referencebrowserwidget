@@ -30,7 +30,7 @@ jQuery(function(jq) {
            disablecurrentrelations(widget_id);
        }});
 
-  var atrb_widgets = jq('[id^=ref_browser_items_]');
+  var atrb_widgets = jq('div.ArchetypesReferenceBrowserWidget');
 
   atrb_widgets.on('click', 'a.atrb_move_up', function(event) {
       event.preventDefault()
