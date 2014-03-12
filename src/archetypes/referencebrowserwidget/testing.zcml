@@ -1,0 +1,19 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:five="http://namespaces.zope.org/five"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
+    xmlns:cmf="http://namespaces.zope.org/cmf"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="atreferencebrowserwidget">
+
+    <include file="configure.zcml" />
+
+    <genericsetup:registerProfile
+       name="testing"
+       title="Tests for Referencebrowser widget"
+       directory="profiles/sample_types"
+       description="An alternate referencebrowser implementation"
+       provides="Products.GenericSetup.interfaces.EXTENSION"
+       />
+
+</configure>
