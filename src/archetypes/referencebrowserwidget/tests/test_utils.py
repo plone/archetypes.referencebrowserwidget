@@ -1,7 +1,9 @@
 import unittest
 
 from archetypes.referencebrowserwidget import utils
-from archetypes.referencebrowserwidget.tests.base import TestCase
+from archetypes.referencebrowserwidget.testing import (
+    ATRB_WITH_DATA_INTEGRATION
+)
 from Products.Archetypes.tests.utils import makeContent
 
 
@@ -20,10 +22,13 @@ class UtilsTestCase(unittest.TestCase):
         assert utils.quotequery('foo and or bar') == 'foo and "or" bar'
 
 
-class PloneUtilsTestCase(TestCase):
+class UtilsIntegrationTestCase(unittest.TestCase):
 
-    def afterSetUp(self):
-        self.folder = self.createDefaultStructure()
+    layer = ATRB_WITH_DATA_INTEGRATION
+
+    def setUp(self):
+        portal = self.layer['portal']
+        self.folder = portal.layer1.layer2
         makeContent(self.folder, portal_type='Document', id='doc1')
         makeContent(self.folder, portal_type='Folder', id='folder1')
         makeContent(self.folder, portal_type='Folder', id='folder2')
@@ -32,9 +37,6 @@ class PloneUtilsTestCase(TestCase):
                     portal_type='Document', id='doc2')
         self.doc1 = self.folder.doc1
         self.doc2 = self.folder.folder1.subfolder1.doc2
-
-    def beforeTearDown(self):
-        self.removeDefaultStructure()
 
     def test_emptystartupdir(self):
         self.assertEqual(

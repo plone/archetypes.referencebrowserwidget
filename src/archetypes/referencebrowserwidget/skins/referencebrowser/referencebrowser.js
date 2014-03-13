@@ -1,9 +1,11 @@
 jQuery(function(jq) {
 
+  var atrb_overlays = jq('[id^=atrb_]');
+
   // Move the overlay div to be a direct child
   // of body to avoid IE7 z-index bug.
   // TODO: load this with prepOverlay to standardize this.
-  jq('[id^=atrb_]').detach().appendTo("body");
+  atrb_overlays.detach().appendTo("body");
 
   // the overlay itself
   jq('.addreference').overlay({
@@ -28,8 +30,27 @@ jQuery(function(jq) {
            disablecurrentrelations(widget_id);
        }});
 
-  // the breadcrumb-links and the links of the 'tree'-navigati        on
-  jq('[id^=atrb_] a.browsesite', jq('body')[0]).live('click', function(event) {
+  var atrb_widgets = jq('div.ArchetypesReferenceBrowserWidget');
+
+  atrb_widgets.on('click', 'a.atrb_move_up', function(event) {
+      event.preventDefault()
+      refbrowser_moveReferenceUp(this);
+  });
+
+  atrb_widgets.on('click', 'a.atrb_move_down', function(event) {
+      event.preventDefault()
+      refbrowser_moveReferenceDown(this);
+  });
+
+  jq('input.atrb_remove').click(function(event) {
+      event.preventDefault()
+      var fieldname = jq(this.parentNode.parentNode).data('fieldname');
+      var widget_id = 'ref_browser_' + fieldname;
+      refbrowser_removeReference(widget_id, 0);
+  });
+
+  // the breadcrumb-links and the links of the 'tree'-navigation
+  atrb_overlays.on('click', 'a.browsesite', function(event) {
       var target = jq(this);
       var src = target.attr('href');
       var wrap = target.parents('.overlaycontent');
@@ -48,7 +69,7 @@ jQuery(function(jq) {
       });
 
   // the links for inserting referencens
-  jq('[id^=atrb_] input.insertreference', jq('body')[0]).live('click', function(event) {
+  atrb_overlays.on('click', 'input.insertreference', function(event) {
       var target = jq(this);
       var wrap = target.parents('.overlaycontent');
       var fieldname = wrap.find('input[name=fieldName]').attr('value');
@@ -81,7 +102,7 @@ jQuery(function(jq) {
 
 
   // the history menu
-  jq('[id^=atrb_] form#history select[name=path]', jq('body')[0]).live('change', function(event) {
+  atrb_overlays.on('change', 'form#history select[name=path]', function(event) {
       var target = jq(this);
       var wrap = target.parents('.overlaycontent');
       var src_selector = '[id^=atrb_] form#history ' +
@@ -93,7 +114,7 @@ jQuery(function(jq) {
       });
 
   // the pagination links
-  jq('[id^=atrb_] .listingBar a', jq('body')[0]).live('click', function(event) {
+  atrb_overlays.on('click', '.listingBar a', function(event) {
       var target = jq(this);
       var src = target.attr('href');
       var wrap = target.parents('.overlaycontent');
@@ -133,10 +154,9 @@ jQuery(function(jq) {
 
   // the search form
   // // This does not catch form submission via enter in FF but does in IE
-  jq('[id^=atrb_] form#search').live('submit', do_atref_search);
+  atrb_overlays.on('submit', 'form#search', do_atref_search);
   //     // This catches form submission in FF
-  jq('[id^=atrb_] form#search input[name=submit]',
-      jq('body')[0]).live('click',do_atref_search);
+  atrb_overlays.on('click', 'form#search input[name=submit]', do_atref_search);
 
   function disablecurrentrelations (widget_id) {
      jq('ul#' + widget_id + ' :input').each(
@@ -178,9 +198,9 @@ jQuery(function(jq) {
           }
           // now add the new item
           var fieldname = widget_id.substr('ref_browser_items_'.length);
-          list = document.getElementById(widget_id);
+          var list_element = jq('ul#' + widget_id);
           // add ul-element to DOM, if it is not there
-          if (list === null) {
+          if ( list_element.length === 0) {
               container = jq('#archetypes-fieldname-' + fieldname +
                              ' input + div');
               if (!container.length) {
@@ -189,48 +209,26 @@ jQuery(function(jq) {
               }
               container.after(
                  '<ul class="visualNoMarker" id="' + widget_id + '"></ul>');
-              list = document.getElementById(widget_id);
+              list_element = jq('ul#' + widget_id);
           }
-          li = document.createElement('li');
-          label_element = document.createElement('label');
-          input = document.createElement('input');
-          input.type = 'checkbox';
-          input.value = uid;
-          input.checked = true;
-          input.name = fieldname + ':list';
-          label_element.appendChild(input);
-          label_element.appendChild(document.createTextNode(' ' + label));
-          li.appendChild(label_element);
-          li.id = 'ref-' + fieldname + '-' + current_values.length;
+
+          var input_element = jq('<input type="checkbox" checked=""/>');
+          input_element.attr({value: uid, name: fieldname + ':list'});
+
+          var label_element = jq('<label/>');
+          label_element.text(' ' + label);
+          label_element.prepend(input_element);
+          
+          var li_element = jq('<li />');
+          li_element.attr('id', 'ref-' + fieldname + '-' + current_values.length);
+          li_element.append(label_element);
 
           sortable = jq('input[name=' + fieldname + '-sortable]').attr('value');
           if (sortable === '1') {
-            up_element = document.createElement('a');
-            up_element.title = 'Move Up';
-            up_element.href = '';
-            up_element.innerHTML = '&#x25b2;';
-            up_element.onclick = function () {
-                refbrowser_moveReferenceUp(this);
-                return false;
-            };
-
-            li.appendChild(up_element);
-
-            down_element = document.createElement('a');
-            down_element.title = 'Move Down';
-            down_element.href = '';
-            down_element.innerHTML = '&#x25bc;';
-            down_element.onclick = function () {
-                refbrowser_moveReferenceDown(this);
-                return false;
-            };
-
-            li.appendChild(down_element);
+            li_element.append('<a title="Move Up" class="atrb_move_up" href="">&#x25b2;</a>')
+            li_element.append('<a title="Move Down" class="atrb_move_down" href="">&#x25bc;</a>')
           }
-          list.appendChild(li);
-
-          // fix on IE7 - check *after* adding to DOM
-          input.checked = true;
+          list_element.append(li_element);
       }
   }
 
@@ -295,18 +293,6 @@ jQuery(function(jq) {
 
       prevelem = document.getElementById('ref-' + widget_id + '-' + (pos - 1));
 
-      // up arrow
-      arrows = newelem.getElementsByTagName("a");
-      arrows[0].onclick = function () {
-          refbrowser_moveReferenceUp(this);
-          return false;
-      };
-      // down arrow
-      arrows[1].onclick = function () {
-          refbrowser_moveReferenceDown(this);
-          return false;
-      };
-
       elem.parentNode.insertBefore(newelem, prevelem);
       elem.parentNode.removeChild(elem);
       newelem.id = 'ref-' + widget_id + '-' + (pos - 1);
@@ -341,18 +327,6 @@ jQuery(function(jq) {
       if (cbs.length > 0) {
           cbs[0].checked = elem.getElementsByTagName("input")[0].checked;
       }
-
-      // up img
-      arrows = newelem.getElementsByTagName("a");
-      arrows[0].onclick = function () {
-          refbrowser_moveReferenceUp(this);
-          return false;
-      };
-      // down img
-      arrows[1].onclick = function () {
-          refbrowser_moveReferenceDown(this);
-          return false;
-      };
 
       nextelem = document.getElementById('ref-' + widget_id + '-' + (pos + 1));
 

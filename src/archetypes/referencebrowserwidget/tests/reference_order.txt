@@ -1,11 +1,19 @@
 This test demonstrates, that the reference widget keep order when changed
 The setup consists of a source (context) and two documents (targets):
 
-  >>> self.setRoles(['Manager'])
+  >>> from plone.app.testing import setRoles
+  >>> from plone.app.testing import TEST_USER_ID
+  >>> from plone.app.testing import TEST_USER_NAME
+  >>> portal = layer['portal']
+  >>> setRoles(portal, TEST_USER_ID, ['Manager'])
+  >>> folder = portal.portal_membership.getHomeFolder()
+  >>> pw = portal.portal_workflow
+  >>> pw.getInfoFor(folder, 'review_state')
+  'private'
   >>> from Products.Archetypes.tests.utils import makeContent
-  >>> context = makeContent(self.folder, portal_type='RefBrowserDemo', id='ref')
-  >>> doc1 = makeContent(self.folder, portal_type='Document', id='doc1')
-  >>> doc2 = makeContent(self.folder, portal_type='Document', id='doc2')
+  >>> context = makeContent(folder, portal_type='RefBrowserDemo', id='ref')
+  >>> doc1 = makeContent(folder, portal_type='Document', id='doc1')
+  >>> doc2 = makeContent(folder, portal_type='Document', id='doc2')
 
 We want to test for doc1 and doc2 in the browser output later, so we turn off
 both portlet columns, since they will contain references to both at all times
@@ -16,12 +24,12 @@ both portlet columns, since they will contain references to both at all times
   >>> from plone.portlets.interfaces import IPortletAssignmentMapping
 
   >>> left_column = getUtility(IPortletManager, name=u"plone.leftcolumn")
-  >>> left_assignable = getMultiAdapter((self.portal, left_column), IPortletAssignmentMapping)
+  >>> left_assignable = getMultiAdapter((portal, left_column), IPortletAssignmentMapping)
   >>> for name in left_assignable.keys():
   ...     del left_assignable[name]
 
   >>> right_column = getUtility(IPortletManager, name=u"plone.rightcolumn")
-  >>> right_assignable = getMultiAdapter((self.portal, right_column), IPortletAssignmentMapping)
+  >>> right_assignable = getMultiAdapter((portal, right_column), IPortletAssignmentMapping)
   >>> for name in right_assignable.keys():
   ...     del right_assignable[name]
 
@@ -30,14 +38,32 @@ both portlet columns, since they will contain references to both at all times
 
   >>> context.setMultiRef((doc1.UID(), doc2.UID()))
   >>> context.reindexObject()
+  >>> import transaction
+  >>> transaction.commit()
 
 For now, doc1 appears before doc2 (order is kept) on the edit form:
-  >>> try:
-  ...     from Testing.testbrowser import Browser
-  ... except ImportError:
-  ...     from Products.Five.testbrowser import Browser
-  >>> browser = Browser()
-  >>> browser.addHeader('Authorization', 'Basic %s:%s' % ('test_user_1_', 'secret'))
+  
+  >>> app = layer['app']
+  >>> from plone.testing.z2 import Browser
+  >>> browser = Browser(app)
+  >>> browser.handleErrors = False
+  >>> import base64
+  >>> basic_auth = 'Basic {0}'.format(
+  ...     base64.encodestring('{0}:{1}'.format(TEST_USER_NAME, 'secret'))
+  ... )
+  >>> browser.addHeader('Authorization', basic_auth)
+  >>> members = folder.aq_parent
+  >>> members.getId()
+  'Members'
+  >>> browser.open(members.absolute_url())
+  >>> browser.url
+  'http://nohost/plone/Members'
+  >>> browser.open(folder.absolute_url())
+  >>> browser.url
+  'http://nohost/plone/Members/test_user_1_'
+  >>> browser.open(context.absolute_url())
+  >>> browser.url
+  'http://nohost/plone/Members/test_user_1_/ref'
   >>> browser.open(context.absolute_url() + "/edit")
   >>> browser.url
   'http://nohost/plone/Members/test_user_1_/ref/edit'
@@ -55,6 +81,7 @@ And on the view :
 Change order and re-edit :
   >>> context.setMultiRef((doc2.UID(), doc1.UID()))
   >>> context.reindexObject()
+  >>> transaction.commit()
   >>> browser.open(context.absolute_url() + "/edit")
   >>> browser.getControl(name="multiRef:list").value == [doc2.UID(), doc1.UID()]
   True

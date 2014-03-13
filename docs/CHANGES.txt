@@ -4,7 +4,16 @@ Changelog
 2.5.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Migrate tests to plone.app.testing
+  [gotcha]
+
+- Migrate calls to jQuery live() to calls to jQuery 1.7 on()
+  Iow, break with plone.app.jquery==1.4.x
+  [gotcha]
+
+- Fix reference reordering and remove reference (for single value)
+  See https://dev.plone.org/ticket/13879
+  [gotcha]
 
 
 2.5.0 (2014-02-23)
@@ -12,6 +21,10 @@ Changelog
 
 - Do not use portal_interface tool but @@plone_interface_info (PLIP #13770).
   [ale-rt]
+
+
+2.4.20 (2014-01-28)
+-------------------
 
 - Filter out references that are None.  This may happen when the
   reference_catalog has links from a source to a no longer existing

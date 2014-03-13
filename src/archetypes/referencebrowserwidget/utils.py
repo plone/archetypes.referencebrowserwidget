@@ -37,7 +37,7 @@ def getStartupDirectory(context, directory=''):
         reference to portal_factory.
         """
 
-        portal_factory = getToolByName(context, 'portal_factory')
+        portal_factory = getToolByName(context, 'portal_factory', None)
 
         # Prepend / to ensure proper path separation, and ensure url is a string
         if url:
@@ -46,7 +46,7 @@ def getStartupDirectory(context, directory=''):
             url = ''
 
         basePath = ''
-        if portal_factory.isTemporary(context):
+        if portal_factory and portal_factory.isTemporary(context):
             pathParts = context.getPhysicalPath()
 
             # Remove the factory from the path

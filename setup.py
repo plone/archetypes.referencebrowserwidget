@@ -64,6 +64,12 @@ setup(name='archetypes.referencebrowserwidget',
 #          'plone.uuid'
 # Older versions of jquerytools don't work. See #10939
       ],
+      extras_require=dict(
+          test=[
+              'plone.app.testing',
+              'plone.app.robotframework',
+          ]
+      ),
       entry_points="""
       # -*- Entry points: -*-
       """,

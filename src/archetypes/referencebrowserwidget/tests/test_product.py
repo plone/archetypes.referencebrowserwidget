@@ -1,60 +1,61 @@
 import unittest
 import os.path
 import re
+import base64
 from urllib import urlencode
 
+import transaction
 import zope.component
+from zope.component import getMultiAdapter
 import zope.interface
 from zope.formlib.namedtemplate import INamedTemplate
 from zope.publisher.browser import TestRequest
 
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.Five import BrowserView
-try:
-    from Testing.testbrowser import Browser  # Zope >= 2.13
-    Browser   # pyflakes
-except ImportError:
-    from Products.Five.testbrowser import Browser  # Zope < 2.13
+
+from plone.testing import z2
+from plone.app.testing import setRoles
+from plone.app.testing import logout
+from plone.app.testing import TEST_USER_ID
+from plone.app.testing import TEST_USER_NAME
+from plone.app.testing import TEST_USER_PASSWORD
+from plone.app.testing import SITE_OWNER_NAME
+from plone.app.testing import SITE_OWNER_PASSWORD
 
 from plone.app.form._named import named_template_adapter
 from plone.app.layout.navigation.interfaces import INavigationRoot
 
 from Products.Archetypes.tests.utils import makeContent
 from Products.CMFCore.utils import getToolByName
-from Products.PloneTestCase.PloneTestCase import default_password
-from Products.PloneTestCase.PloneTestCase import portal_owner
-try:
-    import plone.uuid
-    plone.uuid   # pyflakes
-    import pkg_resources
-    uuid_version = pkg_resources.get_distribution("plone.uuid").version
-    if uuid_version < '1.0.2':
-        HAS_DASH_UUID = True
-    else:
-        HAS_DASH_UUID = False
-except ImportError:
-    HAS_DASH_UUID = False
 
-from Products.CMFPlone import Batch
+from Products.CMFPlone.PloneBatch import Batch
 
-from archetypes.referencebrowserwidget.tests.base import TestCase
-from archetypes.referencebrowserwidget.tests.base import FunctionalTestCase
-from archetypes.referencebrowserwidget.tests.base import PopupBaseTestCase
-from archetypes.referencebrowserwidget.tests.base import normalize
-from archetypes.referencebrowserwidget.tests.base import DummyObject
+from archetypes.referencebrowserwidget.testing import (
+    ATRB_SAMPLE_TYPES_FUNCTIONAL,
+    ATRB_WITH_DATA_INTEGRATION,
+    DummySession,
+    DummyObject,
+)
 from archetypes.referencebrowserwidget.interfaces import (
-    IFieldRelation, IReferenceBrowserHelperView)
-from archetypes.referencebrowserwidget.browser.view import \
+    IFieldRelation,
+    IReferenceBrowserHelperView,
+)
+from archetypes.referencebrowserwidget.browser.view import (
     ReferenceBrowserHelperView
+)
 
 _marker = []
 
 
-class ProductsTestCase(TestCase):
+class ProductsTestCase(unittest.TestCase):
     """ Basic product unit tests """
 
-    def afterSetUp(self):
-        self.createDefaultStructure()
+    layer = ATRB_WITH_DATA_INTEGRATION
+
+    def setUp(self):
+        self.portal = self.layer['portal']
+        self.folder = self.portal.layer1.layer2
 
     def test_skininstall(self):
         assert 'referencebrowser' in self.portal.portal_skins.objectIds()
@@ -171,8 +172,47 @@ def getPTName(filename):
     return os.path.basename(basepath)
 
 
-class PopupTestCase(PopupBaseTestCase):
+class PopupBaseTestCase(unittest.TestCase):
     """ Test the popup view """
+
+    layer = ATRB_WITH_DATA_INTEGRATION
+
+    def setUp(self):
+        self.portal = self.layer['portal']
+        self.folder = self.portal.layer1.layer2
+        makeContent(self.folder, portal_type='RefBrowserDemo', id='ref')
+        if 'news' not in self.portal.objectIds():
+            self.setRoles(['Manager'])
+            makeContent(
+                self.portal,
+                portal_type='Folder',
+                id='news',
+            )
+            self.portal.news.setTitle('News')
+            self.setRoles(['Member'])
+        self.obj = self.folder.ref
+        self.obj.reindexObject()
+        self.request = self.layer['request']
+        setattr(self.request, 'SESSION', DummySession())
+
+    def _getPopup(self, obj=None, request=None):
+        if obj is None:
+            obj = self.obj
+        if request is None:
+            request = self.request
+        popup = getMultiAdapter((obj, request), name='refbrowser_popup')
+        popup.update()
+        return popup
+
+    def setRoles(self, roles):
+        setRoles(self.portal, TEST_USER_ID, roles)
+
+    def loginAsPortalOwner(self):
+        app = self.layer['app']
+        z2.login(app['acl_users'], SITE_OWNER_NAME)
+
+
+class PopupTestCase(PopupBaseTestCase):
 
     def test_variables(self):
         fieldname = 'multiRef2'
@@ -261,14 +301,15 @@ class PopupTestCase(PopupBaseTestCase):
         self.request.set('fieldName', fieldname)
         self.request.set('fieldRealName', fieldname)
         self.request.set('search_index', 'getId')
-        self.request.set('searchValue', 'path:/plone/events')
+        self.request.set('searchValue', 'path:/plone/layer1')
         popup = self._getPopup()
         batch = popup.getResult()
         assert isinstance(batch, Batch)
         # expected to have both the folder at "path" and its contents
-        assert len(batch) == 2
-        assert batch[0].getObject() == self.portal.events
-        assert batch[1].getObject() == self.portal.events.aggregator
+        assert len(batch) == 3
+        assert batch[0].getObject() == self.portal.layer1
+        assert batch[1].getObject() == self.portal.layer1.layer2
+        assert batch[2].getObject() == self.portal.layer1.layer2.ref
         assert popup.has_queryresults
 
     def test_noquery(self):
@@ -424,11 +465,15 @@ class PopupBreadcrumbTestCase(PopupBaseTestCase):
         assert popup.isNotSelf(refbrain) is False
 
 
-class HelperViewTestCase(TestCase):
+class HelperViewTestCase(unittest.TestCase):
     """ Test the helper view """
 
-    def afterSetUp(self):
-        self.createDefaultStructure()
+    layer = ATRB_WITH_DATA_INTEGRATION
+
+    def setUp(self):
+        self.app = self.layer['app']
+        self.portal = self.layer['portal']
+        self.folder = self.portal.layer1.layer2
 
     def test_interface(self):
         zope.interface.verify.verifyClass(IReferenceBrowserHelperView,
@@ -547,11 +592,18 @@ class HelperViewTestCase(TestCase):
         self.assertEqual(helper.getAtURL(), '/plone/layer1/with%20space')
 
     def test_getUidFromReference_fallback_to_UID(self):
+
         _marker = object()
+
         class DummyRef(object):
+
             def UID(self):
                 return _marker
-        helper = ReferenceBrowserHelperView(DummyObject('/plone/foo'), TestRequest())
+
+        helper = ReferenceBrowserHelperView(
+            DummyObject('/plone/foo'),
+            TestRequest()
+        )
         self.assertTrue(helper.getUidFromReference(DummyRef()) is _marker)
 
     def test_canview(self):
@@ -559,21 +611,39 @@ class HelperViewTestCase(TestCase):
         request = TestRequest()
         helper = ReferenceBrowserHelperView(self.portal, request)
         self.assertTrue(helper.canView(self.folder.doc1))
-        self.logout()
+        logout()
         self.assertFalse(helper.canView(self.folder.doc1))
 
 
-class IntegrationTestCase(FunctionalTestCase):
+def normalize(s):
+    """ Helper method for integration tests """
+    return ' '.join(s.split())
+
+
+class FunctionalTestCase(unittest.TestCase):
     """ Browser/publish tests of referencebrowser widget
     """
 
-    def afterSetUp(self):
-        self.setRoles(['Manager'])
+    layer = ATRB_SAMPLE_TYPES_FUNCTIONAL
+
+    def setUp(self):
+        self.portal = self.layer['portal']
+        setRoles(self.portal, TEST_USER_ID, ['Manager'])
         makeContent(self.portal, portal_type='RefBrowserDemo', id='demo1')
         makeContent(self.portal, portal_type='Document', id='page1')
         makeContent(self.portal, portal_type='Folder', id='folder1')
-        self.demo1_url = self.portal.demo1.absolute_url(1)
+        transaction.commit()
+        self.demo1_url = self.portal.demo1.absolute_url()
         self.popup_url = '%s/refbrowser_popup' % self.demo1_url
+
+    def publish(self, url):
+        browser = z2.Browser(self.layer['app'])
+        browser.handleErrors = False
+        basic_auth = '%s:%s' % (TEST_USER_NAME, TEST_USER_PASSWORD)
+        basic_header = 'Basic {0}'.format(base64.encodestring(basic_auth))
+        browser.addHeader('Authorization', basic_header)
+        browser.open(url)
+        return browser.contents
 
     def test_multivalued(self):
         """ We want to support `multiValued=True/False` on fields,
@@ -586,27 +656,20 @@ class IntegrationTestCase(FunctionalTestCase):
         field = context.getField('singleRef')
         field.multiValued = 0
 
-        response = self.publish(context.absolute_url(1) + '/base_edit',
-                                self.basic_auth)
-        self.assert_(
-            'onclick="javascript:refbrowser_removeReference(\'ref_browser_singleRef\', 0)"'
-            in response.getBody())
+        html = self.publish(context.absolute_url() + '/base_edit')
+        self.assert_('atrb_remove' in html)
 
         # we want to support this as well
         field = context.getField('singleRef')
         field.multiValued = False
 
-        response = self.publish(context.absolute_url(1) + '/base_edit',
-                                self.basic_auth)
+        html = self.publish(context.absolute_url() + '/base_edit')
         # this should be the same
-        self.assert_(
-            'onclick="javascript:refbrowser_removeReference(\'ref_browser_singleRef\', 0)"'
-            in response.getBody())
+        self.assert_('atrb_remove' in html)
 
     def test_basewidget(self):
-        response = self.publish('%s/base_edit' % self.demo1_url,
-                                self.basic_auth)
-        body = normalize(response.getBody())
+        html = self.publish('%s/base_edit' % self.demo1_url)
+        body = normalize(html)
         assert ('<script type="text/javascript" charset="iso-8859-1" '
                 'src="http://nohost/plone/referencebrowser.js"> '
                 '</script>') in body
@@ -618,99 +681,140 @@ class IntegrationTestCase(FunctionalTestCase):
             'id="archetypes-fieldname-singleRef"'))
         assert widgetdiv.search(body)
         assert (
-            '<input id="ref_browser_singleRef_label" size="50" type="text" readonly="readonly" '
+            '<input id="ref_browser_singleRef_label" size="50" type="text" '
+            'readonly="readonly" '
             'value="No reference set. Click the add button to select." /> '
             ) in body
-        assert ('<input type="hidden" name="singleRef" id="ref_browser_singleRef" /> ') in body
+        assert (
+            '<input type="hidden" name="singleRef" '
+            'id="ref_browser_singleRef" /> '
+            ) in body
         assert ('<input type="button" class="searchButton addreference" '
                 'value="Add..." src="') in body
-        assert '''<input type="button" class="destructive" value="Clear reference" onclick="javascript:refbrowser_removeReference('ref_browser_singleRef', 0)" />''' in body
+        assert ('<input type="button" class="destructive atrb_remove" '
+                'value="Clear reference" />') in body
 
     def getNormalizedPopup(self, url=None, field=None, startup_path=None):
         if url is None:
-            url = self.demo1_url
+            url = self.portal.demo1.absolute_url(1)
         if field is None:
             field = 'singleRef'
         if startup_path is None:
             startup_path = self.popup_url
-        response = self.publish(
+        html = self.publish(
             '%s?fieldName=%s&fieldRealName=%s&at_url=%s'
-            % (startup_path, field, field, url), self.basic_auth)
+            % (startup_path, field, field, url))
 
-        return normalize(response.getBody())
+        return normalize(html)
 
     def test_quoted_url(self):
-        makeContent(self.portal, portal_type='RefBrowserDemo', id='spaced demo')
+        makeContent(
+            self.portal,
+            portal_type='RefBrowserDemo',
+            id='spaced demo'
+        )
+        transaction.commit()
         url = self.portal['spaced demo'].absolute_url(1)
         body = self.getNormalizedPopup(url)
-        assert '<input type="hidden" name="at_url" value="plone/spaced%20demo" />' in body
+        assert ('<input type="hidden" name="at_url" '
+                'value="plone/spaced%20demo" />') in body
 
     def test_popup_html(self):
         body = self.getNormalizedPopup()
-        assert '''<body class="popup atrefbrowser" id="atrefbrowserpopup"''' in body
+        assert ('<body class="popup atrefbrowser" '
+                'id="atrefbrowserpopup"') in body
 
-        assert '<input type="hidden" name="fieldName" value="singleRef" />' in body
-        assert '<input type="hidden" name="fieldRealName" value="singleRef" />' in body
-        assert '<input type="hidden" name="at_url" value="plone/demo1" />' in body
+        assert ('<input type="hidden" name="fieldName" '
+                'value="singleRef" />') in body
+        assert ('<input type="hidden" name="fieldRealName" '
+                'value="singleRef" />') in body
+        assert ('<input type="hidden" name="at_url" '
+                'value="plone/demo1" />') in body
 
     def test_popup_items(self):
-        wanted_rows = 7
-        wanted_insertlinks = 2
+        wanted_rows = 3  # demo1, page1, folder1
+        wanted_insertlinks = 1  # page1
+
+        try:
+            import plone.uuid
+            plone.uuid   # pyflakes
+            import pkg_resources
+            uuid_version = pkg_resources.get_distribution("plone.uuid").version
+            if uuid_version < '1.0.2':
+                HAS_DASH_UUID = True
+            else:
+                HAS_DASH_UUID = False
+        except ImportError:
+            HAS_DASH_UUID = False
+        if HAS_DASH_UUID:
+            INSERTLINK = re.compile(
+                r'<input type="checkbox" class="insertreference" '
+                'id="[\w]{8}-[\w]{4}-[\w]{4}-[\w]{4}-[\w]{12}" '
+                'rel="[\w]{8}-[\w]{4}-[\w]{4}-[\w]{4}-[\w]{12}" />'
+            )
+        else:
+            INSERTLINK = re.compile(
+                r'<input type="checkbox" class="insertreference" '
+                'id="[0-9a-f]*?" rel="[0-9a-f]*?" />'
+            )
+        ROWS = re.compile(r'<tr.*?>(.*?)</tr>', re.MULTILINE | re.DOTALL)
 
         body = self.getNormalizedPopup()
-        INSERTLINK = re.compile(r'<input type="checkbox" class="insertreference" id="[0-9a-f]*?" rel="[0-9a-f]*?" />')
-        INSERTLINK_UUID = re.compile(r'<input type="checkbox" class="insertreference" id="[\w]{8}-[\w]{4}-[\w]{4}-[\w]{4}-[\w]{12}" rel="[\w]{8}-[\w]{4}-[\w]{4}-[\w]{4}-[\w]{12}" />')
-
-        ROWS = re.compile(r'<tr.*?>(.*?)</tr>', re.MULTILINE|re.DOTALL)
         self.assertEqual(len(ROWS.findall(body)), wanted_rows)
-        if HAS_DASH_UUID:
-            self.assertEqual(len(INSERTLINK_UUID.findall(body)), wanted_insertlinks)
-        else:
-            self.assertEqual(len(INSERTLINK.findall(body)), wanted_insertlinks)
+        self.assertEqual(len(INSERTLINK.findall(body)), wanted_insertlinks)
 
         makeContent(self.portal, portal_type='News Item', id='newsitem')
-        body = self.getNormalizedPopup()
+        makeContent(self.portal, portal_type='Document', id='document')
+        transaction.commit()
 
-        self.assertEqual(len(ROWS.findall(body)), wanted_rows + 1)
-        if HAS_DASH_UUID:
-            self.assertEqual(len(INSERTLINK_UUID.findall(body)), wanted_insertlinks)
-        else:
-            self.assertEqual(len(INSERTLINK.findall(body)), wanted_insertlinks)
+        body = self.getNormalizedPopup()
+        self.assertEqual(len(ROWS.findall(body)), wanted_rows + 2)
+        self.assertEqual(len(INSERTLINK.findall(body)), wanted_insertlinks + 1)
 
     def test_bc_navigationroot(self):
+
+        browser = z2.Browser(self.layer['app'])
+        basic_auth = 'Basic {0}'.format(
+            base64.encodestring(
+                '{0}:{1}'.format(SITE_OWNER_NAME, SITE_OWNER_PASSWORD)
+            )
+        )
+        browser.addHeader('Authorization', basic_auth)
+
         makeContent(self.portal.folder1, portal_type='Document', id='page1')
-
         page = self.portal.folder1.page1
-
-        browser = Browser()
         data = {
             'fieldName': 'relatedItems',
             'fieldRealName': 'relatedItems',
             'at_url': page.absolute_url(1)}
+        transaction.commit()
 
-        basic = '%s:%s' % (portal_owner, default_password)
-
-        browser.addHeader('Authorization', 'Basic %s' % basic)
-        browser.open('%s/refbrowser_popup?%s' % (page.absolute_url(),
-                                                 urlencode(data)))
-        self.assertTrue(('<a class="browsesite" href="http://nohost/plone/refbrowser_popup?'
-                         'fieldName=relatedItems&amp;fieldRealName=relatedItems'
-                         '&amp;at_url=plone/folder1/page1" rel="Home"> '
-                         '<span>Home</span> </a>')
-                        in normalize(browser.contents))
+        url = '%s/refbrowser_popup?%s' % (page.absolute_url(), urlencode(data))
+        browser.open(url)
+        html = browser.contents
+        self.assertTrue((
+            '<a class="browsesite" href="http://nohost/plone/refbrowser_popup?'
+            'fieldName=relatedItems&amp;fieldRealName=relatedItems'
+            '&amp;at_url=plone/folder1/page1" rel="Home"> '
+            '<span>Home</span> </a>'
+            ) in normalize(html))
 
         # now let's change the navigation root
         zope.interface.alsoProvides(self.portal.folder1, INavigationRoot)
-        browser.open('%s/refbrowser_popup?%s' % (page.absolute_url(),
-                                                 urlencode(data)))
-        self.assertTrue(('<a class="browsesite" href="http://nohost/plone/folder1/refbrowser_popup?'
-                         'fieldName=relatedItems&amp;fieldRealName=relatedItems'
-                         '&amp;at_url=plone/folder1/page1" rel="Home"> '
-                         '<span>Home</span> </a>')
-                        in normalize(browser.contents))
+        transaction.commit()
+
+        browser.open(url)
+        html = browser.contents
+        self.assertTrue((
+            '<a class="browsesite" '
+            'href="http://nohost/plone/folder1/refbrowser_popup?'
+            'fieldName=relatedItems&amp;fieldRealName=relatedItems'
+            '&amp;at_url=plone/folder1/page1" rel="Home"> '
+            '<span>Home</span> </a>'
+            ) in normalize(html))
 
     def test_startup_directory(self):
-        startup_path = self.portal.folder1.absolute_url(1)
+        startup_path = self.portal.folder1.absolute_url()
         body = self.getNormalizedPopup(startup_path=startup_path,
                                        field='multiRef3')
         self.assertTrue(
@@ -732,5 +836,5 @@ def test_suite():
         unittest.makeSuite(PopupTestCase),
         unittest.makeSuite(PopupBreadcrumbTestCase),
         unittest.makeSuite(HelperViewTestCase),
-        unittest.makeSuite(IntegrationTestCase),
+        unittest.makeSuite(FunctionalTestCase),
         ])

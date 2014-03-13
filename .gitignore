@@ -3,3 +3,17 @@
 *.pyo
 build
 dist
+bin
+lib
+include
+parts
+var
+develop-eggs
+eggs
+.installed.cfg
+.mr.developer.cfg
+devel/
+log.html
+report.html
+output.xml
+selenium-screenshot*
