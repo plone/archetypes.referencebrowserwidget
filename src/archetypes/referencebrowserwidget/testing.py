@@ -24,6 +24,13 @@ ATRB_SAMPLE_TYPES = PloneWithPackageLayer(
     name='ATRB_SAMPLE_TYPES',
 )
 
+ATRB_SAMPLE_TYPES_FUNCTIONAL = FunctionalTesting(
+    bases=(
+        ATRB_SAMPLE_TYPES,
+    ),
+    name="ATRB_SAMPLE_TYPES_FUNCTIONAL",
+)
+
 
 class ReferenceBrowserWidgetWithData(Layer):
 
@@ -82,3 +89,18 @@ ATRB_ROBOT_TESTING = FunctionalTesting(
     ),
     name="ATRB_ROBOT_TESTING",
 )
+
+
+class DummySession(dict):
+
+    def set(self, key, value):
+        self[key] = value
+
+
+class DummyObject(object):
+
+    def __init__(self, location):
+        self.location = location
+
+    def getPhysicalPath(self):
+        return self.location.split('/')
