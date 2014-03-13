@@ -4,6 +4,9 @@ Changelog
 2.4.21 (unreleased)
 -------------------
 
+- Migrate tests to plone.app.testing
+  [gotcha]
+
 - Migrate calls to jQuery live() to calls to jQuery 1.7 on()
   Iow, break with plone.app.jquery==1.4.x
   [gotcha]
