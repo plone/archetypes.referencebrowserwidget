@@ -94,6 +94,7 @@ Add single reference
     Go to  ${PLONE_URL}/atrb
     Click link  Edit
     Click element  css=input.searchButton.addreference
+    Wait until element is visible  css=tr:nth-child(1) input.insertreference
     Click element  css=tr:nth-child(1) input.insertreference
     Close overlay
 
