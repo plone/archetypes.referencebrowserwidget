@@ -98,4 +98,5 @@ Add single reference
     Close overlay
 
 Close overlay
+    Wait until element is visible  css=.overlay-ajax .close
     Click element  css=.overlay-ajax .close
