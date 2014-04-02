@@ -426,7 +426,7 @@ jQuery(function(jq) {
           uid_selector = "input[name='" + fieldname + ":list']",
           current = jq(uid_selector), // the widget in the form
           current_uids = current.map(function () {
-              if (jq(this).is(':checked')) {
+              if (this.checked === true) {
                   return jq(this).attr('value');
               }
               return null;
