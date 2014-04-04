@@ -12,7 +12,7 @@ Test Setup  Test Setup
 
 *** Test cases ***
 
-# XXX: Those two tests fail randomly on Jenkins, we should either fix those
+# XXX: Those three tests fail randomly on Jenkins, we should either fix those
 # tests or remove them. Flickering tests are worse than no tests. (timo)
 # @gotcha: Feel free to fix and re-add those tests. If you don't have time,
 # let's remove them.
@@ -32,14 +32,14 @@ Test Setup  Test Setup
 #    Click link  Edit
 #    Textfield Value Should Be  css=#ref_browser_singleRef_label  No reference set. Click the add button to select.
 
-Move reference down while adding (before saving)
-    Add two related items
-    Click element  css=#ref-relatedItems-0 .atrb_move_down
-    Click element  name=form.button.save
-    ${first-related}=  Get text  css=#relatedItemBox dd:nth-child(2) a
-    Should be equal  ${first-related}  Second Page
-    ${second-related}=  Get text  css=#relatedItemBox dd:nth-child(3) a
-    Should be equal  ${second-related}  First Page
+#Move reference down while adding (before saving)
+#    Add two related items
+#    Click element  css=#ref-relatedItems-0 .atrb_move_down
+#    Click element  name=form.button.save
+#    ${first-related}=  Get text  css=#relatedItemBox dd:nth-child(2) a
+#    Should be equal  ${first-related}  Second Page
+#    ${second-related}=  Get text  css=#relatedItemBox dd:nth-child(3) a
+#    Should be equal  ${second-related}  First Page
 
 Move reference down after saving
     Add two related items
