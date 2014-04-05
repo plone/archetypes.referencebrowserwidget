@@ -4,7 +4,9 @@ Changelog
 2.5.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Use foward compatable test for checked items with jQuery >=1.7 
+  fixes https://dev.plone.org/ticket/13853
+  [arterrey]
 
 
 2.5.0 (2014-02-23)
