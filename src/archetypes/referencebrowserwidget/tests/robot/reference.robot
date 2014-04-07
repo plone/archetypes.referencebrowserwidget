@@ -12,7 +12,7 @@ Test Setup  Test Setup
 
 *** Test cases ***
 
-# XXX: Those four tests fail randomly on Jenkins, we should either fix those
+# XXX: Those three tests fail randomly on Jenkins, we should either fix those
 # tests or remove them. Flickering tests are worse than no tests. (timo)
 # @gotcha: Feel free to fix and re-add those tests. If you don't have time,
 # let's remove them.
@@ -53,14 +53,14 @@ Test Setup  Test Setup
 #    ${second-related}=  Get text  css=#relatedItemBox dd:nth-child(3) a
 #    Should be equal  ${second-related}  First Page
 
-#Move reference up while adding (before saving)
-#    Add two related items
-#    Click element  css=#ref-relatedItems-1 .atrb_move_up
-#    Click element  name=form.button.save
-#    ${first-related}=  Get text  css=#relatedItemBox dd:nth-child(2) a
-#    Should be equal  ${first-related}  Second Page
-#    ${second-related}=  Get text  css=#relatedItemBox dd:nth-child(3) a
-#    Should be equal  ${second-related}  First Page
+Move reference up while adding (before saving)
+    Add two related items
+    Click element  css=#ref-relatedItems-1 .atrb_move_up
+    Click element  name=form.button.save
+    ${first-related}=  Get text  css=#relatedItemBox dd:nth-child(2) a
+    Should be equal  ${first-related}  Second Page
+    ${second-related}=  Get text  css=#relatedItemBox dd:nth-child(3) a
+    Should be equal  ${second-related}  First Page
 
 Move reference up after saving
     Add two related items
