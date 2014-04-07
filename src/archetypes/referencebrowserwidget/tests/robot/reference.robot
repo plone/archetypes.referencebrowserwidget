@@ -41,17 +41,17 @@ Test Setup  Test Setup
 #    ${second-related}=  Get text  css=#relatedItemBox dd:nth-child(3) a
 #    Should be equal  ${second-related}  First Page
 
-#Move reference down after saving
-#    Add two related items
-#    Click element  name=form.button.save
-#    Click link  Edit
-#    Click link  Categorization
-#    Click element  css=#ref-relatedItems-0 .atrb_move_down
-#    Click element  name=form.button.save
-#    ${first-related}=  Get text  css=#relatedItemBox dd:nth-child(2) a
-#    Should be equal  ${first-related}  Second Page
-#    ${second-related}=  Get text  css=#relatedItemBox dd:nth-child(3) a
-#    Should be equal  ${second-related}  First Page
+Move reference down after saving
+    Add two related items
+    Click element  name=form.button.save
+    Click link  Edit
+    Click link  Categorization
+    Click element  css=#ref-relatedItems-0 .atrb_move_down
+    Click element  name=form.button.save
+    ${first-related}=  Get text  css=#relatedItemBox dd:nth-child(2) a
+    Should be equal  ${first-related}  Second Page
+    ${second-related}=  Get text  css=#relatedItemBox dd:nth-child(3) a
+    Should be equal  ${second-related}  First Page
 
 Move reference up while adding (before saving)
     Add two related items
