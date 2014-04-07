@@ -1,3 +1,5 @@
+# Robot tests have been deactivated because all tests fail randomly on Jenkins.
+# @gotcha: Please fix and re-add those tests (tisto)
 from plone.testing import layered
 
 import robotsuite
