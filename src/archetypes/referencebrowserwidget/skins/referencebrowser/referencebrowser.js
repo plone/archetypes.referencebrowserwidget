@@ -1,4 +1,4 @@
-jQuery(function(jq) {
+jQuery(function (jq) {
 
     // Move the overlay div to be a direct child
     // of body to avoid IE7 z-index bug.
@@ -7,7 +7,7 @@ jQuery(function(jq) {
 
     // the overlay itself
     jq('.addreference').overlay({
-        onBeforeLoad: function() {
+        onBeforeLoad: function () {
             ov = jq('div#content').data('overlay');
             // close overlay, if there is one already
             // we only allow one referencebrowser per time
@@ -20,19 +20,19 @@ jQuery(function(jq) {
             wrap.data('srcfilter', srcfilter);
             jq('div#content').data('overlay', this);
             resetHistory();
-            wrap.load(srcfilter, function() {
+            wrap.load(srcfilter, function () {
                 var fieldname = wrap.find('input[name=fieldName]').attr('value');
                 check_referenced_items(fieldname);
             });
         },
-        onLoad: function() {
+        onLoad: function () {
             widget_id = this.getTrigger().attr('rel').substring(6);
             disablecurrentrelations(widget_id);
         }
     });
 
     // the breadcrumb-links and the links of the 'tree'-navigati        on
-    jq('[id^=atrb_] a.browsesite', jq('body')[0]).live('click', function(event) {
+    jq('[id^=atrb_] a.browsesite', jq('body')[0]).live('click', function (event) {
         var target = jq(this);
         var src = target.attr('href');
         var wrap = target.parents('.overlaycontent');
@@ -51,7 +51,7 @@ jQuery(function(jq) {
     });
 
     // the links for inserting referencens
-    jq('[id^=atrb_] input.insertreference', jq('body')[0]).live('click', function(event) {
+    jq('[id^=atrb_] input.insertreference', jq('body')[0]).live('click', function (event) {
         var target = jq(this);
         var wrap = target.parents('.overlaycontent');
         var fieldname = wrap.find('input[name=fieldName]').attr('value');
@@ -73,17 +73,17 @@ jQuery(function(jq) {
             refbrowser_delReference(fieldname, uid);
             messageId = '#messageRemoved';
         }
-        if (close_window === '1' && multi != '1') {
+        if (close_window === '1' && multi !== '1') {
             overlay = jq('div#content').data('overlay');
             overlay.close();
         } else {
             showMessage(messageId, title);
-        };
+        }
     });
 
 
     // the history menu
-    jq('[id^=atrb_] form#history select[name=path]', jq('body')[0]).live('change', function(event) {
+    jq('[id^=atrb_] form#history select[name=path]', jq('body')[0]).live('change', function (event) {
         var target = jq(this);
         var wrap = target.parents('.overlaycontent');
         var src_selector = '[id^=atrb_] form#history ' +
@@ -95,7 +95,7 @@ jQuery(function(jq) {
     });
 
     // the pagination links
-    jq('[id^=atrb_] .listingBar a', jq('body')[0]).live('click', function(event) {
+    jq('[id^=atrb_] .listingBar a', jq('body')[0]).live('click', function (event) {
         var target = jq(this);
         var src = target.attr('href');
         var wrap = target.parents('.overlaycontent');
@@ -122,7 +122,7 @@ jQuery(function(jq) {
         // if a search_index is defined (a dropdown list of selectable indexes next to the search input), we insert it to qs
         if (search_index) {
             qs += '&search_index=' + search_index;
-        };
+        }
         qs += '&fieldRealName=' + fieldrealname +
             '&fieldName=' + fieldname + '&multiValued=' + multi +
             '&close_window' + close_window + '&at_url=' + at_url;
@@ -142,7 +142,7 @@ jQuery(function(jq) {
 
     function disablecurrentrelations(widget_id) {
         jq('ul#' + widget_id + ' :input').each(
-            function(intIndex) {
+            function (intIndex) {
                 uid = jq(this).attr('value');
                 cb = jq('input[rel=' + uid + ']');
                 cb.attr('disabled', 'disabled');
@@ -178,7 +178,7 @@ jQuery(function(jq) {
                 }
             }
             // now add the new item
-            var fieldname = widget_id.substr('ref_browser_items_'.length);
+            fieldname = widget_id.substr('ref_browser_items_'.length);
             list = document.getElementById(widget_id);
             // add ul-element to DOM, if it is not there
             if (list === null) {
@@ -210,7 +210,7 @@ jQuery(function(jq) {
                 up_element.title = 'Move Up';
                 up_element.href = '';
                 up_element.innerHTML = '&#x25b2;';
-                up_element.onclick = function() {
+                up_element.onclick = function () {
                     refbrowser_moveReferenceUp(this);
                     return false;
                 };
@@ -221,7 +221,7 @@ jQuery(function(jq) {
                 down_element.title = 'Move Down';
                 down_element.href = '';
                 down_element.innerHTML = '&#x25bc;';
-                down_element.onclick = function() {
+                down_element.onclick = function () {
                     refbrowser_moveReferenceDown(this);
                     return false;
                 };
@@ -296,12 +296,12 @@ jQuery(function(jq) {
 
         // up arrow
         arrows = newelem.getElementsByTagName("a");
-        arrows[0].onclick = function() {
+        arrows[0].onclick = function () {
             refbrowser_moveReferenceUp(this);
             return false;
         };
         // down arrow
-        arrows[1].onclick = function() {
+        arrows[1].onclick = function () {
             refbrowser_moveReferenceDown(this);
             return false;
         };
@@ -342,12 +342,12 @@ jQuery(function(jq) {
 
         // up img
         arrows = newelem.getElementsByTagName("a");
-        arrows[0].onclick = function() {
+        arrows[0].onclick = function () {
             refbrowser_moveReferenceUp(this);
             return false;
         };
         // down img
-        arrows[1].onclick = function() {
+        arrows[1].onclick = function () {
             refbrowser_moveReferenceDown(this);
             return false;
         };
@@ -380,10 +380,10 @@ jQuery(function(jq) {
             height: message.height() + 20
         }, 400);
         message.fadeTo(400, 1);
-        old_message.fadeTo(400, 0, function() {
+        old_message.fadeTo(400, 0, function () {
             old_message.parent().remove();
         });
-    };
+    }
 
     function submitHistoryForm() {
         var form = document.history;
@@ -411,7 +411,7 @@ jQuery(function(jq) {
 
     function refreshOverlay(wrap, srcfilter, newoption) {
         var oldhistory = jq('[id^=atrb_] form#history select');
-        wrap.load(srcfilter, function() {
+        wrap.load(srcfilter, function () {
             jq('[id^=atrb_] form#history select').append(newoption +
                 oldhistory.html());
             ov = jq('div#content').data('overlay');
@@ -427,14 +427,14 @@ jQuery(function(jq) {
         var refs_in_overlay = jq('input.insertreference'),
             uid_selector = "input[name='" + fieldname + ":list']",
             current = jq(uid_selector), // the widget in the form
-            current_uids = current.map(function() {
+            current_uids = current.map(function () {
                 if (this.checked === true) {
                     return jq(this).attr('value');
                 }
                 return null;
             });
 
-        refs_in_overlay.each(function() {
+        refs_in_overlay.each(function () {
             var overlay_ref = jq(this),
                 uid = jq(overlay_ref).attr('rel'),
                 i;
