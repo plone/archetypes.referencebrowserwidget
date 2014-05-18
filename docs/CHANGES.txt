@@ -4,10 +4,11 @@ Changelog
 2.5.1 (unreleased)
 ------------------
 
-- Fix JavaScript for compatibility with jQuery 1.9.
+- Fix JavaScript for compatibility with jQuery 1.9 by using jQuery's ``on``,
+  attached to document, instead of ``live``.
   [thet]
 
-- Use foward compatable test for checked items with jQuery >=1.7 
+- Use foward compatable test for checked items with jQuery >=1.7
   fixes https://dev.plone.org/ticket/13853
   [arterrey]
 

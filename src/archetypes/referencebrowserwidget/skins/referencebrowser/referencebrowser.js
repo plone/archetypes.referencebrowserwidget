@@ -32,7 +32,7 @@ jQuery(function (jq) {
     });
 
     // the breadcrumb-links and the links of the 'tree'-navigati        on
-    jq('[id^=atrb_] a.browsesite', jq('body')[0]).on('click', function (event) {
+    jq(document).on('click', '[id^=atrb_] a.browsesite', function (event) {
         var target = jq(this);
         var src = target.attr('href');
         var wrap = target.parents('.overlaycontent');
@@ -51,7 +51,7 @@ jQuery(function (jq) {
     });
 
     // the links for inserting referencens
-    jq('[id^=atrb_] input.insertreference', jq('body')[0]).on('click', function (event) {
+    jq(document).on('click', '[id^=atrb_] input.insertreference', function (event) {
         var target = jq(this);
         var wrap = target.parents('.overlaycontent');
         var fieldname = wrap.find('input[name=fieldName]').attr('value');
@@ -83,7 +83,7 @@ jQuery(function (jq) {
 
 
     // the history menu
-    jq('[id^=atrb_] form#history select[name=path]', jq('body')[0]).on('change', function (event) {
+    jq(document).on('change', '[id^=atrb_] form#history select[name=path]', function (event) {
         var target = jq(this);
         var wrap = target.parents('.overlaycontent');
         var src_selector = '[id^=atrb_] form#history ' +
@@ -95,7 +95,7 @@ jQuery(function (jq) {
     });
 
     // the pagination links
-    jq('[id^=atrb_] .listingBar a', jq('body')[0]).on('click', function (event) {
+    jq(document).on('click', '[id^=atrb_] .listingBar a', function (event) {
         var target = jq(this);
         var src = target.attr('href');
         var wrap = target.parents('.overlaycontent');
@@ -135,10 +135,9 @@ jQuery(function (jq) {
 
     // the search form
     // // This does not catch form submission via enter in FF but does in IE
-    jq('[id^=atrb_] form#search').on('submit', do_atref_search);
+    jq(document).on('submit', '[id^=atrb_] form#search', do_atref_search);
     //     // This catches form submission in FF
-    jq('[id^=atrb_] form#search input[name=submit]',
-        jq('body')[0]).on('click', do_atref_search);
+    jq(document).on('click', '[id^=atrb_] form#search input[name=submit]', do_atref_search);
 
     function disablecurrentrelations(widget_id) {
         jq('ul#' + widget_id + ' :input').each(
