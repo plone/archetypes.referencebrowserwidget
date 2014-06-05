@@ -12,6 +12,9 @@ Changelog
   fixes https://dev.plone.org/ticket/13853
   [arterrey]
 
+- Fix non-multi reference selection when the referenced object 
+  no longer exists.
+  [mattss]
 
 2.5.0 (2014-02-23)
 ------------------

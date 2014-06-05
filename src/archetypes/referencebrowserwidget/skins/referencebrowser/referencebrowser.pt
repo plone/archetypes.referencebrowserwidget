@@ -110,7 +110,7 @@
           />
 
       <tal:single tal:condition="not:multiValued" >
-        <tal:value tal:condition="value">
+        <tal:value tal:condition="refs">
           <tal:block tal:define="
               obj python:refs[0];
               obj_path python: '/'.join(obj.getPhysicalPath())" >
