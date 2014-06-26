@@ -291,7 +291,7 @@ class ReferenceBrowserPopup(BrowserView):
             result = qc(search_catalog=self.widget.search_catalog)
         else:
             result = []
-        b_size = int(self.request.get('b_size', 20))
+        b_size = int(self.request.get('b_size', self.widget.batching_size or 20))
         b_start = int(self.request.get('b_start', 0))
 
         return Batch(result, b_size, b_start, orphan=1)
