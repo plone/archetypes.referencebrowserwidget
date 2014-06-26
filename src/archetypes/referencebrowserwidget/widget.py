@@ -41,6 +41,7 @@ class ReferenceBrowserWidget(ReferenceWidget):
         'browsable_types': (),
         'top_popup_helper': None,
         'bottom_popup_helper': None,
+        'batching_size': None,
         })
 
     # for documentation of properties see: README.txt
