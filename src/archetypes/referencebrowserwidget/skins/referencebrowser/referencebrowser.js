@@ -446,4 +446,15 @@ jQuery(function (jq) {
             }
         });
     }
+
+    jq(document).ready(function () {
+        jq('input.removereference').click(function (event) {
+            event.preventDefault();
+            var fieldname = $(this).data('fieldname'),
+                multivalued = $(this).data('multivalued');
+            refbrowser_removeReference('ref_browser_' + fieldname, multivalued);
+        });
+    });
+
+
 });

@@ -4,7 +4,9 @@ Changelog
 2.5.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix the "Clear Reference" button, which was not working due to the
+  refbrowser_removeReference function hidden in a anonymous function.
+  [thet]
 
 
 2.5.1 (2014-07-10)
