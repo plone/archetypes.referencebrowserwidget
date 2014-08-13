@@ -589,7 +589,7 @@ class IntegrationTestCase(FunctionalTestCase):
         response = self.publish(context.absolute_url(1) + '/base_edit',
                                 self.basic_auth)
         self.assert_(
-            'onclick="javascript:refbrowser_removeReference(\'ref_browser_singleRef\', 0)"'
+            'class="destructive removereference" value="Clear reference" data-fieldname="singleRef" data-multivalued="0"'
             in response.getBody())
 
         # we want to support this as well
@@ -600,7 +600,7 @@ class IntegrationTestCase(FunctionalTestCase):
                                 self.basic_auth)
         # this should be the same
         self.assert_(
-            'onclick="javascript:refbrowser_removeReference(\'ref_browser_singleRef\', 0)"'
+            'class="destructive removereference" value="Clear reference" data-fieldname="singleRef" data-multivalued="0"'
             in response.getBody())
 
     def test_basewidget(self):
@@ -624,7 +624,7 @@ class IntegrationTestCase(FunctionalTestCase):
         assert ('<input type="hidden" name="singleRef" id="ref_browser_singleRef" /> ') in body
         assert ('<input type="button" class="searchButton addreference" '
                 'value="Add..." src="') in body
-        assert '''<input type="button" class="destructive" value="Clear reference" onclick="javascript:refbrowser_removeReference('ref_browser_singleRef', 0)" />''' in body
+        assert '''<input type="button" class="destructive removereference" value="Clear reference" data-fieldname="singleRef" data-multivalued="0" />''' in body
 
     def getNormalizedPopup(self, url=None, field=None, startup_path=None):
         if url is None:

@@ -193,7 +193,7 @@
                            popup_height widget/popup_height|string:550;"
                tal:attributes="src string:${startup_directory}/refbrowser_popup?fieldName=${fieldName}&amp;fieldRealName=${field/getName}&amp;at_url=${at_url};
                            rel string:#${overlay_id}" />
-        <input type="button" class="destructive removereference" value="Clear reference" onclick=""
+        <input type="button" class="destructive removereference" value="Clear reference"
                i18n:attributes="value label_remove_reference"
                tal:condition="not:multiValued"
                tal:attributes="data-fieldname fieldName;
