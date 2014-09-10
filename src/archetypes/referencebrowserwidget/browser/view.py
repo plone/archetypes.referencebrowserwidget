@@ -282,6 +282,7 @@ class ReferenceBrowserPopup(BrowserView):
             self.request.form['path'] = {
                 'query': '/'.join(folder.getPhysicalPath()),
                 'depth': 1}
+            self.request.form['portal_type'] = []
             if 'sort_on' in self.widget.base_query:
                 self.request.form['sort_on'] = self.widget.base_query['sort_on']
             else:
