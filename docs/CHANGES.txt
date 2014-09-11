@@ -7,6 +7,9 @@ Changelog
 - Fix the "Clear Reference" button, which was not working due to the
   refbrowser_removeReference function hidden in a anonymous function.
   [thet]
+  
+- fixed allowed_types
+  [agitator]
 
 
 2.5.1 (2014-07-10)
