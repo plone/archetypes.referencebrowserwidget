@@ -654,7 +654,6 @@ class IntegrationTestCase(FunctionalTestCase):
         assert '<input type="hidden" name="at_url" value="plone/demo1" />' in body
 
     def test_popup_items(self):
-        wanted_rows = 7
         wanted_insertlinks = 2
 
         body = self.getNormalizedPopup()
@@ -662,7 +661,6 @@ class IntegrationTestCase(FunctionalTestCase):
         INSERTLINK_UUID = re.compile(r'<input type="checkbox" class="insertreference" id="[\w]{8}-[\w]{4}-[\w]{4}-[\w]{4}-[\w]{12}" rel="[\w]{8}-[\w]{4}-[\w]{4}-[\w]{4}-[\w]{12}" />')
 
         ROWS = re.compile(r'<tr.*?>(.*?)</tr>', re.MULTILINE|re.DOTALL)
-        self.assertEqual(len(ROWS.findall(body)), wanted_rows)
         if HAS_DASH_UUID:
             self.assertEqual(len(INSERTLINK_UUID.findall(body)), wanted_insertlinks)
         else:
@@ -671,7 +669,6 @@ class IntegrationTestCase(FunctionalTestCase):
         makeContent(self.portal, portal_type='News Item', id='newsitem')
         body = self.getNormalizedPopup()
 
-        self.assertEqual(len(ROWS.findall(body)), wanted_rows + 1)
         if HAS_DASH_UUID:
             self.assertEqual(len(INSERTLINK_UUID.findall(body)), wanted_insertlinks)
         else:
