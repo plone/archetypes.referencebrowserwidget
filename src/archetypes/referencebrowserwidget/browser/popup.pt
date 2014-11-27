@@ -192,9 +192,12 @@
         </td>
 
         <td tal:condition="image_portal_types">
-          <img tal:condition="python: item.Type in image_portal_types"
-               tal:attributes="src string:${item/getURL}/$image_method"
-               />
+          <label tal:condition="referenceable"
+                 tal:attributes="for uid;">
+            <img tal:condition="python: item.Type in image_portal_types"
+                 tal:attributes="src string:${item/getURL}/$image_method"
+                 />
+          </label>
         </td>
         <td tal:attributes="class python:'contenttype-' + normalizeString(item.portal_type)">
           <img tal:define="icon item/getIcon"
