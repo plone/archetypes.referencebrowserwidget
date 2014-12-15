@@ -26,7 +26,7 @@
         <tal:block condition="python: (can_view or not hide_inaccessible)"
                    define="obj python:refs[0];
                            obj_path python: '/'.join(obj.getPhysicalPath());
-                           obj_interface_info nocall:obj/@@plone_interface_info
+                           obj_interface_info nocall:obj/@@plone_interface_info;
                            can_view python: helper.canView(obj)">
           <img src="#" alt="Image"
               tal:condition="python: obj.portal_type in image_portal_types"
