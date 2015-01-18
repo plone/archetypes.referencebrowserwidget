@@ -122,7 +122,9 @@ The popup window can be configured using the following widget properties:
 * base_query: defines query terms that will apply to all searches, mainly
   useful to create specific restrictions when allow_browse=0.  Can be
   either a dictonary with query parameters, or the name of a method or
-  callable available in cotext that will return such a dictionary.
+  callable available in context that will return such a dictionary.
+  Could be also a browser view name to be looked up and context.
+  They view must be callable and return a query dictionary.
 
 * hide_inaccessible: don't show inaccessible objects (no permission) in view
   mode.

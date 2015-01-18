@@ -201,8 +201,9 @@ class ReferenceBrowserPopup(BrowserView):
         base_props = getToolByName(aq_inner(context), 'base_properties', None)
         if base_props is not None:
 
-            self.discreetColor = getattr(base_props, 'discreetColor',
-                    DISCREETCOLOR)
+            self.discreetColor = getattr(base_props,
+                                         'discreetColor',
+                                         DISCREETCOLOR)
         else:
             # XXX This concept has changed in Plone 4.0
             self.discreetColor = DISCREETCOLOR
@@ -224,13 +225,13 @@ class ReferenceBrowserPopup(BrowserView):
             self.brainuid = at_brain.UID
         else:
             self.at_obj = context.restrictedTraverse(
-                    urllib.unquote(self.at_url))
+                urllib.unquote(self.at_url))
         self.field = self.at_obj.Schema()[self.fieldRealName]
         self.widget = self.field.widget
         self.multiValued = int(self.field.multiValued)
         self.search_index = self.request.get('search_index',
                                              self.widget.default_search_index)
-        self.request.set(self.search_index, self.search_text)
+        self.request.form[self.search_index] = self.search_text
 
         base_query = self.widget.getBaseQuery(self.at_obj, self.field)
         self.allowed_types = base_query.get('portal_type', '')
@@ -270,7 +271,7 @@ class ReferenceBrowserPopup(BrowserView):
                              name='refbrowser_querycatalog')
         if self.widget.show_results_without_query or self.search_text:
             result = (self.widget.show_results_without_query or
-                self.search_text) and \
+                      self.search_text) and \
                 qc(search_catalog=self.widget.search_catalog)
 
             self.has_queryresults = bool(result)
@@ -311,8 +312,10 @@ class ReferenceBrowserPopup(BrowserView):
         else:
             # display only crumbs into startup directory
             startup_dir_url = startup_directory or \
-                utils.getStartupDirectory(context,
-                        self.widget.getStartupDirectory(context, self.field))
+                utils.getStartupDirectory(
+                    context,
+                    self.widget.getStartupDirectory(context, self.field)
+                )
             newcrumbs = []
             crumbs = [c for c in crumbs
                       if c['absolute_url'].startswith(startup_dir_url)]
@@ -384,5 +387,5 @@ class ReferenceBrowserPopup(BrowserView):
         site_properties = portal_properties.site_properties
         types_use_view = site_properties.typesUseViewActionInListings
         if item.portal_type in types_use_view:
-            return item.getURL()+'/view'
+            return item.getURL() + '/view'
         return item.getURL()

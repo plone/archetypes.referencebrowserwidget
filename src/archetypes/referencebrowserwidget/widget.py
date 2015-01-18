@@ -3,6 +3,8 @@ from types import StringType
 from Acquisition import aq_base, aq_inner
 from AccessControl import ClassSecurityInfo
 
+from zope.component import queryMultiAdapter
+
 from Products.Archetypes.utils import shasattr
 from Products.Archetypes.Registry import registerWidget, registerPropertyType
 from Products.Archetypes.Widget import ReferenceWidget
@@ -90,6 +92,11 @@ class ReferenceBrowserWidget(ReferenceWidget):
                 results = query()
             elif isinstance(query, dict):
                 results = query
+            elif isinstance(query, basestring):
+                view = queryMultiAdapter((instance, instance.REQUEST),
+                                         name=query)
+                if view:
+                    results = view()
             else:
                 raise ValueError("Wrong format for reference widget base_query parameter")
         else:
