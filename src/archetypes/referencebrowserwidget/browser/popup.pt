@@ -180,7 +180,8 @@
             referenceable python:view.isReferencable(item);
             browsable python:allow_browse and view.isBrowsable(item);
             title_or_id python:view.title_or_id(item);
-            color view/discreetColor;">
+            color view/discreetColor;"
+        tal:condition="python: referenceable or browsable or not isNotSelf">
 
           <tr tal:define="oddrow repeat/item/odd"
           tal:attributes="class python:oddrow and 'even' or 'odd'">
