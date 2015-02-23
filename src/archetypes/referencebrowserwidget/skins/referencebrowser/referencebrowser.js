@@ -454,7 +454,17 @@ jQuery(function (jq) {
                 multivalued = $(this).data('multivalued');
             refbrowser_removeReference('ref_browser_' + fieldname, multivalued);
         });
-    });
 
+        jq('a[data-move-direction]').click(function (event) {
+            event.preventDefault();
+            var direction = jq(this).attr('data-move-direction');
+            if (direction=='up') {
+                refbrowser_moveReferenceUp(this);
+            } else {
+                refbrowser_moveReferenceDown(this);
+            }
+
+        });
+    });
 
 });

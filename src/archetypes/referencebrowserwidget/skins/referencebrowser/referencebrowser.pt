@@ -173,10 +173,8 @@
               </label>
 
               <tal:sorting condition="widget/allow_sorting">
-                <a href="" title="Move up"
-                    onclick="javascript:refbrowser_moveReferenceUp(this); return false">&#x25b2;</a>
-                <a href="" title="Move down"
-                    onclick="javascript:refbrowser_moveReferenceDown(this); return false">&#x25bc;</a>
+                <a href="" title="Move up" data-move-direction="up">&#x25b2;</a>
+                <a href="" title="Move down" data-move-direction="down">&#x25bc;</a>
               </tal:sorting>
 
             </li>
