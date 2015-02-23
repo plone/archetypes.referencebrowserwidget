@@ -6,9 +6,14 @@ Changelog
 
 - Replaced ``jq`` usage with ``$``
   [keul]
+
 - Fixing reference sorting issue due to global function refactoring done
   on recent versions
   [keul]
+
+- #16 fix browsing for widgets in case field has set ``allowed_types``
+
+>>>>>>> ed36daf... undo changes introduced with a537138d8fbfdbacd571886dd3728debe45ea9ee
 
 2.5.2 (2014-09-11)
 ------------------

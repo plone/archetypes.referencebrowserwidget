@@ -18,7 +18,7 @@ from Products.Five import BrowserView
 try:
     # Zope >= 2.13
     from AccessControl.security import checkPermission
-    checkPermission   # pyflakes
+    checkPermission  # pyflakes
 except ImportError:
     from Products.Five.security import checkPermission
 
@@ -282,6 +282,7 @@ class ReferenceBrowserPopup(BrowserView):
             self.request.form['path'] = {
                 'query': '/'.join(folder.getPhysicalPath()),
                 'depth': 1}
+            self.request.form['portal_type'] = []
             if 'sort_on' in self.widget.base_query:
                 self.request.form['sort_on'] = self.widget.base_query['sort_on']
             else:
@@ -292,7 +293,7 @@ class ReferenceBrowserPopup(BrowserView):
             result = []
         b_size = int(self.request.get('b_size', 20))
         b_start = int(self.request.get('b_start', 0))
-
+        
         return Batch(result, b_size, b_start, orphan=1)
 
     def breadcrumbs(self, startup_directory=None):
@@ -373,5 +374,5 @@ class ReferenceBrowserPopup(BrowserView):
         site_properties = portal_properties.site_properties
         types_use_view = site_properties.typesUseViewActionInListings
         if item.portal_type in types_use_view:
-            return item.getURL()+'/view'
+            return item.getURL() + '/view'
         return item.getURL()
