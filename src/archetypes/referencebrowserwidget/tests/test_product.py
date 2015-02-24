@@ -668,15 +668,24 @@ class IntegrationTestCase(FunctionalTestCase):
         else:
             self.assertEqual(len(INSERTLINK.findall(body)), wanted_insertlinks)
 
+        # add a news-item, which is not shown in the popup because its not in allowed_types
         makeContent(self.portal, portal_type='News Item', id='newsitem')
         body = self.getNormalizedPopup()
-
-        self.assertEqual(len(ROWS.findall(body)), wanted_rows + 1)
+        self.assertEqual(len(ROWS.findall(body)), wanted_rows, 'not linkable types should not be shown')
         if HAS_DASH_UUID:
             self.assertEqual(len(INSERTLINK_UUID.findall(body)), wanted_insertlinks)
         else:
             self.assertEqual(len(INSERTLINK.findall(body)), wanted_insertlinks)
-
+            
+        # add a document, this will be addable in the popup
+        makeContent(self.portal, portal_type='Document', id='another-doc')
+        body = self.getNormalizedPopup()
+        self.assertEqual(len(ROWS.findall(body)), wanted_rows + 1)
+        if HAS_DASH_UUID:
+            self.assertEqual(len(INSERTLINK_UUID.findall(body)), wanted_insertlinks + 1)
+        else:
+            self.assertEqual(len(INSERTLINK.findall(body)), wanted_insertlinks + 1)
+            
     def test_bc_navigationroot(self):
         makeContent(self.portal.folder1, portal_type='Document', id='page1')
 
