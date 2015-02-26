@@ -251,7 +251,7 @@ class PopupTestCase(PopupBaseTestCase):
         batch = popup.getResult()
         assert isinstance(batch, Batch)
         assert len(batch) == 1
-        assert batch[0].getObject() == self.portal.news
+        assert batch[0]['item'].getObject() == self.portal.news
         assert popup.has_queryresults
 
     def test_path_query(self):
@@ -267,8 +267,8 @@ class PopupTestCase(PopupBaseTestCase):
         assert isinstance(batch, Batch)
         # expected to have both the folder at "path" and its contents
         assert len(batch) == 2
-        assert batch[0].getObject() == self.portal.events
-        assert batch[1].getObject() == self.portal.events.aggregator
+        assert batch[0]['item'].getObject() == self.portal.events
+        assert batch[1]['item'].getObject() == self.portal.events.aggregator
         assert popup.has_queryresults
 
     def test_noquery(self):
@@ -676,7 +676,7 @@ class IntegrationTestCase(FunctionalTestCase):
             self.assertEqual(len(INSERTLINK_UUID.findall(body)), wanted_insertlinks)
         else:
             self.assertEqual(len(INSERTLINK.findall(body)), wanted_insertlinks)
-            
+
         # add a document, this will be addable in the popup
         makeContent(self.portal, portal_type='Document', id='another-doc')
         body = self.getNormalizedPopup()
@@ -685,7 +685,7 @@ class IntegrationTestCase(FunctionalTestCase):
             self.assertEqual(len(INSERTLINK_UUID.findall(body)), wanted_insertlinks + 1)
         else:
             self.assertEqual(len(INSERTLINK.findall(body)), wanted_insertlinks + 1)
-            
+
     def test_bc_navigationroot(self):
         makeContent(self.portal.folder1, portal_type='Document', id='page1')
 

@@ -172,18 +172,18 @@
     <tbody>
       <tal:results tal:define="plone_view context/@@plone;
                                normalizeString nocall:plone_view/normalizeString;"
-                   tal:repeat="item batch">
+                   tal:repeat="info batch">
         <tal:row
         tal:define="
+            item info/item;
             uid python:view.getUid(item);
             isNotSelf python:view.isNotSelf(item);
-            referenceable python:view.isReferencable(item);
-            browsable python:allow_browse and view.isBrowsable(item);
+            referenceable info/referenceable;
+            browsable python:allow_browse and info['browsable'];
             title_or_id python:view.title_or_id(item);
-            color view/discreetColor;"
-        tal:condition="python: referenceable or browsable or not isNotSelf">
+            color view/discreetColor;">
 
-          <tr tal:define="oddrow repeat/item/odd"
+          <tr tal:define="oddrow repeat/info/odd"
           tal:attributes="class python:oddrow and 'even' or 'odd'">
 
         <td>
@@ -220,10 +220,10 @@
                   tal:content="title_or_id" />
           </tal:foldercheck>
           <a class="discreet"
-		     tal:condition="referenceable"
-			 onclick="window.open(jQuery(this).attr('href'));return false;"
-			 tal:attributes="href python:view.preview_url(item)">
-          	(<span i18n:translate="" i18n:domain="plone">View</span>)
+             tal:condition="referenceable"
+             onclick="window.open(jQuery(this).attr('href'));return false;"
+             tal:attributes="href python:view.preview_url(item)">
+            (<span i18n:translate="" i18n:domain="plone">View</span>)
           </a>
 
           <div tal:condition="widget/show_review_state">

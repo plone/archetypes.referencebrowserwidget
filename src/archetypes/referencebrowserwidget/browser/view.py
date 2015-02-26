@@ -289,12 +289,31 @@ class ReferenceBrowserPopup(BrowserView):
                 self.request.form['sort_on'] = 'getObjPositionInParent'
 
             result = qc(search_catalog=self.widget.search_catalog)
+
         else:
             result = []
+
         b_size = int(self.request.get('b_size', 20))
         b_start = int(self.request.get('b_start', 0))
-        
-        return Batch(result, b_size, b_start, orphan=1)
+        return Batch(self._prepareResults(result), b_size, b_start, orphan=1)
+
+    def _prepareResults(self, result):
+        items_with_info = []
+        for item in result:
+            browse = self.isBrowsable(item)
+            ref = self.isReferencable(item)
+            if self.allowed_types:
+                # we only show allowed_types and objects needed for browsing
+                if not (ref or browse or not self.isNotSelf(item)):
+                    continue
+
+            items_with_info.append(dict(
+                item=item,
+                browsable=browse,
+                referenceable=ref,
+                ))
+
+        return items_with_info
 
     def breadcrumbs(self, startup_directory=None):
         assert self._updated
