@@ -13,7 +13,11 @@ Changelog
 
 - #16 fix browsing for widgets in case field has set ``allowed_types``
 
->>>>>>> ed36daf... undo changes introduced with a537138d8fbfdbacd571886dd3728debe45ea9ee
+  (Warning: changed return value of view/getResult from 
+  `[`brain1, brain2,..]``  to ``[dict(item=brain1,browsable=True,
+  referenceable=False),...]`` in case you customized popup.pt) 
+  [fRiSi]
+
 
 2.5.2 (2014-09-11)
 ------------------
