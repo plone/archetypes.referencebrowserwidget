@@ -4,8 +4,11 @@ Changelog
 2.5.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
+- Replaced ``jq`` usage with ``$``
+  [keul]
+- Fixing reference sorting issue due to global function refactoring done
+  on recent versions
+  [keul]
 
 2.5.2 (2014-09-11)
 ------------------
