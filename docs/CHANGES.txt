@@ -9,6 +9,8 @@ Changelog
 - Fixing reference sorting issue due to global function refactoring done
   on recent versions
   [keul]
+- Add labels for images in the popup widget.
+  [mitakas]
 
 2.5.2 (2014-09-11)
 ------------------
