@@ -12,7 +12,7 @@ from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.Five import BrowserView
 try:
     from Testing.testbrowser import Browser  # Zope >= 2.13
-    Browser   # pyflakes
+    Browser  # pyflakes
 except ImportError:
     from Products.Five.testbrowser import Browser  # Zope < 2.13
 
@@ -25,7 +25,7 @@ from Products.PloneTestCase.PloneTestCase import default_password
 from Products.PloneTestCase.PloneTestCase import portal_owner
 try:
     import plone.uuid
-    plone.uuid   # pyflakes
+    plone.uuid  # pyflakes
     import pkg_resources
     uuid_version = pkg_resources.get_distribution("plone.uuid").version
     if uuid_version < '1.0.2':
@@ -199,7 +199,7 @@ class PopupTestCase(PopupBaseTestCase):
         alternate_template = named_template_adapter(
             ViewPageTemplateFile('sample.pt'))
         zope.component.provideAdapter(alternate_template,
-                                      adapts=(BrowserView, ),
+                                      adapts=(BrowserView,),
                                       provides=INamedTemplate,
                                       name='alternate')
         fieldname = 'multiRef2'
@@ -251,7 +251,7 @@ class PopupTestCase(PopupBaseTestCase):
         batch = popup.getResult()
         assert isinstance(batch, Batch)
         assert len(batch) == 1
-        assert batch[0].getObject() == self.portal.news
+        assert batch[0]['item'].getObject() == self.portal.news
         assert popup.has_queryresults
 
     def test_path_query(self):
@@ -267,8 +267,8 @@ class PopupTestCase(PopupBaseTestCase):
         assert isinstance(batch, Batch)
         # expected to have both the folder at "path" and its contents
         assert len(batch) == 2
-        assert batch[0].getObject() == self.portal.events
-        assert batch[1].getObject() == self.portal.events.aggregator
+        assert batch[0]['item'].getObject() == self.portal.events
+        assert batch[1]['item'].getObject() == self.portal.events.aggregator
         assert popup.has_queryresults
 
     def test_noquery(self):
@@ -283,7 +283,7 @@ class PopupTestCase(PopupBaseTestCase):
         batch = popup.getResult()
         assert isinstance(batch, Batch)
         assert len(batch) == 1
-        assert batch[0].getObject() == self.obj
+        assert batch[0]['item'].getObject() == self.obj
         assert popup.has_queryresults
 
     def test_title_or_id(self):
@@ -319,7 +319,7 @@ class PopupTestCase(PopupBaseTestCase):
         # now testing what URL is get for content's where "/view" if forced
         site_properties = self.portal.portal_properties.site_properties
         site_properties.typesUseViewActionInListings = ('RefBrowserDemo',)
-        assert popup.preview_url(brain) == brain.getURL()+'/view'
+        assert popup.preview_url(brain) == brain.getURL() + '/view'
 
     def test_at_url(self):
         makeContent(self.folder, portal_type='RefBrowserDemo', id='with space')
@@ -654,25 +654,37 @@ class IntegrationTestCase(FunctionalTestCase):
         assert '<input type="hidden" name="at_url" value="plone/demo1" />' in body
 
     def test_popup_items(self):
+        wanted_rows = 7
         wanted_insertlinks = 2
 
         body = self.getNormalizedPopup()
         INSERTLINK = re.compile(r'<input type="checkbox" class="insertreference" id="[0-9a-f]*?" rel="[0-9a-f]*?" />')
         INSERTLINK_UUID = re.compile(r'<input type="checkbox" class="insertreference" id="[\w]{8}-[\w]{4}-[\w]{4}-[\w]{4}-[\w]{12}" rel="[\w]{8}-[\w]{4}-[\w]{4}-[\w]{4}-[\w]{12}" />')
 
-        ROWS = re.compile(r'<tr.*?>(.*?)</tr>', re.MULTILINE|re.DOTALL)
+        ROWS = re.compile(r'<tr.*?>(.*?)</tr>', re.MULTILINE | re.DOTALL)
+        self.assertEqual(len(ROWS.findall(body)), wanted_rows)
         if HAS_DASH_UUID:
             self.assertEqual(len(INSERTLINK_UUID.findall(body)), wanted_insertlinks)
         else:
             self.assertEqual(len(INSERTLINK.findall(body)), wanted_insertlinks)
 
+        # add a news-item, which is not shown in the popup because its not in allowed_types
         makeContent(self.portal, portal_type='News Item', id='newsitem')
         body = self.getNormalizedPopup()
-
+        self.assertEqual(len(ROWS.findall(body)), wanted_rows, 'not linkable types should not be shown')
         if HAS_DASH_UUID:
             self.assertEqual(len(INSERTLINK_UUID.findall(body)), wanted_insertlinks)
         else:
             self.assertEqual(len(INSERTLINK.findall(body)), wanted_insertlinks)
+
+        # add a document, this will be addable in the popup
+        makeContent(self.portal, portal_type='Document', id='another-doc')
+        body = self.getNormalizedPopup()
+        self.assertEqual(len(ROWS.findall(body)), wanted_rows + 1)
+        if HAS_DASH_UUID:
+            self.assertEqual(len(INSERTLINK_UUID.findall(body)), wanted_insertlinks + 1)
+        else:
+            self.assertEqual(len(INSERTLINK.findall(body)), wanted_insertlinks + 1)
 
     def test_bc_navigationroot(self):
         makeContent(self.portal.folder1, portal_type='Document', id='page1')
