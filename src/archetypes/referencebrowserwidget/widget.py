@@ -40,6 +40,7 @@ class ReferenceBrowserWidget(ReferenceWidget):
         'browsable_types': (),
         'top_popup_helper': None,
         'bottom_popup_helper': None,
+        'use_wildcard_search': 1,
         })
 
     # for documentation of properties see: README.txt

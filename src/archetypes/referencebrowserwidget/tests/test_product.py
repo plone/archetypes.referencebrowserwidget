@@ -345,6 +345,59 @@ class PopupTestCase(PopupBaseTestCase):
         # content outside subsite should also be returned
         self.assertTrue(len(results) > 1)
 
+    def test_use_wildcard_search(self):
+        """Test while widget.use_wildcard_search is True or False."""
+        fieldname = 'singleRef'
+        self.request.set('at_url', '/plone/layer1/layer2/ref')
+        self.request.set('fieldName', fieldname)
+        self.request.set('fieldRealName', fieldname)
+        field = self.obj.getField(fieldname)
+        # create 2 documents we will query
+        wc1 = makeContent(self.folder, portal_type='Document', id='wildcard1', title='WildCard1')
+        wc2 = makeContent(self.folder, portal_type='Document', id='wildcard2', title='WildCard2')
+        # we will search on term 'wildcard'
+        self.request.set('search_index', 'SearchableText')
+        self.request.set('searchValue', 'wildcard')
+        self.request.set('sort_on', 'created')
+
+        # enable use_wildcard_search
+        field.widget.use_wildcard_search = True
+        # as wild card is activated, it will find folders 'layer1' and 'layer2'
+        popup = self._getPopup()
+        result = popup.getResult()
+        self.assertTrue(result.length == 2)
+        self.assertTrue(result[0]['item'].UID == wc1.UID())
+        self.assertTrue(result[1]['item'].UID == wc2.UID())
+        # we can force exact match by surrounding searchValue with ""
+        self.request.set('searchValue', '"wildcard"')
+        popup = self._getPopup()
+        self.assertTrue(not popup.getResult())
+        # exact match to something that exists...
+        self.request.set('searchValue', '"wildcard1"')
+        popup = self._getPopup()
+        result = popup.getResult()
+        self.assertTrue(result.length == 1)
+        self.assertTrue(result[0]['item'].UID == wc1.UID())
+
+        # disable use_wildcard_search
+        field.widget.use_wildcard_search = False
+        self.request.set('searchValue', 'wildcard')
+        # this will find nothing...
+        popup = self._getPopup()
+        self.assertTrue(not popup.getResult())
+        # querying exact match will find it
+        self.request.set('searchValue', 'wildcard2')
+        popup = self._getPopup()
+        result = popup.getResult()
+        self.assertTrue(result.length == 1)
+        self.assertTrue(result[0]['item'].UID == wc2.UID())
+        # using "" works too
+        self.request.set('searchValue', '"wildcard2"')
+        popup = self._getPopup()
+        result = popup.getResult()
+        self.assertTrue(result.length == 1)
+        self.assertTrue(result[0]['item'].UID == wc2.UID())
+
 
 class PopupBreadcrumbTestCase(PopupBaseTestCase):
     """ Test the popup breadcrumbs """
