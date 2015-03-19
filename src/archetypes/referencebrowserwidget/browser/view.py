@@ -264,6 +264,12 @@ class ReferenceBrowserPopup(BrowserView):
         avail = self.widget.available_indexes
         return [index for index in indexes if not avail or index in avail]
 
+    @property
+    def wildcardable_indexes(self):
+        assert self._updated
+        indexes = self.search_catalog.Indexes.values()
+        return [index.getId() for index in indexes if index.getTagName() in WILDCARDABLE_INDEXES]
+
     def getResult(self):
         assert self._updated
         result = []
@@ -271,7 +277,7 @@ class ReferenceBrowserPopup(BrowserView):
         # turn search string into a wildcard search if relevant, so if
         # wild_card_search is True and if current index is a ZCTextIndex
         index = self.search_catalog.Indexes[self.search_index]
-        if self.search_text and self.widget.use_wildcard_search and index.getTagName() in WILDCARDABLE_INDEXES:
+        if self.search_text and self.widget.use_wildcard_search and index.getId() in self.wildcardable_indexes:
             # only append a '*' if not already ending with a '*' and not surrounded
             # by " ", this is the case if user want to search exact match
             if not self.search_text.endswith('*') and \
