@@ -51,7 +51,8 @@ schema = BaseSchema.copy() + Schema((
         widget=ReferenceBrowserWidget(
             show_indexes=1,
             history_length=5,
-            description='And here is another field.  Startup directory is /Members.',
+            use_wildcard_search=False,
+            description='And here is another field.  Startup directory is /Members.  Wildcard search is disabled.',
             startup_directory='/Members')),
 
     ReferenceField('multiRef4',
