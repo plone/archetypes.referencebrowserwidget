@@ -17,6 +17,7 @@
                   search_index view/search_index;
                   search_text view/search_text;
                   wildcardable_indexes view/wildcardable_indexes;
+                  wildcardable_indexes_as_json view/wildcardable_indexes_as_json;
                   available_indexes widget/available_indexes;
                   allow_browse widget/allow_browse;
                   image_portal_types widget/image_portal_types;
@@ -105,7 +106,7 @@
               i18n:attributes="title"
               data-wildcardableIndexes="#"
               tal:attributes='title python: widget.use_wildcard_search and "wild_card_search_enabled_help" or "wild_card_search_disabled_help";
-                              data-wildcardableIndexes wildcardable_indexes'>?</span>
+                              data-wildcardableIndexes wildcardable_indexes_as_json'>?</span>
       </div>
      </tal:formactions>
 

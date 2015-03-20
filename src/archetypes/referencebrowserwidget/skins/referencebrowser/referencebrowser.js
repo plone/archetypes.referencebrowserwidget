@@ -448,7 +448,7 @@ jQuery(function ($) {
     }
 
     $(document).on('change', '#indexSelector', function (event) {
-        if ($.inArray(this.value, eval($('#searchWildcardHelp').data()['wildcardableindexes'])) === -1) {
+        if ($.inArray(this.value, $('#searchWildcardHelp').data()['wildcardableindexes']) === -1) {
             // make sure searchWildcardHelp is hidden
             $('#searchWildcardHelp').css("display", "none");
         }

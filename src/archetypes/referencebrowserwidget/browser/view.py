@@ -1,4 +1,5 @@
 from types import ListType, TupleType
+import json
 import urllib
 import re
 
@@ -39,7 +40,7 @@ from archetypes.referencebrowserwidget import utils
 from archetypes.referencebrowserwidget.config import WILDCARDABLE_INDEXES
 from archetypes.referencebrowserwidget.interfaces import IFieldRelation
 from archetypes.referencebrowserwidget.interfaces import \
-        IReferenceBrowserHelperView
+    IReferenceBrowserHelperView
 
 default_popup_template = named_template_adapter(
     ViewPageTemplateFile('popup.pt'))
@@ -269,6 +270,10 @@ class ReferenceBrowserPopup(BrowserView):
         assert self._updated
         indexes = self.search_catalog.Indexes.values()
         return [index.getId() for index in indexes if index.getTagName() in WILDCARDABLE_INDEXES]
+
+    @property
+    def wildcardable_indexes_as_json(self):
+        return json.dumps(self.wildcardable_indexes)
 
     def getResult(self):
         assert self._updated
