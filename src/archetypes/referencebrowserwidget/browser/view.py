@@ -46,7 +46,7 @@ default_popup_template = named_template_adapter(
     ViewPageTemplateFile('popup.pt'))
 
 PMF = MessageFactory('plone')
-RBWMF = MessageFactory('archetypes.referencebrowserwidget')
+_ = MessageFactory('archetypes.referencebrowserwidget')
 
 
 class ReferenceBrowserHelperView(BrowserView):
@@ -279,16 +279,16 @@ class ReferenceBrowserPopup(BrowserView):
     @property
     def wildcard_help_message(self):
         if self.widget.use_wildcard_search:
-            return RBWMF("wild_card_search_enabled_help",
-                         default="Full-text search is enabled: searching for 'budget' will also "
-                         "return elements containing 'budgetary'. If you want to search exact "
-                         "macth, add quotation marks around the word: \"budget\".")
+            return _("wild_card_search_enabled_help",
+                     default="Full-text search is enabled: searching for 'budget' will also "
+                     "return elements containing 'budgetary'. If you want to search exact "
+                     "match, add quotation marks around the word: \"budget\".")
         else:
-            return RBWMF("wild_card_search_disabled_help",
-                         default="Full-text search is disabled: searching for 'budget' will only "
-                         "return elements containing exact term 'budget'. You can enable full-text search "
-                         "by appending a '*' at the end of a word. For example, searching for 'budget*' "
-                         "will also return elements containing 'budgetary'.")
+            return _("wild_card_search_disabled_help",
+                     default="Full-text search is disabled: searching for 'budget' will only "
+                     "return elements containing exact term 'budget'. You can enable full-text search "
+                     "by appending a '*' at the end of a word. For example, searching for 'budget*' "
+                     "will also return elements containing 'budgetary'.")
 
     def getResult(self):
         assert self._updated
