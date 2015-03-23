@@ -447,6 +447,17 @@ jQuery(function ($) {
         });
     }
 
+    $(document).on('change', '#indexSelector', function (event) {
+        if ($.inArray(this.value, $('#searchWildcardHelp').data()['wildcardableindexes']) === -1) {
+            // make sure searchWildcardHelp is hidden
+            $('#searchWildcardHelp').css("display", "none");
+        }
+        else {
+            // make sure searchWildcardHelp is shown
+            $('#searchWildcardHelp').css("display", "");
+        }
+    });
+
     $(document).ready(function () {
         $('input.removereference').click(function (event) {
             event.preventDefault();

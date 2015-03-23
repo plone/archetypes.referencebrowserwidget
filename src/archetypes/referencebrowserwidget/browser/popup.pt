@@ -16,6 +16,8 @@
                   title python:widget.Label(at_obj);
                   search_index view/search_index;
                   search_text view/search_text;
+                  wildcardable_indexes view/wildcardable_indexes;
+                  wildcardable_indexes_as_json view/wildcardable_indexes_as_json;
                   available_indexes widget/available_indexes;
                   allow_browse widget/allow_browse;
                   image_portal_types widget/image_portal_types;
@@ -97,6 +99,14 @@
                i18n:domain="plone"
                i18n:attributes="value label_search;"
                />
+  &nbsp;<span style="font-weight: bold; color: grey; border-bottom: 1px dotted; cursor: help;"
+              title="#"
+              id="searchWildcardHelp"
+              tal:condition="python: search_index in wildcardable_indexes"
+              i18n:attributes="title"
+              data-wildcardableIndexes="#"
+              tal:attributes="title view/wildcard_help_message;
+                              data-wildcardableIndexes wildcardable_indexes_as_json">?</span>
       </div>
      </tal:formactions>
 

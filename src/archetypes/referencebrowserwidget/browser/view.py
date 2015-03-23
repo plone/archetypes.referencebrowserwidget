@@ -1,4 +1,5 @@
 from types import ListType, TupleType
+import json
 import urllib
 import re
 
@@ -36,14 +37,16 @@ except ImportError:
 from Products.CMFPlone.PloneBatch import Batch
 
 from archetypes.referencebrowserwidget import utils
+from archetypes.referencebrowserwidget.config import WILDCARDABLE_INDEXES
 from archetypes.referencebrowserwidget.interfaces import IFieldRelation
 from archetypes.referencebrowserwidget.interfaces import \
-        IReferenceBrowserHelperView
+    IReferenceBrowserHelperView
 
 default_popup_template = named_template_adapter(
     ViewPageTemplateFile('popup.pt'))
 
 PMF = MessageFactory('plone')
+_ = MessageFactory('archetypes.referencebrowserwidget')
 
 
 class ReferenceBrowserHelperView(BrowserView):
@@ -263,9 +266,44 @@ class ReferenceBrowserPopup(BrowserView):
         avail = self.widget.available_indexes
         return [index for index in indexes if not avail or index in avail]
 
+    @property
+    def wildcardable_indexes(self):
+        assert self._updated
+        indexes = self.search_catalog.Indexes.values()
+        return [index.getId() for index in indexes if index.getTagName() in WILDCARDABLE_INDEXES]
+
+    @property
+    def wildcardable_indexes_as_json(self):
+        return json.dumps(self.wildcardable_indexes)
+
+    @property
+    def wildcard_help_message(self):
+        if self.widget.use_wildcard_search:
+            return _("wild_card_search_enabled_help",
+                     default="Full-text search is enabled: searching for 'budget' will also "
+                     "return elements containing 'budgetary'. If you want to search exact "
+                     "match, add quotation marks around the word: \"budget\".")
+        else:
+            return _("wild_card_search_disabled_help",
+                     default="Full-text search is disabled: searching for 'budget' will only "
+                     "return elements containing exact term 'budget'. You can enable full-text search "
+                     "by appending a '*' at the end of a word. For example, searching for 'budget*' "
+                     "will also return elements containing 'budgetary'.")
+
     def getResult(self):
         assert self._updated
         result = []
+
+        # turn search string into a wildcard search if relevant, so if
+        # wild_card_search is True and if current index is a ZCTextIndex
+        index = self.search_catalog.Indexes[self.search_index]
+        if self.search_text and self.widget.use_wildcard_search and index.getId() in self.wildcardable_indexes:
+            # only append a '*' if not already ending with a '*' and not surrounded
+            # by " ", this is the case if user want to search exact match
+            if not self.search_text.endswith('*') and \
+               not (self.search_text.startswith('"') and self.search_text.endswith('"')):
+                self.request[self.search_index] = "{0}*".format(self.search_text)
+
         qc = getMultiAdapter((self.context, self.request),
                              name='refbrowser_querycatalog')
         if self.widget.show_results_without_query or self.search_text:
