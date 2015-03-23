@@ -105,8 +105,8 @@
               tal:condition="python: search_index in wildcardable_indexes"
               i18n:attributes="title"
               data-wildcardableIndexes="#"
-              tal:attributes='title python: widget.use_wildcard_search and "wild_card_search_enabled_help" or "wild_card_search_disabled_help";
-                              data-wildcardableIndexes wildcardable_indexes_as_json'>?</span>
+              tal:attributes="title view/wildcard_help_message;
+                              data-wildcardableIndexes wildcardable_indexes_as_json">?</span>
       </div>
      </tal:formactions>
 
