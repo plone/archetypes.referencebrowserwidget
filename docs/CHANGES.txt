@@ -4,6 +4,9 @@ Changelog
 2.5.3 (unreleased)
 ------------------
 
+- #23 added parameter 'use_wildcard_search' to widget, True by default
+  [gbastien]
+
 - Replaced ``jq`` usage with ``$``
   [keul]
 
@@ -17,9 +20,6 @@ Changelog
   `[`brain1, brain2,..]``  to ``[dict(item=brain1,browsable=True,
   referenceable=False),...]`` in case you customized popup.pt)
   [fRiSi]
-
-- #23 added parameter 'use_wildcard_search' to widget, True by default
-  [gbastien]
 
 
 2.5.2 (2014-09-11)
