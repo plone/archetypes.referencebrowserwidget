@@ -46,7 +46,7 @@ default_popup_template = named_template_adapter(
     ViewPageTemplateFile('popup.pt'))
 
 PMF = MessageFactory('plone')
-_ = MessageFactory('archetypes.referencebrowserwidget')
+_ = MessageFactory('atreferencebrowserwidget')
 
 
 class ReferenceBrowserHelperView(BrowserView):
