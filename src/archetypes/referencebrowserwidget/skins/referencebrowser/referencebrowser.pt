@@ -174,9 +174,9 @@
 
               <tal:sorting condition="widget/allow_sorting">
                 <a href="" title="Move up" data-move-direction="up"
-                   i18n:translate="title">&#x25b2;</a>
+                   i18n:attributes="title">&#x25b2;</a>
                 <a href="" title="Move down" data-move-direction="down"
-                   i18n:translate="title">&#x25bc;</a>
+                   i18n:attributes="title">&#x25bc;</a>
               </tal:sorting>
 
             </li>
