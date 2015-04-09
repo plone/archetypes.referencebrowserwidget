@@ -13,6 +13,8 @@ Changelog
 - Fixing reference sorting issue due to global function refactoring done
   on recent versions
   [keul]
+- Add labels for images in the popup widget.
+  [mitakas]
 
 - #16 fix browsing for widgets in case field has set ``allowed_types``
 
