@@ -13,6 +13,8 @@
           image_portal_types field/widget/image_portal_types|string:;
           image_method       field/widget/image_method|string:;
           show_path          field/widget/show_path|nothing;
+          portal_type        obj/portal_type|python:'';
+          title              obj/Title|python:'';
           hide_inaccessible  field/widget/hide_inaccessible | nothing;
           helper nocall:here/refbrowserhelper;
           portal context/@@plone_portal_state/portal;
@@ -23,26 +25,26 @@
 
 
         <tal:notMultivalued condition="not:field/multiValued">
-        <tal:block condition="python: (can_view or not hide_inaccessible)"
-                   define="obj python:refs[0];
-                           obj_path python: '/'.join(obj.getPhysicalPath());
-                           obj_interface_info nocall:obj/@@plone_interface_info;
-                           can_view python: helper.canView(obj)">
+        <tal:block condition="python: (can_view or not hide_inaccessible) and obj"
+                   define="obj refs/0|nothing;
+                           obj_path python: obj and '/'.join(obj.getPhysicalPath()) or None;
+                           obj_interface_info nocall:obj/@@plone_interface_info|nothing;
+                           can_view python: helper.canView(obj)|False">
           <img src="#" alt="Image"
-              tal:condition="python: obj.portal_type in image_portal_types"
+              tal:condition="python: portal_type in image_portal_types"
               tal:attributes="src string:${obj/absolute_url}/$image_method"
               />
 
           <a href="#"
               tal:attributes="href obj/absolute_url;
-                              class python:obj.portal_type.replace(' ', '_')"
-              tal:content="python:obj.Title() or obj.absolute_url(relative=1)"
+                              class python:portal_type.replace(' ', '_')"
+              tal:content="python:title or obj.absolute_url(relative=1)"
               >Sole target object's title</a>
 
             <a href="#"
                tal:condition="python:obj_interface_info.provides('Products.Archetypes.interfaces.referenceengine.IContentReference')"
                tal:attributes="href python:ref.getContentObject().absolute_url();
-                               class python:obj.portal_type.replace(' ', '_')"
+                               class python:portal_type.replace(' ', '_')"
                tal:content="field/relationship"
                >reference object link</a>
 
@@ -62,20 +64,20 @@
                                obj_interface_info nocall:obj/@@plone_interface_info"
                        condition="python: can_view or not hide_inaccessible">
               <li>
-                <img tal:condition="python:obj.portal_type in image_portal_types"
+                <img tal:condition="python:portal_type in image_portal_types"
                     tal:attributes="src string:${obj/absolute_url}/$image_method" />
                 <a href="#"
                     tal:attributes="
                         href obj/absolute_url;
-                        class python:obj.portal_type.replace(' ', '_')"
+                        class python:portal_type.replace(' ', '_')"
                     tal:content="
-                        python:obj.Title() or obj.absolute_url(relative=1)"
+                        python:title or obj.absolute_url(relative=1)"
                     >Target Title</a>
 
                 <a href="#"
                     tal:condition="python:obj_interface_info.provides('Products.Archetypes.interfaces.referenceengine.IContentReference')"
                     tal:attributes="href python:ref.getContentObject().absolute_url();
-                                    class python:obj.portal_type.replace(' ', '_')"
+                                    class python:portal_type.replace(' ', '_')"
                     tal:content="field/relationship"
                     >reference object link</a>
 
@@ -111,9 +113,11 @@
 
       <tal:single tal:condition="not:multiValued" >
         <tal:value tal:condition="refs">
-          <tal:block tal:define="
-              obj python:refs[0];
-              obj_path python: '/'.join(obj.getPhysicalPath())" >
+          <tal:block
+            tal:condition="obj"
+            tal:define="
+              obj refs/0|nothing;
+              obj_path python: obj and '/'.join(obj.getPhysicalPath()) or None">
 
             <input size="" type="text" value="" id="" readonly="readonly"
                 tal:attributes="
