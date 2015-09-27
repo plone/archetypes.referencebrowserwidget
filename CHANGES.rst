@@ -4,6 +4,9 @@ Changelog
 2.5.4 (unreleased)
 ------------------
 
+- Follow README/CHANGES best practice.
+  [tisto]
+  
 - saner check for isNotSelf(), which was throwing KeyError
   [alecpm, tkimnguyen]
 

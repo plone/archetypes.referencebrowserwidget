@@ -2,3 +2,5 @@ recursive-include src *
 recursive-include docs *
 global-exclude *pyc
 include *.txt
+include *.rst
+
