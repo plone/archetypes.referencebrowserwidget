@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.5.4 (unreleased)
+2.5.4 (2015-09-27)
 ------------------
 
 - Follow README/CHANGES best practice.
