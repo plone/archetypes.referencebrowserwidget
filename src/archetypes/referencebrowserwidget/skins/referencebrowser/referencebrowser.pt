@@ -14,20 +14,20 @@
           image_method       field/widget/image_method|string:;
           show_path          field/widget/show_path|nothing;
           hide_inaccessible  field/widget/hide_inaccessible | nothing;
-          helper nocall:here/refbrowserhelper;
-          portal context/@@plone_portal_state/portal;
+          multiValued        field/multiValued;
+          helper             nocall:here/refbrowserhelper;
+          portal             context/@@plone_portal_state/portal;
           portal_path        helper/getPortalPath;
-          value python: field.getEditAccessor(context)();
-          refs python:helper.getFieldRelations(field, value);"
+          value              python: field.getEditAccessor(context)();
+          refs               python:helper.getFieldRelations(field, value);"
           condition="refs">
 
-
-        <tal:notMultivalued condition="not:field/multiValued">
-        <tal:block condition="python: (can_view or not hide_inaccessible)"
-                   define="obj python:refs[0];
-                           obj_path python: '/'.join(obj.getPhysicalPath());
-                           obj_interface_info nocall:obj/@@plone_interface_info;
-                           can_view python: helper.canView(obj)">
+        <ul tal:omit-tag="not:multiValued">
+        <tal:items tal:repeat="obj refs">
+        <tal:check tal:define="can_view python:helper.canView(obj)">
+        <li tal:condition="can_view" tal:omit-tag="not:multiValued">
+        <tal:item define="obj_path python: '/'.join(obj.getPhysicalPath());
+                    obj_interface_info nocall:obj/@@plone_interface_info;">
           <img src="#" alt="Image"
               tal:condition="python: obj.portal_type in image_portal_types"
               tal:attributes="src string:${obj/absolute_url}/$image_method"
@@ -52,42 +52,13 @@
                                  >directory</span>)
             </tal:if>
 
-        </tal:block>
-        </tal:notMultivalued>
-
-        <ul tal:condition="field/multiValued">
-          <tal:block tal:repeat="obj refs">
-            <tal:block define="obj_path python: '/'.join(obj.getPhysicalPath());
-                               can_view python: helper.canView(obj);
-                               obj_interface_info nocall:obj/@@plone_interface_info"
-                       condition="python: can_view or not hide_inaccessible">
-              <li>
-                <img tal:condition="python:obj.portal_type in image_portal_types"
-                    tal:attributes="src string:${obj/absolute_url}/$image_method" />
-                <a href="#"
-                    tal:attributes="
-                        href obj/absolute_url;
-                        class python:obj.portal_type.replace(' ', '_')"
-                    tal:content="
-                        python:obj.Title() or obj.absolute_url(relative=1)"
-                    >Target Title</a>
-
-                <a href="#"
-                    tal:condition="python:obj_interface_info.provides('Products.Archetypes.interfaces.referenceengine.IContentReference')"
-                    tal:attributes="href python:ref.getContentObject().absolute_url();
-                                    class python:obj.portal_type.replace(' ', '_')"
-                    tal:content="field/relationship"
-                    >reference object link</a>
-
-                <tal:if condition="show_path"
-                     i18n:translate="label_directory">
-                     (Directory: <span i18n:name="directory"
-                                        tal:replace="python: obj_path.replace(portal_path + '/', '') "
-                                         >directory</span>)
-                </tal:if>
-              </li>
-            </tal:block>
-          </tal:block>
+        </tal:item>
+        </li>
+        <li tal:condition="not:can_view" tal:omit-tag="not:multiValued">
+          <span i18:translate="">Undisclosed</span>
+        </li>
+        </tal:check>
+        </tal:items>
         </ul>
 
       </tal:define>
