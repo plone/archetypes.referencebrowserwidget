@@ -4,7 +4,9 @@ Changelog
 2.5.5 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Show elements that the reader has no access to as "Undisclosed" instead of
+  throwing Unauthorized.
+  [pbauer]
 
 
 2.5.4 (2015-09-27)
@@ -12,7 +14,7 @@ Changelog
 
 - Follow README/CHANGES best practice.
   [tisto]
-  
+
 - saner check for isNotSelf(), which was throwing KeyError
   [alecpm, tkimnguyen]
 
