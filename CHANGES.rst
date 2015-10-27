@@ -4,6 +4,8 @@ Changelog
 2.5.5 (unreleased)
 ------------------
 
+Fixes:
+
 - Show elements that the reader has no access to as "Undisclosed" instead of
   throwing Unauthorized.
   [pbauer]
