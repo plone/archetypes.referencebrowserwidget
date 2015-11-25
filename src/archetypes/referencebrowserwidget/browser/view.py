@@ -226,8 +226,8 @@ class ReferenceBrowserPopup(BrowserView):
             self.has_brain = True
             self.brainuid = at_brain.UID
         else:
-            self.at_obj = context.restrictedTraverse(
-                    urllib.unquote(self.at_url))
+            self.at_obj = context.unrestrictedTraverse(
+                urllib.unquote(self.at_url))
         self.field = self.at_obj.Schema()[self.fieldRealName]
         self.widget = self.field.widget
         self.multiValued = int(self.field.multiValued)

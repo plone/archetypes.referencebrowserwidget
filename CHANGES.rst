@@ -10,7 +10,9 @@ New:
 
 Fixes:
 
-- *add item here*
+- Do not fail if a level of the path we are adding the object using
+  the ReferenceBrowser widget is not accessible by the current user.
+  [gbastien]
 
 
 2.5.5 (2015-10-27)
