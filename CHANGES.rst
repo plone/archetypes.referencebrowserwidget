@@ -4,10 +4,6 @@ Changelog
 2.5.6 (unreleased)
 ------------------
 
-New:
-
-- *add item here*
-
 Fixes:
 
 - Do not fail if a level of the path we are adding the object using
