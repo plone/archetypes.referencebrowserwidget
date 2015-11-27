@@ -20,6 +20,9 @@ from plone.app.form._named import named_template_adapter
 from plone.app.layout.navigation.interfaces import INavigationRoot
 
 from Products.Archetypes.tests.utils import makeContent
+from Products.CMFCore.permissions import AccessContentsInformation
+from Products.CMFCore.permissions import View
+from Products.CMFCore.utils import _checkPermission
 from Products.CMFCore.utils import getToolByName
 from Products.PloneTestCase.PloneTestCase import default_password
 from Products.PloneTestCase.PloneTestCase import portal_owner
@@ -330,6 +333,21 @@ class PopupTestCase(PopupBaseTestCase):
         self.request.set('fieldRealName', fieldname)
         popup = self._getPopup(obj=obj)
         self.assertEqual(popup.at_url, '/plone/layer1/layer2/with%20space')
+
+    def test_new_content_inaccessible_folder_in_path(self):
+        # make 'layer1' not accessible by current user
+        layer1 = self.portal.layer1
+        layer1.manage_permission(View, 'Manager')
+        layer1.manage_permission(AccessContentsInformation, 'Manager')
+        self.assertFalse(_checkPermission(AccessContentsInformation, layer1))
+        self.assertFalse(_checkPermission(View, layer1))
+        makeContent(self.folder, portal_type='RefBrowserDemo', id='accessible')
+        obj = self.folder['accessible']
+        fieldname = 'singleRef'
+        self.request.set('fieldName', fieldname)
+        self.request.set('fieldRealName', fieldname)
+        self.request.set('at_url', '/plone/layer1/layer2/accessible')
+        self.assertTrue(self._getPopup(obj=obj))
 
     def test_subsite_query(self):
         """searches should not be restricted to subsites"""
