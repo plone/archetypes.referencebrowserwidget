@@ -6,30 +6,38 @@ jQuery(function ($) {
     $('[id^=atrb_]').detach().appendTo("body");
 
     // the overlay itself
-    $('.addreference').overlay({
-        onBeforeLoad: function () {
-            ov = $('div#content').data('overlay');
-            // close overlay, if there is one already
-            // we only allow one referencebrowser per time
-            if (ov) {
-                ov.close();
-            }
-            var wrap = this.getOverlay().find('.overlaycontent');
-            var src = this.getTrigger().attr('src');
-            var srcfilter = src + ' >*';
-            wrap.data('srcfilter', srcfilter);
-            $('div#content').data('overlay', this);
-            resetHistory();
-            wrap.load(srcfilter, function () {
-                var fieldname = wrap.find('input[name=fieldName]').attr('value');
-                check_referenced_items(fieldname);
-            });
-        },
-        onLoad: function () {
-            widget_id = this.getTrigger().attr('rel').substring(6);
-            disablecurrentrelations(widget_id);
+    var _loadOverlay = function(){
+        // could be loaded after this...
+        if(!$.fn.overlay){
+            setTimeout(_loadOverlay, 50);
+            return;
         }
-    });
+        $('.addreference').overlay({
+            onBeforeLoad: function () {
+                ov = $('div#content').data('overlay');
+                // close overlay, if there is one already
+                // we only allow one referencebrowser per time
+                if (ov) {
+                    ov.close();
+                }
+                var wrap = this.getOverlay().find('.overlaycontent');
+                var src = this.getTrigger().attr('src');
+                var srcfilter = src + ' >*';
+                wrap.data('srcfilter', srcfilter);
+                $('div#content').data('overlay', this);
+                resetHistory();
+                wrap.load(srcfilter, function () {
+                    var fieldname = wrap.find('input[name=fieldName]').attr('value');
+                    check_referenced_items(fieldname);
+                });
+            },
+            onLoad: function () {
+                widget_id = this.getTrigger().attr('rel').substring(6);
+                disablecurrentrelations(widget_id);
+            }
+        });
+    };
+    _loadOverlay();
 
     // the breadcrumb-links and the links of the 'tree'-navigati        on
     $(document).on('click', '[id^=atrb_] a.browsesite', function (event) {
