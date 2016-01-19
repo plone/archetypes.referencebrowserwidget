@@ -10,7 +10,7 @@ New:
 
 Fixes:
 
-- *add item here*
+- Fix to work with Plone 5
 
 
 2.5.6 (2015-11-27)

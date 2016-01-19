@@ -55,7 +55,7 @@
         </tal:item>
         </li>
         <li tal:condition="not:can_view" tal:omit-tag="not:multiValued">
-          <span i18:translate="">Undisclosed</span>
+          <span i18n:translate="">Undisclosed</span>
         </li>
         </tal:check>
         </tal:items>
@@ -162,7 +162,7 @@
                i18n:attributes="value label_add;"
                tal:define="popup_width widget/popup_width|string:500;
                            popup_height widget/popup_height|string:550;"
-               tal:attributes="src string:${startup_directory}/refbrowser_popup?fieldName=${fieldName}&amp;fieldRealName=${field/getName}&amp;at_url=${at_url};
+               tal:attributes="src string:${startup_directory}/refbrowser_popup?fieldName=${fieldName}&amp;fieldRealName=${field/getName}&amp;at_url=${at_url}&amp;_authenticator=${context/@@authenticator/token|nothing};
                            rel string:#${overlay_id}" />
         <input type="button" class="destructive removereference" value="Clear reference"
                i18n:attributes="value label_remove_reference"
