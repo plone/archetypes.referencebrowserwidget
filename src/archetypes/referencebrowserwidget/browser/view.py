@@ -204,8 +204,8 @@ class ReferenceBrowserPopup(BrowserView):
         base_props = getToolByName(aq_inner(context), 'base_properties', None)
         if base_props is not None:
 
-            self.discreetColor = getattr(base_props, 'discreetColor',
-                    DISCREETCOLOR)
+            self.discreetColor = getattr(
+                base_props, 'discreetColor', DISCREETCOLOR)
         else:
             # XXX This concept has changed in Plone 4.0
             self.discreetColor = DISCREETCOLOR
@@ -286,8 +286,8 @@ class ReferenceBrowserPopup(BrowserView):
         else:
             return _("wild_card_search_disabled_help",
                      default="Full-text search is disabled: searching for 'budget' will only "
-                     "return elements containing exact term 'budget'. You can enable full-text search "
-                     "by appending a '*' at the end of a word. For example, searching for 'budget*' "
+                     "return elements containing exact term 'budget'. You can enable full-text search "  # noqa
+                     "by appending a '*' at the end of a word. For example, searching for 'budget*' "  # noqa
                      "will also return elements containing 'budgetary'.")
 
     def getResult(self):
@@ -297,7 +297,8 @@ class ReferenceBrowserPopup(BrowserView):
         # turn search string into a wildcard search if relevant, so if
         # wild_card_search is True and if current index is a ZCTextIndex
         index = self.search_catalog.Indexes[self.search_index]
-        if self.search_text and self.widget.use_wildcard_search and index.getId() in self.wildcardable_indexes:
+        if (self.search_text and self.widget.use_wildcard_search and
+                index.getId() in self.wildcardable_indexes):
             # only append a '*' if not already ending with a '*' and not surrounded
             # by " ", this is the case if user want to search exact match
             if not self.search_text.endswith('*') and \
@@ -307,7 +308,8 @@ class ReferenceBrowserPopup(BrowserView):
         qc = getMultiAdapter((self.context, self.request),
                              name='refbrowser_querycatalog')
         if self.widget.show_results_without_query or self.search_text:
-            result = (self.widget.show_results_without_query or
+            result = (
+                self.widget.show_results_without_query or
                 self.search_text) and \
                 qc(search_catalog=self.widget.search_catalog)
 
@@ -368,8 +370,8 @@ class ReferenceBrowserPopup(BrowserView):
         else:
             # display only crumbs into startup directory
             startup_dir_url = startup_directory or \
-                utils.getStartupDirectory(context,
-                        self.widget.getStartupDirectory(context, self.field))
+                utils.getStartupDirectory(
+                    context, self.widget.getStartupDirectory(context, self.field))
             newcrumbs = []
             crumbs = [c for c in crumbs
                       if c['absolute_url'].startswith(startup_dir_url)]
@@ -417,10 +419,6 @@ class ReferenceBrowserPopup(BrowserView):
         return getattr(item, 'Title', '') or getattr(item, 'getId', '')
 
     def preview_url(self, item):
-        portal_properties = getMultiAdapter((self.context, self.request),
-                                            name=u'plone_tools').properties()
-        site_properties = portal_properties.site_properties
-        types_use_view = site_properties.typesUseViewActionInListings
-        if item.portal_type in types_use_view:
+        if item.portal_type in utils.getTypesUseViewActionInListings(self.context, self.request):
             return item.getURL() + '/view'
         return item.getURL()

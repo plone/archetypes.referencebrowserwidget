@@ -1,31 +1,40 @@
-import unittest
 import os.path
 import re
+import unittest
 from urllib import urlencode
-
-import zope.component
-import zope.interface
-from zope.formlib.namedtemplate import INamedTemplate
-from zope.publisher.browser import TestRequest
-
-from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-from Products.Five import BrowserView
-try:
-    from Testing.testbrowser import Browser  # Zope >= 2.13
-    Browser  # pyflakes
-except ImportError:
-    from Products.Five.testbrowser import Browser  # Zope < 2.13
-
-from plone.app.form._named import named_template_adapter
-from plone.app.layout.navigation.interfaces import INavigationRoot
 
 from Products.Archetypes.tests.utils import makeContent
 from Products.CMFCore.permissions import AccessContentsInformation
 from Products.CMFCore.permissions import View
 from Products.CMFCore.utils import _checkPermission
 from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone import Batch
+from Products.Five import BrowserView
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.PloneTestCase.PloneTestCase import default_password
 from Products.PloneTestCase.PloneTestCase import portal_owner
+from archetypes.referencebrowserwidget.browser.view import ReferenceBrowserHelperView
+from archetypes.referencebrowserwidget.interfaces import IFieldRelation
+from archetypes.referencebrowserwidget.interfaces import IReferenceBrowserHelperView
+from archetypes.referencebrowserwidget.tests.base import DummyObject
+from archetypes.referencebrowserwidget.tests.base import FunctionalTestCase
+from archetypes.referencebrowserwidget.tests.base import PopupBaseTestCase
+from archetypes.referencebrowserwidget.tests.base import TestCase
+from archetypes.referencebrowserwidget.tests.base import normalize
+from plone.app.form._named import named_template_adapter
+from plone.app.layout.navigation.interfaces import INavigationRoot
+from plone.registry.interfaces import IRegistry
+from zope.component import getUtility
+import zope.component
+from zope.formlib.namedtemplate import INamedTemplate
+import zope.interface
+from zope.publisher.browser import TestRequest
+
+try:
+    from Testing.testbrowser import Browser  # Zope >= 2.13
+    Browser  # pyflakes
+except ImportError:
+    from Products.Five.testbrowser import Browser  # Zope < 2.13
 try:
     import plone.uuid
     plone.uuid  # pyflakes
@@ -37,18 +46,6 @@ try:
         HAS_DASH_UUID = False
 except ImportError:
     HAS_DASH_UUID = False
-
-from Products.CMFPlone import Batch
-
-from archetypes.referencebrowserwidget.tests.base import TestCase
-from archetypes.referencebrowserwidget.tests.base import FunctionalTestCase
-from archetypes.referencebrowserwidget.tests.base import PopupBaseTestCase
-from archetypes.referencebrowserwidget.tests.base import normalize
-from archetypes.referencebrowserwidget.tests.base import DummyObject
-from archetypes.referencebrowserwidget.interfaces import (
-    IFieldRelation, IReferenceBrowserHelperView)
-from archetypes.referencebrowserwidget.browser.view import \
-    ReferenceBrowserHelperView
 
 _marker = []
 
@@ -320,8 +317,12 @@ class PopupTestCase(PopupBaseTestCase):
         assert popup.preview_url(brain) == brain.getURL()
 
         # now testing what URL is get for content's where "/view" if forced
-        site_properties = self.portal.portal_properties.site_properties
-        site_properties.typesUseViewActionInListings = ('RefBrowserDemo',)
+        try:
+            site_properties = self.portal.portal_properties.site_properties
+            site_properties.typesUseViewActionInListings = ('RefBrowserDemo',)
+        except (AttributeError, KeyError):
+            registry = getUtility(IRegistry)
+            registry['plone.types_use_view_action_in_listings'] = ['RefBrowserDemo']
         assert popup.preview_url(brain) == brain.getURL() + '/view'
 
     def test_at_url(self):
@@ -660,7 +661,7 @@ class IntegrationTestCase(FunctionalTestCase):
         response = self.publish(context.absolute_url(1) + '/base_edit',
                                 self.basic_auth)
         self.assert_(
-            'class="destructive removereference" value="Clear reference" data-fieldname="singleRef" data-multivalued="0"'
+            'class="destructive removereference" value="Clear reference" data-fieldname="singleRef" data-multivalued="0"'  # noqa
             in response.getBody())
 
         # we want to support this as well
@@ -671,7 +672,7 @@ class IntegrationTestCase(FunctionalTestCase):
                                 self.basic_auth)
         # this should be the same
         self.assert_(
-            'class="destructive removereference" value="Clear reference" data-fieldname="singleRef" data-multivalued="0"'
+            'class="destructive removereference" value="Clear reference" data-fieldname="singleRef" data-multivalued="0"'  # noqa
             in response.getBody())
 
     def test_basewidget(self):
@@ -695,7 +696,7 @@ class IntegrationTestCase(FunctionalTestCase):
         assert ('<input type="hidden" name="singleRef" id="ref_browser_singleRef" /> ') in body
         assert ('<input type="button" class="searchButton addreference" '
                 'value="Add..." src="') in body
-        assert '''<input type="button" class="destructive removereference" value="Clear reference" data-fieldname="singleRef" data-multivalued="0" />''' in body
+        assert '''<input type="button" class="destructive removereference" value="Clear reference" data-fieldname="singleRef" data-multivalued="0" />''' in body  # noqa
 
     def getNormalizedPopup(self, url=None, field=None, startup_path=None):
         if url is None:
@@ -729,8 +730,8 @@ class IntegrationTestCase(FunctionalTestCase):
         wanted_insertlinks = 2
 
         body = self.getNormalizedPopup()
-        INSERTLINK = re.compile(r'<input type="checkbox" class="insertreference" id="[0-9a-f]*?" rel="[0-9a-f]*?" />')
-        INSERTLINK_UUID = re.compile(r'<input type="checkbox" class="insertreference" id="[\w]{8}-[\w]{4}-[\w]{4}-[\w]{4}-[\w]{12}" rel="[\w]{8}-[\w]{4}-[\w]{4}-[\w]{4}-[\w]{12}" />')
+        INSERTLINK = re.compile(r'<input type="checkbox" class="insertreference" id="[0-9a-f]*?" rel="[0-9a-f]*?" />')  # noqa
+        INSERTLINK_UUID = re.compile(r'<input type="checkbox" class="insertreference" id="[\w]{8}-[\w]{4}-[\w]{4}-[\w]{4}-[\w]{12}" rel="[\w]{8}-[\w]{4}-[\w]{4}-[\w]{4}-[\w]{12}" />')  # noqa
 
         ROWS = re.compile(r'<tr.*?>(.*?)</tr>', re.MULTILINE | re.DOTALL)
         self.assertEqual(len(ROWS.findall(body)), wanted_rows)
@@ -742,7 +743,7 @@ class IntegrationTestCase(FunctionalTestCase):
         # add a news-item, which is not shown in the popup because its not in allowed_types
         makeContent(self.portal, portal_type='News Item', id='newsitem')
         body = self.getNormalizedPopup()
-        self.assertEqual(len(ROWS.findall(body)), wanted_rows, 'not linkable types should not be shown')
+        self.assertEqual(len(ROWS.findall(body)), wanted_rows, 'not linkable types should not be shown')  # noqa
         if HAS_DASH_UUID:
             self.assertEqual(len(INSERTLINK_UUID.findall(body)), wanted_insertlinks)
         else:

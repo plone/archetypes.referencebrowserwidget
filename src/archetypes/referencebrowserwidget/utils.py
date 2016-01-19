@@ -1,5 +1,8 @@
 from Products.CMFCore.utils import getToolByName
 from ZODB.POSException import ConflictError
+from plone.registry.interfaces import IRegistry
+from zope.component import getMultiAdapter
+from zope.component import getUtility
 
 
 def getStartupDirectory(context, directory=''):
@@ -60,7 +63,7 @@ def getStartupDirectory(context, directory=''):
 
             basePath = '/'.join(pathParts)
         else:
-            basePath = context.absolute_url(relative = 1)
+            basePath = context.absolute_url(relative=1)
 
         # Resolve the URL
         try:
@@ -166,3 +169,15 @@ def getSearchCatalog(context, name=''):
         catalog = portal_catalog
 
     return catalog
+
+
+def getTypesUseViewActionInListings(context, request):
+    try:
+        portal_properties = getMultiAdapter((context, request),
+                                            name=u'plone_tools').properties()
+        site_properties = portal_properties.site_properties
+        return site_properties.typesUseViewActionInListings
+    except (AttributeError, KeyError):
+        # plone 5
+        registry = getUtility(IRegistry)
+        return registry.get('plone.types_use_view_action_in_listings', [])
