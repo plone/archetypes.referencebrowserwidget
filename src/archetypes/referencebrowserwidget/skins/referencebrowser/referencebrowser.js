@@ -103,7 +103,7 @@ jQuery(function ($) {
     });
 
     // the pagination links
-    $(document).on('click', '[id^=atrb_] .listingBar a', function (event) {
+    $(document).on('click', '[id^=atrb_] .listingBar a, [id^=atrb_] .pagination a', function (event) {
         var target = $(this);
         var src = target.attr('href');
         var wrap = target.parents('.overlaycontent');
