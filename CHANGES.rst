@@ -12,6 +12,9 @@ Fixes:
 
 - Fix to work with Plone 5
 
+- Update to work with new plone.batching "pagination" selector as well asl with old one.
+  [thet]
+
 
 2.5.6 (2015-11-27)
 ------------------
