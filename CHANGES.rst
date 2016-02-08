@@ -10,10 +10,10 @@ New:
 
 Fixes:
 
-- Fix to work with Plone 5
+- Fixed to work with Plone 5.  [vangheem]
 
-- Update to work with new plone.batching "pagination" selector as well asl with old one.
-  [thet]
+- Updated to work with new plone.batching ``pagination`` selector as
+  well as with old one.  [thet]
 
 
 2.5.6 (2015-11-27)
