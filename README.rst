@@ -13,4 +13,4 @@ Versions
 
 Version 1 of the product is a classical popup and works with Plone 3 and 4.
 Version 2 of the product displays the browser as a jQuery overlay. Currently
-it is only tested with Plone 4.
+it is only tested with Plone 4 and Plone 5.
