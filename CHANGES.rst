@@ -4,10 +4,6 @@ Changelog
 2.5.7 (unreleased)
 ------------------
 
-New:
-
-- *add item here*
-
 Fixes:
 
 - Fixed to work with Plone 5.  [vangheem]
