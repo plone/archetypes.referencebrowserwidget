@@ -49,6 +49,7 @@ PMF = MessageFactory('plone')
 _ = MessageFactory('atreferencebrowserwidget')
 
 
+@zope.interface.implementer(IReferenceBrowserHelperView)
 class ReferenceBrowserHelperView(BrowserView):
     """ A helper view for the reference browser widget.
 
@@ -56,8 +57,6 @@ class ReferenceBrowserHelperView(BrowserView):
         referencebrowser.pt template. This template needs to be in skins
         and can not be a view, since it is macro widget for Archetypes.
     """
-
-    zope.interface.implements(IReferenceBrowserHelperView)
 
     def getFieldRelations(self, field, value=None):
         """ Query relations of a field and a context.
