@@ -1,6 +1,22 @@
 Changelog
 =========
 
+2.5.9 (unreleased)
+------------------
+
+Breaking changes:
+
+- *add item here*
+
+New features:
+
+- *add item here*
+
+Bug fixes:
+
+- *add item here*
+
+
 2.5.8 (2016-08-10)
 ------------------
 
