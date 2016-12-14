@@ -16,7 +16,7 @@
   <page
       name="refbrowserhelper"
       permission="zope2.Public"
-      for="Products.ATContentTypes.interface.IATTopicCriterion"
+      for="Products.ATContentTypes.interfaces.IATTopicCriterion"
       allowed_interface="..interfaces.IReferenceBrowserHelperView"
       class=".view.ReferenceBrowserHelperView"
       />
