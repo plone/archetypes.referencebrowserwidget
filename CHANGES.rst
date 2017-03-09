@@ -4,14 +4,6 @@ Changelog
 2.5.9 (unreleased)
 ------------------
 
-Breaking changes:
-
-- *add item here*
-
-New features:
-
-- *add item here*
-
 Bug fixes:
 
 - Fix import location for Products.ATContentTypes.interfaces.
