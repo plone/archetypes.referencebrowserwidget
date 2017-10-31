@@ -295,15 +295,17 @@ class ReferenceBrowserPopup(BrowserView):
 
         # turn search string into a wildcard search if relevant, so if
         # wild_card_search is True and if current index is a ZCTextIndex
-        index = self.search_catalog.Indexes[self.search_index]
-        if (self.search_text and self.widget.use_wildcard_search and
-                index.getId() in self.wildcardable_indexes):
-            # only append a '*' if not already ending with a '*' and not surrounded
-            # by " ", this is the case if user want to search exact match
-            if not self.search_text.endswith('*') and \
-               not (self.search_text.startswith('"') and self.search_text.endswith('"')):
-                self.request[self.search_index] = "{0}*".format(self.search_text)
-
+        try:
+            index = self.search_catalog.Indexes[self.search_index]
+            if (self.search_text and self.widget.use_wildcard_search and
+                    index.getId() in self.wildcardable_indexes):
+                # only append a '*' if not already ending with a '*' and not surrounded
+                # by " ", this is the case if user want to search exact match
+                if not self.search_text.endswith('*') and \
+                   not (self.search_text.startswith('"') and self.search_text.endswith('"')):
+                    self.request[self.search_index] = "{0}*".format(self.search_text)
+        except KeyError:
+            pass
         qc = getMultiAdapter((self.context, self.request),
                              name='refbrowser_querycatalog')
         if self.widget.show_results_without_query or self.search_text:

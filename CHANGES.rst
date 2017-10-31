@@ -14,7 +14,9 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Make the automatic wildcard search from #24 compatible with collective.solr.
+  The SearchableText index might not be present at all in the portal_catalog.
+  [fredvd]
 
 
 2.5.9 (2017-03-09)
