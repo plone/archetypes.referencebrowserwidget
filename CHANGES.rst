@@ -14,7 +14,8 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Drop dependency on plone.app.form
+  [MatthewWilkes]
 
 
 2.5.9 (2017-03-09)

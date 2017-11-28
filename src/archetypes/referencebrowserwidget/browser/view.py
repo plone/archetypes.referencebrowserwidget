@@ -25,8 +25,6 @@ except ImportError:
 
 from Products.ZCTextIndex.ParseTree import ParseError
 
-from plone.app.form._named import named_template_adapter
-
 from Products.Archetypes.config import REFERENCE_CATALOG
 from Products.CMFCore.utils import getToolByName
 try:
@@ -42,7 +40,7 @@ from archetypes.referencebrowserwidget.interfaces import IFieldRelation
 from archetypes.referencebrowserwidget.interfaces import \
     IReferenceBrowserHelperView
 
-default_popup_template = named_template_adapter(
+default_popup_template = utils.named_template_adapter(
     ViewPageTemplateFile('popup.pt'))
 
 PMF = MessageFactory('plone')
