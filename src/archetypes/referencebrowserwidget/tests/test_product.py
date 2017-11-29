@@ -21,7 +21,7 @@ from archetypes.referencebrowserwidget.tests.base import FunctionalTestCase
 from archetypes.referencebrowserwidget.tests.base import PopupBaseTestCase
 from archetypes.referencebrowserwidget.tests.base import TestCase
 from archetypes.referencebrowserwidget.tests.base import normalize
-from plone.app.form._named import named_template_adapter
+from archetypes.referencebrowserwidget import utils
 from plone.app.layout.navigation.interfaces import INavigationRoot
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
@@ -196,7 +196,7 @@ class PopupTestCase(PopupBaseTestCase):
         assert getPTName(popup.template.default_template.filename) == 'popup'
 
     def test_alternatetemplate(self):
-        alternate_template = named_template_adapter(
+        alternate_template = utils.named_template_adapter(
             ViewPageTemplateFile('sample.pt'))
         zope.component.provideAdapter(alternate_template,
                                       adapts=(BrowserView,),
