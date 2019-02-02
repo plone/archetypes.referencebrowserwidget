@@ -1,20 +1,12 @@
 Changelog
 =========
 
-2.5.11 (unreleased)
--------------------
+.. You should *NOT* be adding new change log entries to this file.
+   You should create a file in the news directory instead.
+   For helpful instructions, please see:
+   https://github.com/plone/plone.releaser/blob/master/ADD-A-NEWS-ITEM.rst
 
-Breaking changes:
-
-- *add item here*
-
-New features:
-
-- *add item here*
-
-Bug fixes:
-
-- *add item here*
+.. towncrier release notes start
 
 
 2.5.10 (2017-12-11)
