@@ -214,7 +214,7 @@ class NamedTemplateAdapter(object):
     def __call__(self, *args, **kwargs):
         context = aq_inner(self.context)
         context_of_context = aq_inner(context.context)
-        view = context.__of__(context_of_context)
+        view = context
 
         # self.default_template is a ViewPageTemplateFile, which is a property descriptor
         # whose __get__ method returns a BoundPageTemplate.  That expects to be accessed from

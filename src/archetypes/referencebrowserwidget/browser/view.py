@@ -267,7 +267,7 @@ class ReferenceBrowserPopup(BrowserView):
     def wildcardable_indexes(self):
         assert self._updated
         indexes = self.search_catalog.Indexes.values()
-        return [index.getId() for index in indexes if index.getTagName() in WILDCARDABLE_INDEXES]
+        return [index.getId() for index in indexes if index.__class__.__name__ in WILDCARDABLE_INDEXES]
 
     @property
     def wildcardable_indexes_as_json(self):
