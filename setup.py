@@ -34,6 +34,7 @@ setup(name='archetypes.referencebrowserwidget',
       description="A referencebrowser implementation for Archetypes",
       long_description=long_description,
       classifiers=[
+          "Development Status :: 6 - Mature",
           "Framework :: Plone",
           "Framework :: Plone :: 4.3",
           "Framework :: Plone :: 5.0",
